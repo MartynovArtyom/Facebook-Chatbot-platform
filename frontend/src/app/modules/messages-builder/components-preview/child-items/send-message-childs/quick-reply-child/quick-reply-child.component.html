@@ -1,0 +1,13 @@
+<div class="quick-container" data-drag="true">
+  <div class="quick-item" *ngFor="let quick of item" data-drag="true">
+    <span data-drag="true">{{ quick?.title }}</span>
+    <span class="button-clicks" *ngIf="quick?.click && _builderService.view === 'preview'">CTR {{ quick?.click | flowStatistic:opened }}%</span>
+    <span class="button-clicks" *ngIf="!quick?.click && _builderService.view === 'preview'">CTR 0%</span>
+    <div class="link-button"
+         [ngClass]="{'active-circle': quick?.next_step}" data-drag="true">
+      <i class="far fa-circle" data-drag="false"
+         (click)="_builderService.createMouseLink(quick.buttons[0], $event, 'all')"
+         [id]="quick?.buttons[0]?.uuid"></i>
+    </div>
+  </div>
+</div>

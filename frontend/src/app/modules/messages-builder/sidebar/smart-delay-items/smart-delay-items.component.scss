@@ -1,0 +1,57 @@
+.title-sidebar{
+  background: #FF3350;
+
+  & > input {
+    color: #ffffff !important;
+  }
+}
+
+.continue-next-step{
+  padding-top: 10px;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-top: 1px solid #E0E6ED;
+
+  & > span {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+  }
+}
+
+.smart-delay-content{
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 25px;
+
+  & > span{
+    font-weight: 600;
+    margin-bottom: 3px;
+    display: block;
+  }
+
+  & > .d-flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & > input, & > select{
+      border: 1px solid #E0E6ED;
+      padding: 5px 8px;
+      outline: none;
+      box-shadow: none;
+    }
+
+    & > input{
+      width: 70px;
+    }
+
+    & > select{
+      width: 65%;
+      height: 100%;
+      padding: 6px 8px 7px 8px;
+    }
+  }
+}

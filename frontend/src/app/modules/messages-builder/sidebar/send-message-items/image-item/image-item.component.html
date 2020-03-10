@@ -1,0 +1,30 @@
+<div class="text-item-content position-relative margin-bottom--25">
+  <div class="error-content-icon">
+    <i class="fas fa-exclamation-triangle" *ngIf="!item?.params['img_url'] && (item?.uuid | publishErrors) === true"></i>
+  </div>
+
+  <div class="image-content position-relative" [ngClass]="{
+        'border-radius-bottom-no': item?.params['img_url'],
+        'text-border-bottom': _builderService.view === 'preview' && item?.params['buttons'].length === 0,
+        'error-border': !item?.params['img_url'] && (item?.uuid | publishErrors) === true
+        }">
+    <img *ngIf="item?.params['img_url']" [src]="item?.params['img_url']" alt="" width="100%">
+
+    <label class="file-upload file-upload__show-image" *ngIf="_builderService.view !== 'preview'">
+      <img src="/assets/img/builder-sidebar/bild-short.png" alt="bild-short">
+      <span>Bild</span>
+      <input type="file" accept="image/*"
+             (change)="_builderFunctionsService.uploadFile(item?.params, $event.target.files)"/>
+    </label>
+  </div>
+
+  <app-buttons-item *ngIf="item?.params['img_url']" [config]="item?.params['buttons']" [opened]="opened" [type]="'some'"></app-buttons-item>
+
+  <div class="sidebar-actions" *ngIf="_builderService.view !== 'preview'">
+    <button class="trash-sidebar" (click)="_builderFunctionsService.deleteItemFromSidebar(item)">
+      <i class="fas fa-times"></i>
+    </button>
+    <button class="drop-sidebar-items"><i class="fas fa-arrows-alt-v"></i></button>
+    <button (click)="_builderFunctionsService.cloneItemFromSidebar(item)"><i class="far fa-clone"></i></button>
+  </div>
+</div>

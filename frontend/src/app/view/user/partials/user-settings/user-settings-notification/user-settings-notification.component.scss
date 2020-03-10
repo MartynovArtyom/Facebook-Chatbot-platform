@@ -1,0 +1,34 @@
+.disable-notif{
+  opacity: 0.5;
+  cursor: no-drop !important;
+
+  & > .d-flex{
+    & > .primary-button{
+      cursor: no-drop !important;
+    }
+
+    & > input{
+      cursor: no-drop !important;
+    }
+  }
+
+  & > .col-md-4{
+    & > div{
+      & > label{
+        cursor: no-drop !important;
+      }
+
+      & > input{
+        cursor: no-drop !important;
+      }
+    }
+  }
+}
+
+.new-switch.notification-switch{
+  width: 65px;
+}
+
+.new-switch.notification-switch .switch-input:checked ~ .switch-handle {
+  left: 41px;
+}

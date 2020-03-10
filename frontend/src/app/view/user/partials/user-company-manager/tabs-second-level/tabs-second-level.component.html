@@ -1,0 +1,23 @@
+<div class="list-tabs-campaign second-level" style="overflow-y: hidden; overflow-x: auto" id="horizontal-scroller-second">
+  <div class="list-tabs-campaign" style="width: 100em;">
+    <div class="tab-campaign" *ngFor="let tab of companyManagerService.dataSecondLevelTabs; let i = index"
+         (click)="companyManagerService.setStatusTabs(companyManagerService.dataSecondLevelTabs, null, tab)"
+         [class]="companyManagerService.dataFirstLevelTabs | checkTabClass"
+         [ngClass]="{'active': tab?.status}">
+      <i class="fas fa-times"
+         (click)="companyManagerService.deleteTab(companyManagerService.dataSecondLevelTabs, i, 'second')"></i>
+      <p>{{ tab?.name }}</p>
+    </div>
+  </div>
+</div>
+
+<app-growth-tools *ngIf="view?.view === 'widget' && !preloader"
+                  [viewId]="view?.id"></app-growth-tools>
+<app-sequences *ngIf="view?.view === 'autoresponder' && !preloader"
+               [viewId]="view?.id"></app-sequences>
+<app-flow *ngIf="view?.view === 'flow' && !preloader"
+          [viewId]="view?.id"></app-flow>
+<app-flow-edit *ngIf="view?.view === 'flowEdit' && !preloader"
+          [viewId]="view?.id"></app-flow-edit>
+<app-flow-responses *ngIf="view?.view === 'flowResponses' && !preloader"
+          [viewId]="view?.id"></app-flow-responses>

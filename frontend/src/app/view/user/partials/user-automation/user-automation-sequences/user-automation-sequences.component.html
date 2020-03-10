@@ -1,0 +1,81 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Autoresponder</p>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <button class="btn primary-button margin-right--10" (click)="openVerticallyCentered(content)">+ Neuer Autoresponder</button>
+  </div>
+</div>
+<!-- End top sidebar page -->
+<div class="not-found-messages" *ngIf="!sequencesItems || sequencesItems.length === 0">
+  <span>You have no sequences</span>
+  <span>You can use <button class="btn success-button" (click)="openVerticallyCentered(content)">This Button</button> to create new sequence</span>
+</div>
+
+<div class="sequences-container" *ngIf="sequencesItems.length > 0">
+  <div class="sequence-table">
+    <div class="sequence-table-title">
+      <div class="table-row">
+        <div class="table-cell" style="width: 60%">Name</div>
+        <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 10%">Abonnenten</div>
+        <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 10%">Nachrichten</div>
+        <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 10%">Öffnungsrate</div>
+        <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 5%">CTR</div>
+        <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 5%"></div>
+      </div>
+    </div>
+    <div class="sequence-table-body">
+      <div class="table-row" *ngFor="let item of sequencesItems; let i = index">
+        <div class="table-cell" style="width: 60%" (click)="navigateToSequence(item?.id)">{{ item?.title }}</div>
+        <div class="table-cell d-flex--justify-end" style="width: 10%" (click)="navigateToSequence(item?.id)">{{ item?.countSubscribers }}</div>
+        <div class="table-cell d-flex--justify-end" style="width: 10%" (click)="navigateToSequence(item?.id)">{{ item?.countItems }}</div>
+        <div class="table-cell d-flex--justify-end" style="width: 10%" (click)="navigateToSequence(item?.id)">{{ item?.openRate }}</div>
+        <div class="table-cell d-flex--justify-end" style="width: 5%" (click)="navigateToSequence(item?.id)">{{ item?.ctr }}</div>
+        <div class="table-cell d-flex--justify-end" style="width: 5%">
+          <div ngbDropdown placement="bottom-left" class="d-inline-block">
+            <button (click)="disabledRoute()" class="btn sidebar-top-menu-button icon-btn-main" id="dropdownBasic1" ngbDropdownToggle><i class="fas fa-ellipsis-v"></i></button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="right: 0; left: auto !important;" class="left-imp">
+              <button class="dropdown-item" (click)="openVerticallyCenter(update, item)"><i class="fas fa-pencil-alt"></i> Umbenennen</button>
+              <button class="dropdown-item" (click)="copySequence(item.id)"><i class="far fa-clone"></i> Duplizieren</button>
+              <button class="dropdown-item trash" (click)="deleteSequence(item, i)"><i class="far fa-trash-alt"></i> Löschen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-autoposting-chanel">
+    <h3 class="title-modals">Neuen Autoresponder erstellen</h3>
+    <input type="text" placeholder="Namen der Sequenz eingeben" #newSequence>
+    <div class="footer-chanel-buttons d-flex d-flex--justify-between">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn success-button" (click)="createSequence(newSequence.value)" [disabled]="!newSequence?.value">Erstellen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #update let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-autoposting-chanel">
+    <h3 class="title-modals">Umbenennen Sequence</h3>
+    <input type="text" placeholder="Sequence name" [ngModel]="sequnceUpdate['title']" #updateS>
+    <div class="footer-chanel-buttons d-flex d-flex--justify-between">
+      <button class="btn default-button" (click)="c('Cross click')">Schließen</button>
+      <button class="btn success-button" (click)="updateSequence(sequnceUpdate, updateS?.value)" [disabled]="!updateS['value']">Update</button>
+    </div>
+  </div>
+</ng-template>

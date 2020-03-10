@@ -1,0 +1,179 @@
+<div class="sidebar-logo">
+  <a [routerLink]="['/' + _userService.userID + '/dashboard']">
+    <img src="../../../../assets/img/chatbo-logo-neu.png" alt="">
+  </a>
+  <button class="btn sidebar-change-status"
+          [ngClass]="{ 'active': _sharedService.sidebarView === 'full'}"
+          (click)="_sharedService.changeSidebarView()">
+    <i class="fas fa-thumbtack"></i>
+  </button>
+</div>
+
+<div class="client-account">
+  <div class="account" (click)="resetAccout()">
+    <div class="image-profile">
+      <img src="{{ _userService.userPageInfo?.avatar }}" alt="">
+    </div>
+
+    <div class="desc-profile">
+      <span class="profile-name">{{ _userService.userPageInfo?.title }}</span>
+    </div>
+
+    <div class="icon-opening" [ngClass]="{'rotate': resAc}">
+      <i class="fa fa-angle-down" aria-hidden="true"></i>
+    </div>
+  </div>
+
+  <div class="before-profile" [ngClass]="{'resetAccount': resAc}">
+
+    <div class="page-list-container">
+      <div class="account" *ngFor="let item of _userService.listConnectionPages" (click)="routerToPage(item?.page_id)">
+        <div class="image-profile">
+          <img src="{{ item?.avatar }}" alt="">
+        </div>
+        <div class="desc-profile">
+          <span class="profile-name">{{ item?.title }}</span>
+        </div>
+        <div class="icon-opening"></div>
+      </div>
+    </div>
+
+    <div class="account new-ac" (click)="routingForAddAccount()">
+      <div class="prof-new">
+        <i class="fa fa-plus"></i>
+      </div>
+      <div class="grow-new">
+        <p>Neue Seite hinzufügen</p>
+      </div>
+    </div>
+
+    <div class="log-out">
+      <label (click)="logout()" class="accordion-item-hd"><i class="fa fa-sign-out"></i> <span>Abmelden</span></label>
+    </div>
+  </div>
+
+  <div class="nav-profile" [ngClass]="{'resetAccount': resAc}">
+    <ul class="accordion css-accordion">
+      <li class="accordion-item">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd" [routerLink]="['/' + _userService.userID + '/dashboard']" routerLinkActive="active-link">
+          <img class="margin-right--12" src="../../../../assets/img/sidebar-icon/dashboard.png">
+          <span>Dashboard</span>
+        </label>
+      </li>
+
+      <li class="accordion-item" *ngIf="_userService.userPageInfo?.role !== 3">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd" [routerLink]="['/' + _userService.userID + '/company-manager']"
+               (click)="companyManagerService.setStatusTabs(null, null, null)" routerLinkActive="active-link">
+          <i class="fa fa-folder" aria-hidden="true"></i>
+          <span>Kampagnenmanager</span>
+        </label>
+      </li>
+
+      <li class="accordion-item" routerLinkActive="active-link">
+        <input class="accordion-item-input" type="checkbox" name="accordion" id="item1"/>
+        <label routerLinkActive="active-link" for="item1" class="accordion-item-hd">
+          <img class="margin-right--12" src="../../../../assets/img/sidebar-icon/newsletter.png">
+          <span>Kontakte</span>
+        </label>
+        <div class="accordion-item-bd" routerLinkActive="active-link">
+          <ul>
+            <li class="cursor outline--none" [routerLink]="['/' + _userService.userID + '/audience']" routerLinkActive="active-link">
+              <img class="margin-right--12" src="../../../../../assets/img/sidebar-icon/kontakte.png">
+              <a>Kontakte</a>
+            </li>
+            <li class="cursor outline--none" [routerLink]="['/' + _userService.userID + '/chat']" routerLinkActive="active-link">
+              <img class="margin-right--12" src="../../../../../assets/img/sidebar-icon/livechat.png">
+              <a class="position--relative">
+                Live Chat
+                <b class="live-chat-count" *ngIf="_sharedService.openedConversationCount > 0">
+                  {{ _sharedService.openedConversationCount }}
+                </b>
+              </a>
+            </li>
+            <li class="cursor outline--none"
+                *ngIf="_userService.userPageInfo?.role !== 3"
+                [routerLink]="['/' + _userService.userID + '/broadcasts']"
+                routerLinkActive="active-link">
+              <img class="margin-right--12" src="../../../../../assets/img/sidebar-icon/broadcast.png">
+              <a>Newsletter</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="accordion-item" routerLinkActive="active-link" *ngIf="_userService.userPageInfo?.role !== 3">
+        <input class="accordion-item-input" type="checkbox" name="accordion" id="item2"/>
+        <label routerLinkActive="active-link" for="item2" class="accordion-item-hd">
+          <img class="margin-right--12" src="../../../../assets/img/sidebar-icon/automatisierung.png"><span>Grundeinstellungen</span>
+        </label>
+        <div class="accordion-item-bd" routerLinkActive="active-link">
+          <ul>
+            <li class="cursor outline--none" [routerLink]="['/' + _userService.userID + '/automation/menu']" routerLinkActive="active-link">
+              <img class="margin-right--12" src="../../../../../assets/img/sidebar-icon/main-menu.png">
+              <a>Hauptmenü</a>
+            </li>
+            <li class="cursor outline--none" [routerLink]="['/' + _userService.userID + '/automation/default']" routerLinkActive="active-link">
+              <img class="margin-right--12" src="../../../../../assets/img/sidebar-icon/default.png">
+              <a>Standard Antwort</a>
+            </li>
+            <li class="cursor outline--none" [routerLink]="['/' + _userService.userID + '/automation/welcome']" routerLinkActive="active-link">
+              <img class="margin-right--12" src="../../../../../assets/img/sidebar-icon/default.png">
+              <a>Willkommens Nachricht</a>
+            </li>
+            <li class="cursor outline--none"
+                *ngIf="_userService.userPageInfo?.role !== 2 && _userService.userPageInfo?.role !== 4"
+                [routerLink]="['/' + _userService.userID + '/settings']"
+                routerLinkActive="active-link">
+              <img class="margin-right--12" src="../../../../../assets/img/sidebar-icon/einstellungen.png">
+              <a>Einstellungen</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <a class="accordion-item" href="https://botvorlagen.chatbo.de" target="_blank">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd">
+          <i class="fas fa-file" aria-hidden="true"></i>
+          <span>Botvorlagen</span>
+        </label>
+      </a>
+      <a class="accordion-item" href="https://hilfe.chatbo.de" target="_blank">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd">
+          <img class="margin-right--12" src="../../../../assets/img/sidebar-icon/hilfe.png">
+          <span>Hilfe</span>
+        </label>
+      </a>
+      <a *ngIf="!sidebar?.upgradeButton" class="accordion-item" href="https://chatbo.de/upgrade/" target="_blank">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd">
+          <i class="fas fa-level-up-alt"></i>
+          <span>Upgrade</span>
+        </label>
+      </a>
+      <a class="accordion-item" href="https://affiliates.chatbo.de/" target="_blank">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd">
+          <img class="margin-right--12" src="../../../../../assets/img/sidebar-icon/video.png">
+          <span>Partnerprogramm</span>
+        </label>
+      </a>
+      <br>
+      <li *ngIf="sidebar?.upgradeButton" class="d-flex justify-content-center upgrade-btn">
+        <a href="https://chatbo.de/upgrade/" target="_blank" class="btn primary-button">Upgrade</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div *ngIf="sidebar?.upgradeButton && openBarUpgrade" class="upgrade-bar">
+  <div class="upgrade-bar--text">
+    Dein Gratis Test endet in {{ sidebar?.upgradeDay }} Tagen - <a href="https://chatbo.de/upgrade/" (click)="closeUpgradeBar()" target="_blank" class="btn-link text-decoration-none"> Jetzt upgraden</a>
+  </div>
+  <div class="upgrade-bar--close">
+    <i class="fa fa-times" (click)="closeUpgradeBar()"></i>
+  </div>
+</div>

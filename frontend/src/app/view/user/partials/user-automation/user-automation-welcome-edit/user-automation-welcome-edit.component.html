@@ -1,0 +1,97 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a [routerLink]="['/' + _userService.userID + '/automation/welcome']">Willkommens Nachricht</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>Bearbeiten</h3>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <div class="switch-content d-flex margin-right--18">
+      <label class="title-switch title-switch--left">Deaktiviert</label>
+      <div class="material-toggle">
+        <input type="checkbox" id="toggle" name="toggle" [checked]="checkStatus" class="switch" (change)="updateWelcomeMessageStatus()" />
+        <label for="toggle" class=""></label>
+      </div>
+      <label class="title-switch title-switch--right"> Aktiviert</label>
+    </div>
+
+    <div class="switch-content d-flex margin-right--18">
+      <span class="saved-span" *ngIf="_sharedService.savedCheck"><i class="fas fa-check"></i> Gespeichert</span>
+      <span class="saved-span" *ngIf="!_sharedService.savedCheck">Saving...</span>
+    </div>
+
+    <button class="btn sidebar-top-menu-button margin-right--10"
+            (click)="_sharedService.previewFlowInMessenger(previewAccept, _sharedService.flowId)">
+      <i class="fab fa-facebook-messenger"></i> Vorschau
+    </button>
+    <button class="btn primary-button margin-right--10" (click)="saveFlowItem()">Veröffentlichen</button>
+    <div ngbDropdown placement="bottom-left" class="d-inline-block">
+      <button class="btn sidebar-top-menu-button icon-btn-main" id="dropdownBasic1" ngbDropdownToggle><i class="fas fa-ellipsis-v"></i></button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="right: 0; left: auto !important;" class="left-imp">
+        <button class="dropdown-item" (click)="headerActionService.openVerticallyCentered(rename, null)">
+          <i class="fas fa-pencil-alt"></i> Umbenennen
+        </button>
+        <button class="dropdown-item" (click)="_sharedService.copyFlow(_sharedService.flowId)">
+          <i class="far fa-clone"></i> Duplizieren
+        </button>
+        <button class="dropdown-item trash" (click)="headerActionService.openVerticallyCentered(content, '/automation/welcome')">
+          <i class="far fa-trash-alt"></i> Löschen
+        </button>
+        <button class="dropdown-item"
+                [disabled]="!_builderService.requestDataAll?.items ||
+                            _builderService.requestDataAll?.items?.length === 0 ||
+                            _builderService?.counterUpdate === 0"
+                (click)="revertToPublish()">Zur Veröffentlichung zurückkehren</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="welcome-message-container">
+  <app-builder *ngIf="!preloader" [view]="'edit'"></app-builder>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+<!-- End preloader -->
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Löschen</h3>
+    <span class="delete-title">Du gehst zu löschen <b>{{ nameFlow }}</b></span>
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn danger-button" (click)="deleteFlow();c('Cross click')">Löschen</button>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #rename let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Umbenennen</h3>
+    <input type="text" placeholder="Gib den Namen für den Newsletter ein" #flowRename [value]="nameFlow">
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn primary-button" (click)="renameFlow(flowRename.value, nameFlow);c('Cross click')" [disabled]="!flowRename?.value">Umbenennen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #previewAccept let-cd="close" let-cd="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="cd('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Vorschau</h3>
+    <app-preview-accept [popup]="cd"
+                        [flowID]="_sharedService.flowId"></app-preview-accept>
+  </div>
+</ng-template>

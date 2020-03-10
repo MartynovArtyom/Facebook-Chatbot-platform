@@ -1,0 +1,39 @@
+<app-sidebar [config]="_builderService.requestDataSidebar"></app-sidebar>
+<div class="builder"
+     id="builder"
+     (mousedown)="mouseDown($event)"
+     (mouseup)="mouseUp()"
+     (mousemove)="move($event)"
+     appWheel
+     (mouseleave)="leaveFromCanvasContainer()" (mouseover)="overToCanvasContainer()" (wheelDirection)="wheelCanvasContainer($event)"
+     #builderContainer>
+  <span class="trash-flow" *ngIf="_builderService?.requestDataAll.status === false">Dieser Nachrichten befindet sich im Papierkorb</span>
+  <div [ngStyle]="{'transform': 'translate(' + positionX + 'px, ' + positionY + 'px) scale('+ scale +')', height: canvasSize + 'px', width: canvasSize + 'px'}"
+       class="builder__content" #builderCanvas>
+    <div class="builder__main">
+      <app-arrow></app-arrow>
+      <ng-container *ngFor="let item of items" [config]="item" [scale]="scale" appDynamicItems
+      ></ng-container>
+    </div>
+  </div>
+</div>
+<app-create-main-item *ngIf="_builderService.view !== 'preview'"
+                      [size]="canvasSize" [container]="builderContainer" [positionX]="positionX"
+                      [positionY]="positionY"></app-create-main-item>
+
+<button *ngIf="_builderService.view === 'preview'" (click)="openBuilderSidebar()" class="main-items-button">
+  <i class="fa fa-bar-chart" aria-hidden="true"></i>
+</button>
+
+<div class="zoom-builder">
+  <button class="btn zoom-button" [disabled]="scale === 1" (click)="zoomBuilder($event, -1)">+</button>
+  <div class="mouse">
+    <div class="wheel"> </div>
+  </div>
+  <button class="btn zoom-button" [disabled]="scale === 0.45" (click)="zoomBuilder($event, 1)">-</button>
+</div>
+
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>

@@ -1,0 +1,94 @@
+.title-sidebar{
+  background: #2C8BC2;
+
+  & > input {
+    color: #ffffff !important;
+  }
+}
+
+.continue-next-step{
+  padding-top: 10px;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-top: 1px solid #E0E6ED;
+
+  & > span {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+  }
+}
+
+.start-another-flow-default{
+  margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  color: #9c9c9c;
+
+  &:hover{
+    color: #2C8BC2;
+  }
+
+  & > i{
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+
+  & > span{
+    font-size: 16px;
+  }
+}
+
+.start-another-flow-content{
+  margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #9c9c9c;
+  position: relative;
+
+  & > i{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+
+    &:hover{
+      color: #C91E22;
+    }
+  }
+
+  & > span{
+    margin-bottom: 10px;
+  }
+
+  & > .opening-flow{
+    border: 1px solid #e0e6ed;
+    padding: 12px 15px;
+    background: #fff;
+    color: #2C8BC2;
+    width: 100%;
+    cursor: pointer;
+
+    &:hover{
+      background: #f9f9f9;
+    }
+  }
+}
+
+.close-flow-popup{
+  position: absolute;
+  right: -30px;
+  font-size: 40px;
+  opacity: 1;
+}
+
+.error-content-icon{
+  left: 38px;
+}

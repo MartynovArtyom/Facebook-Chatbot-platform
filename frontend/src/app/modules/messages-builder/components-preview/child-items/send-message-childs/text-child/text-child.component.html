@@ -1,0 +1,19 @@
+<div class="text-items-view">
+  <div class="default-content" #block *ngIf="!config?.params['description']" data-drag="true"
+       [ngClass]="{'border-radius-bottom-no': config?.params['buttons'].length > 0}">
+    <img class="build-component-item-image" src="/assets/img/builder-sidebar/text-short.png" alt="bild-short">
+    <span data-drag="true">Klicke, um Text in der Sidebar hinzuzufьgen</span>
+  </div>
+
+  <div class="config-content" *ngIf="config?.params['description']"
+       [ngClass]="{'border-radius-bottom-no': config?.params['buttons'].length > 0}"
+       #block
+       data-drag="true">
+    {{ config?.params?.description }}
+  </div>
+
+  <app-buttons
+    [buttons]="config?.params['buttons']"
+    [opened]="opened"
+    [type]="'some'"></app-buttons>
+</div>

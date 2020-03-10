@@ -1,0 +1,102 @@
+<div class="bar-desktop bar-st m-h w-b-s bar-st-default" *ngIf="tabsValue === 'initial_state' || tabsValue === 'setup'"
+     [style.background]="config['color_background']">
+  <button *ngIf="config?.hide_bar"><i class="fas fa-times"></i></button>
+  <div class="d-flex d-flex--justify-center">
+    <h2 class="ed-t"
+        *ngIf="_userService.userPageInfo?.role === 4"
+        [ngClass]="{'not-after': _userService.userPageInfo?.role === 4}"
+        [style.color]="config['color_headline']"
+        [textContent]="config['bar_title']"></h2>
+
+    <h2 class="ed-t" contenteditable="true"
+        #barTitle
+        *ngIf="_userService.userPageInfo?.role !== 4"
+        [style.color]="config['color_headline']"
+        [textContent]="config['bar_title']"
+        (input)="config['bar_title']=$event.target.textContent"></h2>
+  </div>
+  <div class="d-flex d-flex--align-center d-flex--justify-center full-width"
+       [ngClass]="{'d-flex--direction-column': view === 'mobile'}">
+    <div class="button-type-check"
+         [style.background]="config['color_button_background']">
+      <div class="edit-button-text">
+        <input type="text" maxlength="15"
+               id="buttonText"
+               [style.color]="config['color_button_text']"
+               [disabled]="_userService.userPageInfo?.role === 4"
+               class="button-text"
+               [(ngModel)]="config['bar_button_title']">
+        <label for="buttonText">
+          <i *ngIf="_userService.userPageInfo?.role !== 4" class="fa fa-pencil" aria-hidden="true"></i>
+        </label>
+      </div>
+    </div>
+    <div class="facebook-plugin-form">
+      <div class="fb-messenger-checkbox"
+           [attr.origin]="originUrl"
+           [attr.messenger_app_id]="apiId"
+           [attr.page_id]="_userService.userID"
+           [attr.user_ref]="randomValue"
+           [attr.data-ref]="currentId"
+           [attr.checked]="true"
+           [attr.prechecked]="true"
+           [attr.allow_login]="true"
+           [attr.size]="'standard'">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bar-desktop bar-st m-h w-b-s bar-st-default"
+     *ngIf="tabsValue !== 'initial_state' && tabsValue !== 'setup' && config['after_submit'] === 'show'"
+     [style.background]="config['after_submit_color_background']">
+  <button><i class="fas fa-times"></i></button>
+  <div class="d-flex d-flex--justify-center">
+    <h2 class="ed-t" contenteditable="true"
+        #barTitle
+        *ngIf="_userService.userPageInfo?.role !== 4"
+        [style.color]="config['after_submit_color_headline']"
+        [textContent]="config['bar_submit_title']"
+        (input)="config['bar_submit_title']=$event.target.textContent"></h2>
+
+    <h2 class="ed-t" contenteditable="true"
+        [ngClass]="{'not-after': _userService.userPageInfo?.role === 4}"
+        *ngIf="_userService.userPageInfo?.role === 4"
+        [style.color]="config['after_submit_color_headline']"
+        [textContent]="config['bar_submit_title']"></h2>
+  </div>
+  <div class="d-flex d-flex--align-center d-flex--justify-center full-width">
+    <div class="button-type-check"
+         [style.background]="config['after_submit_color_button_background']">
+      <div class="edit-button-text">
+        <input type="text" maxlength="15"
+               id="buttonText1"
+               [disabled]="_userService.userPageInfo?.role === 4"
+               [style.color]="config['after_submit_color_button_text']"
+               class="button-text"
+               [(ngModel)]="config['bar_submit_button_title']">
+        <label for="buttonText1">
+          <i *ngIf="_userService.userPageInfo?.role !== 4" class="fa fa-pencil" aria-hidden="true"></i>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<div class="bar-desktop mobile" [style.background]="'red'">
+  <button><i class="fas fa-times"></i></button>
+  <div class="d-flex d-flex&#45;&#45;justify-center">
+    <h2 class="ed-t" contenteditable="true" style="color: #000" [textContent]="config['bar_title']" (input)="config['bar_title']=$event.target.textContent"></h2>
+    <i class="fa fa-pencil" aria-hidden="true" style="position: relative; top: 5px; right: -5px;"></i>
+  </div>
+  <div class="d-flex d-flex&#45;&#45;justify-between d-flex&#45;&#45;direction-column full-width">
+    <div class="button-type-check">
+      <div class="edit-button-text">
+        <span contenteditable="true" maxlength="20" style="color: #000" [textContent]="config['bar_button_title']" (input)="config['bar_button_title']=$event.target.textContent"></span>
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="facebook-plugin-form"></div>
+  </div>
+
+</div>-->

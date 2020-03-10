@@ -1,0 +1,826 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a [routerLink]="['/' + _userService.userID + '/growth-tools']">Growth Tools</a>
+    <i class="fas fa-chevron-right"></i>
+    <input type="text" placeholder="..." value="{{ widgetById?.details?.name }}"
+           (change)="editWidgetTitle(titleWidget.value)"
+           #titleWidget>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <div class="preview-widget"
+         *ngIf="widgetById?.details?.type !== 7 &&
+                widgetById?.details?.type !== 8 &&
+                widgetById?.details?.type !== 9 &&
+                widgetById?.details?.type !== 10">
+      <span>Vorschau:</span>
+      <div class="change-preview">
+        <i class="fas fa-desktop" (click)="renderPreview(true)" [ngClass]="{'active-visible': previewCheck}"></i>
+        <i class="fas fa-mobile-alt" (click)="renderPreview(false)" [ngClass]="{'active-visible': !previewCheck}"></i>
+      </div>
+    </div>
+    <button class="btn primary-button margin-right--10"
+            *ngIf="widgetById?.details?.type !== 8"
+            (click)="editWidget()"
+    >Gespeichert</button>
+    <div class="switch-content d-flex margin-right--18"
+         *ngIf="widgetById?.details?.type !== 8">
+      <label class="margin-right--10">Entwurf</label>
+      <div class="material-toggle">
+        <input type="checkbox" id="toggle19" name="toggle19" class="switch"
+               [checked]="widgetById?.details?.status"
+               (change)="editWidgetStatus()"
+        />
+        <label for="toggle19"></label>
+      </div>
+      <label>Aktiv</label>
+    </div>
+  </div>
+</div>
+<!-- End top sidebar page -->
+
+<div class="widget-container-edit">
+  <div class="widget-edit-sidebar">
+    <div class="widget-type-flow">
+      <img src="../../../../../../assets/img/widget/bar.png" *ngIf="widgetById?.details?.type === 1">
+      <img src="../../../../../../assets/img/widget/slidein.png" *ngIf="widgetById?.details?.type === 2">
+      <img src="../../../../../../assets/img/widget/modal.png" *ngIf="widgetById?.details?.type === 3">
+      <img src="../../../../../../assets/img/widget/page_takeover.png" *ngIf="widgetById?.details?.type === 4">
+      <img src="../../../../../../assets/img/widget/button.png" *ngIf="widgetById?.details?.type === 5">
+      <img src="../../../../../../assets/img/widget/box.png" *ngIf="widgetById?.details?.type === 6">
+      <img src="../../../../../../assets/img/widget/messenger_ref.png" *ngIf="widgetById?.details?.type === 7">
+      <img src="../../../../../../assets/img/widget/fb_ads.png" *ngIf="widgetById?.details?.type === 8">
+      <img src="../../../../../../assets/img/widget/fb_messenger_code.png" *ngIf="widgetById?.details?.type === 9">
+      <img src="../../../../../../assets/img/widget/chat.png" *ngIf="widgetById?.details?.type === 10">
+      <span>{{ widgetById?.details?.name }}</span>
+    </div>
+
+    <div class="tabs-edit-sidebar" [ngClass]="{ 'd-flex--justify-start-imp': widgetById?.details?.type > 6}">
+      <span [ngClass]="{ 'active': tabsValue === 'initial_state' }"
+            *ngIf="widgetById?.details?.type <= 6"
+            (click)="comeToTabs('initial_state')">
+        Start Widget
+      </span>
+      <span [ngClass]="{'active': tabsValue === 'submitted_state'}"
+            *ngIf="widgetById?.details?.type <= 6"
+            (click)="comeToTabs('submitted_state')">
+        Danke Widget
+      </span>
+      <span [ngClass]="{'active': tabsValue === 'opt_in_actions'}" (click)="comeToTabs('opt_in_actions')">Opt-In Aktionen</span>
+      <span [ngClass]="{'active': tabsValue === 'setup'}" (click)="comeToTabs('setup')">Einrichtung</span>
+    </div>
+
+    <div class="content-tabs-sidebar"
+         *ngIf="tabsValue === 'initial_state' && widgetById?.details?.type && widgetById?.details?.type <= 6">
+      <div class="switch-content d-flex margin-right--18"
+        *ngIf="widgetById?.details?.type === 1">
+        <div class="material-toggle">
+          <input type="checkbox" id="toggle1" name="toggle1" class="switch"
+                 (change)="changeHideBar()"
+                 [checked]="widgetConfig?.hide_bar"/>
+          <label for="toggle1"></label>
+        </div>
+        <label>Erlaube die Bar zu verstecken</label>
+      </div>
+      <!-- allow to hide bar toggle -->
+      <div class="switch-content d-flex margin-right--18"
+           *ngIf="widgetById?.details?.type !== 1 && widgetById?.details?.type !== 5">
+        <div class="material-toggle">
+          <input type="checkbox" id="toggle2" name="toggle2" class="switch"
+                 (change)="changeShowDescription()"
+                 [checked]="widgetConfig?.show_desc"/>
+          <label for="toggle2"></label>
+        </div>
+        <label>Zeige Beschreibung</label>
+      </div>
+      <!-- show description toggle -->
+      <div class="d-flex d-flex--direction-column">
+        <span class="widget-span">Button Typ</span>
+        <div>
+          <input id="radio-1" class="radio-custom" name="radio-group" type="radio"
+                 [checked]="widgetConfig?.button_type === 'checkbox'">
+          <label for="radio-1" class="radio-custom-label">Mit Checkbox</label>
+        </div>
+        <!-- checkbox toggle -->
+      </div>
+      <!-- button type -->
+      <div class="d-flex d-flex--direction-column">
+        <span class="widget-span">Aktive Button Text</span>
+        <input type="text" placeholder="Enter link" [(ngModel)]="widgetConfig.check_button_text">
+      </div>
+      <!-- aktive button text -->
+      <div class="d-flex d-flex--direction-column">
+        <span class="widget-span">Farben</span>
+        <div class="d-flex d-flex--justify-between d-flex--wrap">
+          <div class="color-type"
+               *ngIf="widgetById?.details?.type !== 5">
+            <input [style.background]="widgetConfig?.color_background"
+                   [(colorPicker)]="widgetConfig['color_background']"
+                   id="colorBackground"
+                   name="colorBackground"/>
+            <label for="colorBackground">Hintergrund</label>
+          </div>
+          <div class="color-type"
+               *ngIf="widgetById?.details?.type !== 5">
+            <input [style.background]="widgetConfig?.color_headline"
+                   [(colorPicker)]="widgetConfig['color_headline']"
+                   id="colorHeadline"
+                   name="colorHeadline"/>
+            <label for="colorHeadline">Überschrift</label>
+          </div>
+          <div class="color-type" *ngIf="widgetById?.details?.type !== 1 && widgetById?.details?.type !== 5">
+            <input [style.background]="widgetConfig?.color_desc"
+                   [(colorPicker)]="widgetConfig['color_desc']"
+                   id="colorDesc"
+                   name="colorDesc"/>
+            <label for="colorDesc">Beschreibung</label>
+          </div>
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.color_button_background"
+                   [(colorPicker)]="widgetConfig['color_button_background']"
+                   id="colorButtonBackground"
+                   name="colorButtonBackground"/>
+            <label for="colorButtonBackground">Button Hintergrund</label>
+          </div>
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.color_button_text"
+                   [(colorPicker)]="widgetConfig['color_button_text']"
+                   id="colorButtonText"
+                   name="colorButtonText"/>
+            <label for="colorButtonText">Button Text Farbe</label>
+          </div>
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.check_button_bg"
+                   [(colorPicker)]="widgetConfig['check_button_bg']"
+                   id="checkButtonBg"
+                   name="checkButtonBg"/>
+            <label for="checkButtonBg">Aktive Button Hintergrund</label>
+          </div>
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.check_button_color"
+                   [(colorPicker)]="widgetConfig['check_button_color']"
+                   name="checkButtonColor"
+                   id="checkButtonColor"/>
+            <label for="checkButtonColor">Aktive Button Text Farbe</label>
+          </div>
+        </div>
+      </div>
+      <!--colors -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type !== 1 && widgetById?.details?.type !== 5">
+        <span class="widget-span">Bild</span>
+
+        <div class="image-upload-container">
+          <i class="fas fa-times" (click)="deleteWidgetImage()" *ngIf="widgetConfig['image']"></i>
+          <img *ngIf="widgetConfig['image']" [src]="widgetConfig['image']" alt="" width="100%">
+          <label class="file-upload widget-upload">
+            <i class="far fa-image" *ngIf="!widgetConfig['image']"></i>
+            <span *ngIf="!widgetConfig['image']">Bild hierher ziehen um es hochzuladen</span>
+            <input type="file" accept="image/*"
+                   (change)="uploadWidgetFile($event.target.files, 'image')"/>
+          </label>
+        </div>
+      </div>
+      <!-- image -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type !== 1 && widgetById?.details?.type !== 5 && widgetConfig?.image">
+        <span class="widget-span">Bildplatzierung</span>
+        <select [(ngModel)]="widgetConfig.image_place" #imagePlace (change)="selectImagePlace(imagePlace.value, 'image_place')">
+          <option [value]="0">Oben Überschrift</option>
+          <option [value]="1">Oben Beschreibung</option>
+          <option [value]="2">Unter Beschreibung</option>
+        </select>
+      </div>
+      <!-- image placement -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 2">
+        <span class="widget-span">Slide In Platzierung</span>
+        <select [(ngModel)]="widgetConfig.slide_place">
+          <option value="l-t">Left Top</option>
+          <option value="l-m">Left Middle</option>
+          <option value="l-b">Left Bottom</option>
+          <option value="r-t">Right Top</option>
+          <option value="r-m">Right Middle</option>
+          <option value="r-b">Right Bottom</option>
+        </select>
+      </div>
+      <!-- slide in placement -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type !== 5 && widgetById?.details?.type !== 6">
+        <span class="widget-span">Wann Wird Es Angezeigt</span>
+        <div class="d-flex d-flex--justify-between">
+          <input *ngIf="widgetConfig?.it_display === '1'" type="number" #whenDisplayInput
+                 (change)="changeInputFields('display_seconds', whenDisplayInput.value)"
+                 value="{{ widgetConfig?.display_seconds }}" style="width: 29%; margin-right: 10px">
+          <select style="width: 100%" #whenDisplay [(ngModel)]="widgetConfig['it_display']"
+                  (change)="changeInputFields('it_display', whenDisplay.value)">
+            <option value="0">Sofort</option>
+            <option value="1">Sekunden vergangen</option>
+          </select>
+        </div>
+      </div>
+      <!-- when does it display -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type !== 5 && widgetById?.details?.type !== 6">
+        <span class="widget-span">Zeige Das Widget Demselben Benutzer Erneut Nach</span>
+        <div class="d-flex d-flex--justify-between">
+          <input type="number" style="width: 29%; margin-right: 10px" #showWidgetAfterInput
+                 *ngIf="widgetConfig['show_widget_after'] === 'hours' || widgetConfig['show_widget_after'] === 'days'"
+                 (change)="changeInputFields('show_widget_after_value', showWidgetAfterInput.value)"
+                 value="{{ widgetConfig?.show_widget_after_value }}">
+          <select style="width: 100%" #showWidgetAfter [(ngModel)]="widgetConfig['show_widget_after']"
+                  (change)="changeInputFields('show_widget_after', showWidgetAfter.value)">
+            <option value="never">Niemals</option>
+            <option value="always">Immer</option>
+            <option value="hours">Stunden</option>
+            <option value="days">Tagen</option>
+          </select>
+        </div>
+      </div>
+      <!-- show widget to the same user again after -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type !== 5 && widgetById?.details?.type !== 6">
+        <span class="widget-span">Wenn Manuell Durch Den Benutzer Geschlossen</span>
+        <div class="d-flex d-flex--justify-between">
+          <input type="number" style="width: 29%; margin-right: 10px"
+                 *ngIf="widgetConfig['closed_user_show_after'] === 'hours' || widgetConfig['closed_user_show_after'] === 'days'"
+                 (change)="changeInputFields('closed_user_show_after_value', closedUserShowAfterInput.value)"
+                 value="{{ widgetConfig?.closed_user_show_after_value }}"
+                 #closedUserShowAfterInput>
+          <select style="width: 100%" #closedUserShowAfter [(ngModel)]="widgetConfig['closed_user_show_after']"
+                  (change)="changeInputFields('closed_user_show_after', closedUserShowAfter.value)">
+            <option value="never">Niemals</option>
+            <option value="always">Immer</option>
+            <option value="hours">Stunden</option>
+            <option value="days">Tagen</option>
+          </select>
+        </div>
+      </div>
+      <!-- if manually closed by a user, show after -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 5">
+        <span class="widget-span">Checkbox Position</span>
+        <div>
+          <input id="pos-2" class="radio-custom" name="pos-group" type="radio"
+                 (change)="setCheckboxPosition('bottom')"
+                 [checked]="widgetConfig.checkbox_position === 'bottom'">
+          <label for="pos-2" class="radio-custom-label">Unterseite</label>
+        </div>
+        <div>
+          <input id="pos-1" class="radio-custom" name="pos-group" type="radio"
+                 (change)="setCheckboxPosition('side')"
+                 [checked]="widgetConfig.checkbox_position === 'side'">
+          <label for="pos-1" class="radio-custom-label">Seite</label>
+        </div>
+      </div>
+      <!-- checkbox position -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 6">
+        <span class="widget-span">Breite</span>
+        <div class="d-flex d-flex--align-center">
+          <input type="number" class="margin-right--8"
+                 [(ngModel)]="widgetConfig.width_container"
+                 (change)="changeWidthContainer(widthContainer.value)"
+                 #widthContainer
+                 placeholder="Enter width"> <span>px</span>
+        </div>
+      </div>
+      <!-- width BOX -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 6">
+        <div class="switch-content d-flex margin-right--18">
+          <div class="material-toggle">
+            <input type="checkbox" id="toggleBOX" name="toggleBOX" class="switch"
+                   [(ngModel)]="widgetConfig.fit_container"
+                   [checked]="widgetConfig.fit_container"/>
+            <label for="toggleBOX"></label>
+          </div>
+          <label>Box ausrichten</label>
+        </div>
+      </div>
+      <!-- width BOX toggle -->
+
+      <div class="d-flex d-flex--justify-end margin-bottom--12 margin-top--15">
+        <button class="btn primary-button" (click)="comeToTabs('submitted_state')">Nächste ></button>
+      </div>
+    </div>
+
+
+    <div class="content-tabs-sidebar" *ngIf="tabsValue === 'submitted_state' && widgetById?.details?.type <= 6">
+      <div class="d-flex d-flex--direction-column">
+        <span class="widget-span">Nach Dem Absenden</span>
+        <div>
+          <input id="radio-wid1" class="radio-custom" name="radio-wid" type="radio"
+                 (change)="changeAterSubmitType('show')"
+                 [checked]="widgetConfig?.after_submit === 'show'">
+          <label for="radio-wid1" class="radio-custom-label">Zeige neue Nachricht</label>
+        </div>
+        <div>
+          <input id="radio-wid2" class="radio-custom" name="radio-wid" type="radio"
+                 (change)="changeAterSubmitType('redirect')"
+                 [checked]="widgetConfig?.after_submit === 'redirect'">
+          <label for="radio-wid2" class="radio-custom-label">Leite auf eine URL weiter</label>
+        </div>
+      </div>
+      <!-- nach dem absenden -->
+      <div class="switch-content d-flex margin-right--18"
+      *ngIf="widgetById?.details?.type !== 1 &&
+             widgetById?.details?.type !== 5 &&
+             widgetConfig?.after_submit === 'show'">
+        <div class="material-toggle">
+          <input type="checkbox" id="toggle244" name="toggle244" class="switch"
+                 (change)="changeShowDescriptionAfter()"
+                 [checked]="widgetConfig?.show_desc_after"/>
+          <label for="toggle244"></label>
+        </div>
+        <label>Zeige Beschreibung</label>
+      </div>
+      <!-- show description toggle -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetConfig?.after_submit === 'show'">
+        <span class="widget-span">Farben</span>
+        <div class="d-flex d-flex--justify-between d-flex--wrap">
+          <div class="color-type" *ngIf="widgetById?.details?.type !== 5">
+            <input [style.background]="widgetConfig?.after_submit_color_background"
+                   [(colorPicker)]="widgetConfig['after_submit_color_background']"
+                   id="afterSubmitColorBackground"
+                   name="afterSubmitColorBackground"/>
+            <label for="afterSubmitColorBackground">Hintergrund</label>
+          </div>
+          <div class="color-type" *ngIf="widgetById?.details?.type !== 5">
+            <input [style.background]="widgetConfig?.after_submit_color_headline"
+                   [(colorPicker)]="widgetConfig['after_submit_color_headline']"
+                   id="afterSubmitColorHeadline"
+                   name="afterSubmitColorHeadline"/>
+            <label for="afterSubmitColorHeadline">Überschrift</label>
+          </div>
+
+          <div class="color-type" *ngIf="widgetById?.details?.type !== 1 && widgetById?.details?.type !== 5">
+            <input [style.background]="widgetConfig?.after_submit_color_desc"
+                   [(colorPicker)]="widgetConfig['after_submit_color_desc']"
+                   id="afterSubmitColorDesc"
+                   name="afterSubmitColorDesc"/>
+            <label for="afterSubmitColorDesc">Beschreibung</label>
+          </div>
+
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.after_submit_color_button_background"
+                   [(colorPicker)]="widgetConfig['after_submit_color_button_background']"
+                   id="afterSubmitColorButtonBackground"
+                   name="afterSubmitColorButtonBackground"/>
+            <label for="afterSubmitColorButtonBackground">Button Hintergrund</label>
+          </div>
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.after_submit_color_button_text"
+                   [(colorPicker)]="widgetConfig['after_submit_color_button_text']"
+                   id="afterSubmitColorButtonText"
+                   name="afterSubmitColorButtonText"/>
+            <label for="afterSubmitColorButtonText">Button Text Farbe</label>
+          </div>
+        </div>
+      </div>
+      <!-- color -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type !== 1 && widgetById?.details?.type !== 5 && widgetConfig?.after_submit === 'show'">
+        <span class="widget-span">Bild</span>
+
+        <div class="image-upload-container">
+          <i class="fas fa-times" (click)="deleteWidgetImage()" *ngIf="widgetConfig['after_submit_image']"></i>
+          <img *ngIf="widgetConfig['after_submit_image']" [src]="widgetConfig['after_submit_image']" alt="" width="100%">
+          <label class="file-upload widget-upload">
+            <i class="far fa-image" *ngIf="!widgetConfig['after_submit_image']"></i>
+            <span *ngIf="!widgetConfig['after_submit_image']">Bild hierher ziehen um es hochzuladen</span>
+            <input type="file" accept="image/*"
+                   (change)="uploadWidgetFile($event.target.files, 'after_submit_image')"/>
+          </label>
+        </div>
+      </div>
+      <!-- image -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type !== 1 &&
+                  widgetById?.details?.type !== 5 &&
+                  widgetConfig?.after_submit_image &&
+                  widgetConfig?.after_submit === 'show'">
+        <span class="widget-span">Bildplatzierung</span>
+        <select [(ngModel)]="widgetConfig.after_submit_image_place"
+                #afterSubmitImagePlace
+                (change)="selectImagePlace(afterSubmitImagePlace.value, 'after_submit_image_place')">
+          <option [value]="0">Oben Überschrift</option>
+          <option [value]="1">Oben Beschreibung</option>
+          <option [value]="2">Unter Beschreibung</option>
+        </select>
+      </div>
+      <!-- image placement -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetConfig?.after_submit === 'redirect'">
+        <span class="widget-span">URL, Die Nach Der Übermittlung Geöffnet Werden Soll</span>
+        <input type="text" placeholder="" [(ngModel)]="widgetConfig.url_open_after_submission">
+      </div>
+      <!-- Redirect URL -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetConfig?.after_submit === 'redirect'">
+        <span class="widget-span">Öffnen Sie Diese URL</span>
+        <div>
+          <input id="radio-wid3" class="radio-custom" name="radio-widsec" type="radio"
+                (change)="changeOpenUrlType(0)"
+                [checked]="widgetConfig.open_this_url === 0">
+          <label for="radio-wid3" class="radio-custom-label">In einem neuen Tab</label>
+        </div>
+        <div>
+          <input id="radio-wid4" class="radio-custom" name="radio-widsec" type="radio"
+                 (change)="changeOpenUrlType(1)"
+                 [checked]="widgetConfig.open_this_url === 1">
+          <label for="radio-wid4" class="radio-custom-label">In der aktuellen Tab</label>
+        </div>
+      </div>
+      <!-- Opening tab -->
+
+      <div class="d-flex d-flex--justify-between">
+        <button class="btn default-button" (click)="comeToTabs('initial_state')"> < Vorherige</button>
+        <button class="btn primary-button" (click)="comeToTabs('opt_in_actions')">Nächste ></button>
+      </div>
+    </div>
+
+
+    <div class="content-tabs-sidebar" *ngIf="tabsValue === 'opt_in_actions'">
+      <div class="d-flex d-flex--direction-column">
+        <span class="widget-span">Opt-In Nachricht</span>
+        <div class="button-message d-flex">
+          <span (click)="redirectToWidgetFlow('preview', widgetById?.details?.flow?.id)">
+            {{ widgetById?.details?.flow?.name }}
+          </span>
+          <div class="actions-widget-tag">
+            <button class="btn" (click)="redirectToWidgetFlow('edit', widgetById?.details?.flow?.id)">
+              <i class="far fa-edit"></i> Bearbeiten
+            </button>
+            <button class="btn" (click)="openVerticallyC(contentFlow)">
+              <i class="fas fa-reply-all"></i> Replace
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- opt-in message -->
+      <div class="d-flex d-flex--direction-column"
+      *ngIf="widgetById?.details?.type !== 8">
+        <span class="widget-span">Abonnent Zu Autoresponder Hinzufügen</span>
+        <select placeholder="-- Autoresponder auswählen --" [(ngModel)]="widgetById.details.sequenceID">
+          <option value="null">-- Autoresponder auswählen --</option>
+          <option *ngFor="let item of widgetById?.allSequences" [value]="item?.sequenceID">{{ item?.name }}</option>
+        </select>
+      </div>
+      <!--Add Subscriber to Sequence -->
+
+      <div class="d-flex d-flex--justify-between"
+      [ngClass]="{'d-flex--justify-end': widgetById?.details?.type > 6}">
+        <button class="btn default-button"
+                *ngIf="widgetById?.details?.type <= 6"
+                (click)="comeToTabs('submitted_state')"> < Vorherige</button>
+        <button class="btn primary-button" (click)="comeToTabs('setup')">Nächste ></button>
+      </div>
+    </div>
+
+
+    <div class="content-tabs-sidebar" *ngIf="tabsValue === 'setup'">
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type !== 7 && widgetById?.details?.type !== 8 && widgetById?.details?.type !== 9">
+        <span class="widget-span">Installiere Den ChatBo Snippet Code Auf Deiner Webseite</span>
+        <button class="btn primary-button" (click)="openVerticallyCentered(content)">
+          ChatBo Snippet Code generieren
+        </button>
+      </div>
+      <!-- Code pasted -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type !== 5 &&
+                  widgetById?.details?.type !== 6 &&
+                  widgetById?.details?.type !== 7 &&
+                  widgetById?.details?.type !== 8 &&
+                  widgetById?.details?.type !== 9">
+        <span class="widget-span">Geräte</span>
+        <div>
+          <input id="radio-setup1" class="radio-custom" name="radio-setup" type="radio"
+                 (change)="changeDeviceType(0)"
+                 [checked]="widgetConfig?.devices === 0">
+          <label for="radio-setup1" class="radio-custom-label">Mobile und Desktop</label>
+        </div>
+        <div>
+          <input id="radio-setup2" class="radio-custom" name="radio-setup" type="radio"
+                 (change)="changeDeviceType(1)"
+                 [checked]="widgetConfig?.devices === 1">
+          <label for="radio-setup2" class="radio-custom-label">Nur Desktop</label>
+        </div>
+        <div>
+          <input id="radio-setup3" class="radio-custom" name="radio-setup" type="radio"
+                 (change)="changeDeviceType(2)"
+                 [checked]="widgetConfig?.devices === 2">
+          <label for="radio-setup3" class="radio-custom-label">Nur Mobile</label>
+        </div>
+      </div>
+      <!-- Visible on desktop/tablet/mobile -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 5 ||
+                  widgetById?.details?.type === 6">
+        <span class="widget-span">2. Integriere Dein Widget</span>
+        <p class="sub-widget-title">Betten Sie diesen Code in Ihre Seite ein, in der das Widget angezeigt werden soll.</p>
+        <code *ngIf="widgetById?.details?.type === 5" class="code-st">&lt;div class="chatbo-button-widget-embed" data-widget-id="{{ widgetById?.details?.id }}"&gt;&lt;/div&gt;</code>
+        <code *ngIf="widgetById?.details?.type === 6" class="code-st">&lt;div class="chatbo-box-widget-embed" data-widget-id="{{ widgetById?.details?.id }}"&gt;&lt;/div&gt;</code>
+      </div>
+      <!-- Integration widget -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 7">
+        <span class="widget-span">Benutzerdefinierter Referenzparameter</span>
+        <input type="text" placeholder=""
+               [(ngModel)]="widgetConfig.custom_ref"
+               (ngModelChange)="changeRefUrl(widgetConfig.custom_ref)">
+      </div>
+      <!-- custom REF parameter -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 7">
+        <span class="widget-span">Ihre Messenger Ref URL</span>
+        <code class="changed-ref-url" *ngIf="changeRef">Please speichern kampagne</code>
+        <a *ngIf="!changeRef" class="messenger-ref" [href]="refUrl" target="_blank">
+          {{ refUrl }}
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+      <!-- messenger REF URL -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 8">
+        <p class="sub-widget-title">Generierter JSON Code hängt vom ersten Element in Ihrer Opt-In Nachricht ab. Jedes Mal, wenn Sie es ändern, müssen Sie auch den neuen JSON generieren.</p>
+        <p class="sub-widget-title">Sie können den folgenden JSON Code nur für die aktuelle Facebook Seite verwenden.</p>
+        <span class="widget-span">Ihr Facebook Ads JSON Code</span>
+        <pre id="json-code" *ngIf="dataJSON?.result" class="code-st" style="font-size: 14px;">
+          <code>
+{{ dataJSON?.adsJSON }}
+          </code>
+        </pre>
+
+        <pre id="json-code1" *ngIf="!dataJSON?.result" class="code-st" style="font-size: 14px; color: red">
+          {{ dataJSON?.adsJSON }}
+        </pre>
+      </div>
+      <!-- facebook JSON -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 9">
+        <span class="widget-span">Bildgröße (100-2000px)</span>
+        <input type="number" min="100" max="2000"
+               (change)="setImageSize()"
+               [(ngModel)]="widgetConfig.image_size">
+      </div>
+      <!-- image size (facebook messenger code) -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 9">
+        <span class="widget-span">Ihre Facebook Messenger Code</span>
+        <img class="mess-code" [src]="imageMessengerCode" alt="">
+        <a class="btn default-button" [href]="imageMessengerCode"
+           target="_blank"
+           [download]="imageMessengerCode">Codebild herunterladen</a>
+      </div>
+      <!-- image (facebook messenger code) -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 10">
+        <span class="widget-span">Willkommens Text</span>
+        <input type="text" placeholder="" [(ngModel)]="widgetConfig.check_welcome_text">
+      </div>
+      <!-- welcome message (CHAT) -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 10">
+        <span class="widget-span">Button Text</span>
+        <input type="text" [(ngModel)]="widgetConfig.check_button_text">
+      </div>
+      <!-- button text (CHAT) -->
+      <div class="d-flex d-flex--direction-column"
+           *ngIf="widgetById?.details?.type === 10">
+        <span class="widget-span">Farben</span>
+        <div class="d-flex d-flex--justify-between d-flex--wrap">
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.check_box_bg"
+                   [(colorPicker)]="widgetConfig['check_box_bg']"
+                   id="checkBoxBg"
+                   name="checkBoxBg"/>
+            <label for="checkBoxBg">Willkommens Box Hintergrund</label>
+          </div>
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.check_welcome_text_color"
+                   [(colorPicker)]="widgetConfig['check_welcome_text_color']"
+                   id="checkWelcomeTextColor"
+                   name="checkWelcomeTextColor"/>
+            <label for="checkWelcomeTextColor">Willkommens Text Farbe</label>
+          </div>
+
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.check_button_bg"
+                   [(colorPicker)]="widgetConfig['check_button_bg']"
+                   id="checkButtonBg1"
+                   name="checkButtonBg1"/>
+            <label for="checkButtonBg1">Button Hintergrund</label>
+          </div>
+
+          <div class="color-type">
+            <input [style.background]="widgetConfig?.check_button_color"
+                   [(colorPicker)]="widgetConfig['check_button_color']"
+                   id="checkButtonColor1"
+                   name="checkButtonColor1"/>
+            <label for="checkButtonColor1">Button Text Farbe</label>
+          </div>
+        </div>
+      </div>
+      <!-- color -->
+
+      <div class="d-flex d-flex--justify-start">
+        <button class="btn default-button" (click)="comeToTabs('opt_in_actions')"> < Vorherige</button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="widget-edit-content" *ngIf="tabsValue === 'initial_state' && widgetById?.details?.type ||
+                                          tabsValue === 'submitted_state' && widgetById?.details?.type ||
+                                          tabsValue === 'setup' && widgetById?.details?.type">
+    <div class="d-flex d-flex--align-center d-flex--justify-center full-height" *ngIf="!previewCheck">
+      <div class="back-phone">
+        <div class="camera"></div>
+        <div class="loudspeaker"></div>
+        <div class="messenger-profile">
+          <div class="d-flex" *ngIf="widgetById?.details?.type === 1">
+            <app-bar-widget [config]="widgetConfig"
+                            [view]="'mobile'"
+                            [tabsValue]="tabsValue" class="full-widget"></app-bar-widget>
+          </div>
+          <!-- BAR -->
+          <div class="d-flex" *ngIf="widgetById?.details?.type === 2">
+            <app-slide-in-widget [config]="widgetConfig"
+                                 [view]="'mobile'"
+                                 [tabsValue]="tabsValue" class="full-widget"></app-slide-in-widget>
+          </div>
+          <!-- SLIDE-IN -->
+          <div class="d-flex" *ngIf="widgetById?.details?.type === 3">
+            <app-modal-widget [config]="widgetConfig"
+                              [view]="'mobile'"
+                              [tabsValue]="tabsValue" class="full-widget modal-widget"></app-modal-widget>
+          </div>
+          <!-- POPUP -->
+          <div class="d-flex" *ngIf="widgetById?.details?.type === 4">
+            <app-page-takeover-widget [config]="widgetConfig"
+                                      [view]="'mobile'"
+                                      [tabsValue]="tabsValue" class="full-widget"></app-page-takeover-widget>
+          </div>
+          <!-- PAGE TAKEOVER -->
+          <div class="d-flex" *ngIf="widgetById?.details?.type === 5">
+            <app-button-widget [config]="widgetConfig"
+                               [view]="'mobile'"
+                               [tabsValue]="tabsValue" class="full-widget"></app-button-widget>
+          </div>
+          <!-- BUTTON -->
+          <div class="d-flex" *ngIf="widgetById?.details?.type === 6">
+            <app-box-widget [config]="widgetConfig"
+                            [view]="'mobile'"
+                            [tabsValue]="tabsValue" class="full-widget"></app-box-widget>
+          </div>
+          <!-- BOX -->
+          <div class="d-flex background-white"
+               *ngIf="widgetById?.details?.type === 7 ||
+                      widgetById?.details?.type === 8 ||
+                      widgetById?.details?.type === 9 ||
+                      widgetById?.details?.type === 10">
+          </div>
+          <!-- MESSENGER REF -->
+          <!-- FB JSON -->
+          <!-- FB CODE -->
+          <!-- CHAT -->
+        </div>
+        <div class="touch"></div>
+      </div>
+    </div>
+    <div *ngIf="previewCheck" class="full-height">
+
+      <div class="d-flex full-height" *ngIf="widgetById?.details?.type === 1">
+        <app-bar-widget [config]="widgetConfig"
+                        [view]="'desktop'"
+                        [tabsValue]="tabsValue" class="full-widget"></app-bar-widget>
+      </div>
+      <!-- BAR -->
+      <div class="d-flex full-height" *ngIf="widgetById?.details?.type === 2">
+        <app-slide-in-widget [config]="widgetConfig"
+                             [view]="'desktop'"
+                             [tabsValue]="tabsValue" class="full-widget"></app-slide-in-widget>
+      </div>
+      <!-- SLIDE-IN -->
+      <div class="d-flex full-height" *ngIf="widgetById?.details?.type === 3">
+        <app-modal-widget [config]="widgetConfig"
+                          [view]="'desktop'"
+                          [tabsValue]="tabsValue" class="full-widget modal-widget"></app-modal-widget>
+      </div>
+      <!-- POPUP -->
+      <div class="d-flex full-height" *ngIf="widgetById?.details?.type === 4">
+        <app-page-takeover-widget [config]="widgetConfig"
+                                  [view]="'desktop'"
+                                  [tabsValue]="tabsValue" class="full-widget"></app-page-takeover-widget>
+      </div>
+      <!-- PAGE TAKEOVER -->
+      <div class="d-flex full-height" *ngIf="widgetById?.details?.type === 5">
+        <app-button-widget [config]="widgetConfig"
+                           [view]="'desktop'"
+                           [tabsValue]="tabsValue" class="full-widget"></app-button-widget>
+      </div>
+      <!-- BUTTON -->
+      <div class="d-flex full-height" *ngIf="widgetById?.details?.type === 6">
+        <app-box-widget [config]="widgetConfig"
+                        [view]="'desktop'"
+                        [tabsValue]="tabsValue" class="full-widget"></app-box-widget>
+      </div>
+      <!-- BOX -->
+      <div class="d-flex full-height" *ngIf="widgetById?.details?.type === 10">
+        <app-chat-widget [config]="widgetConfig"
+                         [view]="'desktop'"
+                         [tabsValue]="tabsValue" class="full-widget"></app-chat-widget>
+      </div>
+      <!-- CHAT -->
+      <div class="d-flex full-height background-white"
+           *ngIf="widgetById?.details?.type === 7 ||
+                  widgetById?.details?.type === 8 ||
+                  widgetById?.details?.type === 9"></div>
+      <!-- MESSENGER REF -->
+      <!-- FB JSON -->
+      <!-- FB CODE -->
+    </div>
+  </div>
+  <div class="widget-edit-content" *ngIf="tabsValue === 'opt_in_actions'">
+    <div class="d-flex d-flex--align-center d-flex--justify-center full-height">
+      <div class="back-phone">
+        <div class="camera"></div>
+        <div class="loudspeaker"></div>
+        <div class="messenger-profile">
+          <app-mobile-flow-preview *ngIf="previewMobile" class="preview-flow" [id]="widgetById?.details?.flow?.id"></app-mobile-flow-preview>
+        </div>
+        <div class="touch"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column widget-body-website">
+    <h3>Richte Deine Webseite ein</h3>
+
+    <ngb-tabset>
+      <ngb-tab>
+        <ng-template ngbTabTitle>
+          <span class="tab-word">A</span> Autorisiere Deine Webseite
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div class="widget-website">
+            <div class="web-item" *ngFor="let item of widgetById?.website; let i = index">
+              {{ item }}
+              <i class="fas fa-times" (click)="removeWebsite(item, widgetById?.website, i)"></i>
+            </div>
+          </div>
+          <div class="create-web">
+            <input type="text" placeholder="e.g.mysite.com" [(ngModel)]="web">
+            <button class="btn primary-button" (click)="createWebSite(web)">Hinzufügen</button>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab>
+        <ng-template ngbTabTitle>
+          <span class="tab-word">B</span> Installiere das ChatBo Snippet
+        </ng-template>
+        <ng-template ngbTabContent>
+          <p class="tab-text-content">Dieser Code erlaubt ChatBo den Facebook Messenger auf Deiner Webseite zu verwenden und die Aktivitäten zu tracken. Installiere diesen Code auf Deiner Webseite.</p>
+          <p class="tab-text-content">Platziere es im <code>&lt;head&gt;</code> Bereich auf allen Seiten Deiner Webseite.</p>
+          <div class="copy-script">
+            <pre>
+&lt;!-- ChatBo --&gt;
+&lt;script&gt;document.write("&lt;script type='text/javascript' src='{{ widgetById?.details?.filePath }}?v=" + Date.now() + "'&gt;&lt;\/script&gt;");&lt;/script&gt;
+            </pre>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-body d-flex d-flex--direction-column enter-folder-name">
+    <button type="button" class="close close-flow-popup" aria-label="Close" (click)="c('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <app-flow-popup
+      [config]="widgetById"
+      [changePreloader]="previewMobile"
+      [sendPopup]="'true'"
+      [closePopup]="c">
+    </app-flow-popup>
+  </div>
+</ng-template>

@@ -1,0 +1,30 @@
+app_web:
+    resource: "@AppBundle/Controller"
+    type:   annotation
+
+app_api:
+    resource: "@AppBundle/Controller/Api"
+    type:   annotation
+    prefix: /v2
+
+app_api_admin:
+    resource: "@AppBundle/Controller/Api/Admin"
+    type:   annotation
+    prefix: /v2/admin
+
+app_api_webhook:
+    resource: "@AppBundle/Controller/Api/WebHook"
+    type:   annotation
+    prefix: /v2/webhook
+
+app_api_fetch:
+    resource: "@AppBundle/Controller/Api/Fetch"
+    type:   annotation
+    prefix: /v2/fetch
+
+handle_options:
+    path: /{path}
+    methods: OPTIONS
+    defaults: { _controller: AppBundle:Default:handleOptions, path: "" }
+    requirements:
+        path: "^.+"

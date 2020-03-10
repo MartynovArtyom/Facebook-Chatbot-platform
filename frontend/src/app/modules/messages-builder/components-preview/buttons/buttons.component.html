@@ -1,0 +1,51 @@
+<div class="container-buttons-send-message" *ngIf="type === 'some'" data-drag="true">
+  <div class="button-content" *ngFor="let button of buttons; let i = index" data-drag="true">
+    <div class="name-button" data-drag="true" [ngClass]="{'text-left': _builderService.view === 'preview'}">
+      {{ button?.title }}
+      <span class="button-clicks" *ngIf="button?.click && _builderService.view === 'preview'">CTR {{ button?.click | flowStatistic:opened }}%</span>
+      <span class="button-clicks" *ngIf="!button?.click && _builderService.view === 'preview'">CTR 0%</span>
+    </div>
+
+    <div class="link-button" *ngIf="button?.type !== 'open_website' && button?.type !== 'call_number'"
+         [ngClass]="{'active-circle': button?.next_step}" data-drag="true">
+      <i class="far fa-circle" data-drag="false" [id]="button?.uuid"
+         (click)="_builderService.createMouseLink(button, $event, 'all')"></i>
+    </div>
+
+    <div class="link-button" data-drag="true" *ngIf="button?.type === 'call_number'">
+      <i class="fas fa-phone" [id]="button?.uuid" data-drag="false"></i>
+    </div>
+
+    <div class="link-button between" *ngIf="button?.type === 'open_website'" data-drag="true">
+      <i class="fas fa-link" data-drag="false"></i>
+      <i class="fas fa-bolt" data-drag="false" [id]="button?.uuid"
+         (click)="_builderService.createMouseLink(button, $event, 'pr')"></i>
+    </div>
+  </div>
+</div>
+<!-- Container from array buttons to send message type main -->
+
+<div class="container-buttons-send-message" *ngIf="type === 'noun' || type === 'noun-list-item'" data-drag="true">
+  <div class="button-content noun" *ngFor="let button of buttons; let i = index"
+       [ngClass]="{'noun-list-item': type === 'noun-list-item'}" data-drag="true">
+    <div class="name-button" data-drag="true" [ngClass]="{'text-left': _builderService.view === 'preview'}">
+      {{ button?.title }}
+      <span class="button-clicks" *ngIf="button?.click && _builderService.view === 'preview'">CTR {{ button?.click | flowStatistic:opened }}%</span>
+      <span class="button-clicks" *ngIf="!button?.click && _builderService.view === 'preview'">CTR 0</span>
+    </div>
+
+    <div class="link-button" *ngIf="button?.type !== 'open_website'"
+         [ngClass]="{'active-circle': button?.next_step}" data-drag="true">
+      <i class="far fa-circle" data-drag="false" [id]="button?.uuid"
+         (click)="_builderService.createMouseLink(button, $event, 'all')"></i>
+    </div>
+
+    <div class="link-button between" *ngIf="button?.type === 'open_website'" data-drag="true">
+      <i class="fas fa-link" data-drag="false"></i>
+      <i class="fas fa-bolt" data-drag="false" [id]="button?.uuid"
+         (click)="_builderService.createMouseLink(button, $event, 'pr')"></i>
+    </div>
+
+  </div>
+</div>
+<!-- Container from array buttons to send message type child list -->

@@ -1,0 +1,58 @@
+.contract-info-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  .contract-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 12px;
+
+    & > span{
+      width: 300px;
+    }
+
+    & > input{
+      width: calc(100% - 300px);
+      border: 1px solid #E0E6ED;
+      padding: 3px 5px;
+    }
+  }
+}
+
+.iframe-cv{
+  padding: 40px;
+
+  .doc{
+    height: 600px;
+  }
+}
+
+.contract-header{
+  display: flex;
+  border: 1px solid #E0E6ED;
+  padding: 10px;
+}
+
+.contract-body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  .contract-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid #E0E6ED;
+  }
+}
+
+.component-settings > .row{
+  margin-bottom: 24px;
+}

@@ -1,0 +1,60 @@
+<div class="component-settings" *ngIf="!preload">
+  <div class="row" *ngIf="planErrorStatus">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 d-flex d-flex--direction-column d-flex--align-center">
+      <p class="margin-bottom--12" style="font-size: 16px; text-align: center">
+        Diese Funktion ist für deinen Plan nicht freigeschaltet. Mache bitte ein Upgrade um diese Funktion zu nutzen!
+      </p>
+      <a [href]="'https://chatbo.de/upgrade/'"
+         target="_blank"
+         class="btn primary-button">
+        Jetzt upgraden
+      </a>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+  <div class="row" *ngIf="!planErrorStatus">
+    <div class="col-md-4">
+      <h5>API Key erstellen</h5>
+    </div>
+    <div class="col-md-4">
+      <input type="text" class="disabled-zapier-input" disabled placeholder="Dein API Key" [(ngModel)]="token">
+      <button class="bth primary-button margin-bottom--12" *ngIf="!token" (click)="generateToken()">API Key erstellen</button>
+      <button class="bth primary-button margin-right--10 margin-bottom--12" *ngIf="token" (click)="openVerticallyCenter(content)">Token aktualisieren</button>
+      <button class="bth danger-button margin-bottom--12" *ngIf="token" (click)="openVerticallyCenter(content1)">Löschen Token</button>
+    </div>
+    <div class="col-md-4">
+      <p>Zapier API Key</p>
+    </div>
+  </div>
+</div>
+
+<div class="place-preloader-settings" *ngIf="preload">
+  <span class="loader-table">Loading</span>
+</div>
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+  <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="content-modal-container">
+    <h3>Vorsicht, wenn du den Token aktualisierst, werden alle verbundenen API Schnittstellen deaktiviert.</h3>
+    <div class="modal-footer d-flex d-flex--justify-between d-flex--align-center">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn primary-button" (click)="generateToken()">Aktualisieren</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #content1 let-c="close" let-c="dismiss">
+  <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+  <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="content-modal-container">
+    <h3>Beware, if you Löschen Token all connected API methods will be deaktiviert.</h3>
+    <div class="modal-footer d-flex d-flex--justify-between d-flex--align-center">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn danger-button" (click)="deleteToken()">Löschen</button>
+    </div>
+  </div>
+</ng-template>

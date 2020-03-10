@@ -1,0 +1,40 @@
+.text-item-content{
+  width: 100%;
+  padding-left: 30px;
+  padding-right: 30px;
+
+  &:hover{
+    .sidebar-actions{
+      display: flex;
+    }
+  }
+
+  & > .image-content{
+    border: 2px dashed #00BFC6;
+    cursor: pointer;
+    height: 140px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+    &:hover{
+      border-color: #2C8BC2;
+    }
+
+    &.border-radius-bottom-no{
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border: 2px solid #00BFC6;
+      cursor: pointer;
+      height: 140px;
+
+      &:hover{
+        border-color: #2C8BC2;
+      }
+    }
+
+  }
+}
+

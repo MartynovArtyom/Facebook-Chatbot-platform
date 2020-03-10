@@ -1,0 +1,93 @@
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Users</p>
+  </div>
+</div>
+
+<div class="dashboard-content">
+  <div class="white-background padding--10">
+    <div class="search-users-container">
+      <input type="text" placeholder="Search" [(ngModel)]="search" (ngModelChange)="searchUsers()">
+
+      <ng-select class="products-list-select"
+                 [addTag]="false"
+                 placeholder="Products"
+                 (change)="getTabsUsers(addTags.selectedValues[0], addTags.selectedValues[0])"
+                 (clear)="getTabsUsers('All', null)"
+                 #addTags>
+        <ng-option *ngFor="let item of products" [value]="item?.id">
+          {{ item?.name }}
+        </ng-option>
+      </ng-select>
+    </div>
+    <div class="search-users-created-account">
+      <input [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" [(ngModel)]="createAccountFrom" (ngModelChange)="getUsers()" class="mr-5"  placeholder="Created account from">
+      <owl-date-time #dt1 [pickerType]="'calendar'" ></owl-date-time>
+      <input [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" [(ngModel)]="createAccountTo" (ngModelChange)="getUsers()" placeholder="Created account to">
+      <owl-date-time #dt2 [pickerType]="'calendar'"></owl-date-time>
+    </div>
+
+    <div class="users-content-tabs">
+      <div class="d-flex justify-content-between" *ngIf="!search">
+        <div class="tabs-users">
+          <span *ngFor="let tab of tabs" [ngClass]="{'active': tabValue === tab}"
+                (click)="getTabsUsers(tab, null)">{{ tab }}</span>
+        </div>
+        <div class="total">
+          <span><strong>Total: </strong>{{ counterUsers }}</span>
+        </div>
+      </div>
+
+      <div class="users-tab-list">
+        <div class="user-item" *ngFor="let user of allUsers; let i = index">
+
+          <div class="d-flex">
+            <span *ngIf="user?.status" class="active-tool">Active</span>
+            <span *ngIf="!user?.status" class="disable-tool">Disable</span>
+            <img [src]="user?.avatar" alt="Avatar">
+            <div class="d-flex d-flex--direction-column">
+              <a [routerLink]="'/admin/users/' + user?.id">
+                {{ user?.firstName }} {{ user?.lastName }}
+                <span [ngClass]="{'show-product': user?.productLabel !== 'Not Product'}" class="product-label">
+                  {{ user?.productLabel }}
+                </span>
+              </a>
+              <span>Pages: {{ user?.countPages }}, Subscribers: {{(user?.countSubscribers) ? user?.countSubscribers : 0 }}/{{ (user?.limitSubscribers) ? user?.limitSubscribers : 0 }}</span>
+            </div>
+          </div>
+
+          <div class="user-button-actions">
+            <button class="btn primary-button" (click)="getUserToken(user)">
+              <i class="fas fa-sign-in-alt"></i>
+              Login
+            </button>
+            <button class="btn default-button margin-left--10 margin-right--10"
+                    [routerLink]="'/admin/users/' + user?.id">
+              <i class="fas fa-pencil-alt"></i>
+              Update
+            </button>
+            <button class="btn danger-button" (click)="removeUser(user, i)">
+              <i class="far fa-trash-alt"></i>
+              Löschen
+            </button>
+          </div>
+        </div>
+
+        <div class="d-flex d-flex--align-center d-flex--justify-center load-more-users"
+             *ngIf="counterUsers > allUsers?.length && !loadPagination">
+          <button class="btn default-button" (click)="loadPaginations()">Mehr laden</button>
+        </div>
+
+        <span *ngIf="loadPagination" class="loader-button small-load-table"></span>
+
+        <div class="user-item not-found" *ngIf="allUsers?.length === 0 && !loadPagination">
+          Users not found
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>

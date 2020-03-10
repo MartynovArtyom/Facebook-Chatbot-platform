@@ -1,0 +1,28 @@
+<div class="list-tabs-campaign first-level" style="overflow-y: hidden; overflow-x: auto" id="horizontal-scroller">
+  <div class="list-tabs-campaign" style="width: 100em;">
+    <div class="tab-campaign general-tab"
+         [ngClass]="{'active': companyManagerService.statusCampaign}"
+         (click)="companyManagerService.setStatusTabs(null, null, null)">
+      <p>Kampagnenmanager</p>
+    </div>
+
+    <div class="tab-campaign" *ngFor="let tab of companyManagerService.dataFirstLevelTabs; let i = index"
+         (click)="companyManagerService.setStatusTabs(companyManagerService.dataFirstLevelTabs,
+                                                    companyManagerService.dataSecondLevelTabs,
+                                                    tab)"
+         [ngClass]="{
+        'active': tab?.status,
+        'kampagne': tab?.type === 'widget' || tab?.type === 'newAutoresponder',
+        'autoresponder': tab?.type === 'autoresponder',
+        'keywords': tab?.type === 'keywords'
+       }">
+      <i class="fas fa-times"
+         (click)="companyManagerService.deleteTab(companyManagerService.dataFirstLevelTabs, i, 'first')"></i>
+      <p>{{ tab?.name }}</p>
+    </div>
+  </div>
+</div>
+
+<app-tabs-second-level *ngIf="companyManagerService.dataSecondLevelTabs.length > 0"></app-tabs-second-level>
+
+<app-campaign *ngIf="companyManagerService.dataSecondLevelTabs.length === 0"></app-campaign>

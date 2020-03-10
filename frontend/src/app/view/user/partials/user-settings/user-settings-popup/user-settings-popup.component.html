@@ -1,0 +1,50 @@
+<div class="content-component">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" (click)="settingTabs(1)" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">Allgemein</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="settingTabs(2)" id="notification-tab" data-toggle="tab" href="#notification" role="tab" aria-controls="notification" aria-selected="true">Benachrichtigungen</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="settingTabs(3)" id="custom-fields-tab" data-toggle="tab" href="#custom-fields" role="tab" aria-controls="custom-fields" aria-selected="false">Benutzerdefinierte Felder</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="settingTabs(4)" id="tags-tab" data-toggle="tab" href="#tags" role="tab" aria-controls="tags" aria-selected="false">Tags</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="settingTabs(5)" id="admins-tab" data-toggle="tab" href="#admins" role="tab" aria-controls="admins" aria-selected="false">Admins</a>
+    </li>
+    <li class='nav-item'>
+      <a class='nav-link' (click)='settingTabs(6)' id='zapier-tab' data-toggle='tab' href='#zapier' role='tab' aria-controls='zapier' aria-selected='false'>Zapier</a>
+    </li>
+    <li class='nav-item'>
+      <a class='nav-link' (click)='settingTabs(7)' id='contract-tab' data-toggle='tab' href='#contract' role='tab' aria-controls='contract' aria-selected='false'>Verträge</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="settings-tabs tab-pane fade show active" *ngIf="activeTab === 1" id="general" role="tabpanel" aria-labelledby="general-tab">
+      <app-user-settings-general></app-user-settings-general>
+    </div>
+    <div class="settings-tabs tab-pane fade" *ngIf="activeTab === 2" id="notification" role="tabpanel" aria-labelledby="notification-tab">
+      <app-user-settings-notification></app-user-settings-notification>
+    </div>
+    <div class="settings-tabs tab-pane fade" *ngIf="activeTab === 3" id="custom-fields" role="tabpanel" aria-labelledby="custom-fields-tab">
+      <app-user-settings-custom-fields></app-user-settings-custom-fields>
+    </div>
+    <div class="settings-tabs tab-pane fade" *ngIf="activeTab === 4" id="tags" role="tabpanel" aria-labelledby="tags-tab">
+      <app-user-settings-tags></app-user-settings-tags>
+    </div>
+    <div class="settings-tabs tab-pane fade" *ngIf="activeTab === 5" id="admins" role="tabpanel" aria-labelledby="admins-tab">
+      <app-user-settings-admins></app-user-settings-admins>
+    </div>
+    <div class='settings-tabs tab-pane fade' *ngIf='activeTab === 6' id='zapier' role='tabpanel' aria-labelledby='zapier-tab'>
+      <app-user-settings-zapier></app-user-settings-zapier>
+    </div>
+    <div class='settings-tabs tab-pane fade' *ngIf='activeTab === 7' id='contract' role='tabpanel' aria-labelledby='contract-tab'>
+      <app-user-settings-contracts></app-user-settings-contracts>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,16 @@
+<div class="open-messanger-popup" *ngIf="sharedService.openMessage">
+  <i class="fas fa-times" (click)="closePopup()"></i>
+  <div class="d-flex d-flex--align-center d-flex--justify-center margin-right--10">
+    <i class="far fa-check-circle"></i>
+  </div>
+
+  <div class="d-flex d-flex--align-center d-flex--justify-center d-flex--direction-column">
+    <p>Nachrichtenvorschau gesendet, Prüfe deinen Messenger. Diese Nachricht wurde nur an dich gesendet.</p>
+    <a [href]="'https://m.me/' + userService.userID"
+       (click)="closePopup()"
+       target="_blank"
+       class="btn default-button">
+      Öffne Messenger
+    </a>
+  </div>
+</div>

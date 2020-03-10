@@ -1,0 +1,57 @@
+.color{
+  &--users{
+    background: #1ab394;
+  }
+
+  &--sequence{
+    background: #13ce66;
+  }
+
+  &--pages{
+    background: #23c6c8;
+  }
+
+  &--subscribers{
+    background: #ed5565;
+  }
+
+  &--conversion-tools{
+    background: #1c84c6;
+  }
+
+  &--messages{
+    background: #f8ac59;
+  }
+}
+
+.stats-item{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-radius: 8px;
+  align-items: center;
+  color: #FFFFFF;
+
+  &.cursor--pointer{
+    cursor: pointer;
+  }
+
+  & > i{
+    font-size: 48px;
+  }
+
+  .stats-content{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-weight: 600;
+
+    & > p{
+      font-size: 18px;
+    }
+
+    & > span{
+      font-size: 28px;
+    }
+  }
+}

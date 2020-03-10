@@ -1,0 +1,247 @@
+<div class="component-settings" *ngIf="!preload">
+  <div class="row title-row-admin">
+    <div class="col-md-6">
+      <h3>{{ _userService.userPageInfo?.title }} Team</h3>
+    </div>
+    <div class="col-md-6">
+      <button class="btn primary-button" *ngIf="_userService.userPageInfo?.role === 1" (click)="openVerticallyCenter(contentFlow)">+ Neues Mitglied einladen</button>
+    </div>
+  </div>
+  <!-- Admins -->
+
+  <div *ngIf="admins.length > 0" class="row title-row-admin">
+    <div class="col-md-12 margin-bottom--24">
+      <p>Admins</p>
+      <span>Admins haben volle Kontrolle ьber die Bots, inklusive Nutzer Rollen Management and folgende Rechte: Bots deaktivieren und klonen, Inhalte teilen, Vorlagen erstellen und installieren, Rechnungen und Zahlungen verwalten.</span>
+    </div>
+    <div class="col-md-6">
+      <div class="admin-info">
+        <span>Name</span>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="admin-info">
+        <span>Role</span>
+      </div>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+  <div class="row admin-content" *ngFor="let admin of admins; let index = index">
+    <div class="col-md-6">
+      <div class="admin-info">
+        <img [src]="admin?.avatar">
+        <span>{{ admin?.firstName }} {{ admin?.lastName }}</span>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <span *ngIf="admin?.type === 1" class="admin-status">Owner</span>
+      <span *ngIf="admin?.type === 2 && admin?.role === 1" class="admin-status">Admin</span>
+      <div *ngIf="admin?.type === 3 && admin?.role === 1" ngbDropdown placement="bottom-right" class="d-inline-block admin-status">
+        <a id="dropdownBasic1" class="cursor" ngbDropdownToggle>Admin <i class="fas fa-angle-down"></i></a>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 2)">Bearbeiter</button>
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 3)">Live Chat Agent</button>
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 4)">Beobachter</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1 text-align--center">
+      <span *ngIf="admin?.type !== 1 && admin?.type !== 2 && admin?.role === 1"
+            (click)="removeUserForPage(admin, admins, index)"
+            class="remove-admin">Löschen</span>
+
+      <span *ngIf="admin?.type === 2" (click)="leaveUserForPage(admin)" class="remove-admin">Verlassen</span>
+    </div>
+  </div>
+  <!-- Admins -->
+
+  <!-- Editors -->
+  <div *ngIf="editors.length > 0" class="row title-row-admin">
+    <div class="col-md-12 margin-bottom--24">
+      <p>Bearbeiters</p>
+      <span>Die Bearbeiter Rolle ist die zweitwichtigste Rolle im Bot Management. Bearbeiter Bots erstellen und Inhalte bearbeiten. (inklusive Installation von Vorlagen), aber sie haben keine Berechtigung um Bots zu deaktivieren, zu klonen, zu teilen oder Vorlagen zu erstellen.</span>
+    </div>
+    <div class="col-md-6">
+      <div class="admin-info">
+        <span>Name</span>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="admin-info">
+        <span>Role</span>
+      </div>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+  <div class="row admin-content" *ngFor="let admin of editors; let index = index">
+    <div class="col-md-6">
+      <div class="admin-info">
+        <img [src]="admin?.avatar">
+        <span>{{ admin?.firstName }} {{ admin?.lastName }}</span>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <span *ngIf="admin?.type === 2" class="admin-status">Bearbeiter</span>
+      <div *ngIf="admin?.type === 3" ngbDropdown placement="bottom-right" class="d-inline-block admin-status">
+        <a id="dropdownBasic2" class="cursor" ngbDropdownToggle>Bearbeiter <i class="fas fa-angle-down"></i></a>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 1)">Admin</button>
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 3)">Live Chat Agent</button>
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 4)">Beobachter</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1 text-align--center">
+      <span *ngIf="admin?.type !== 2 && admin?.role === 1 || admin?.type === 3 && admin?.role === 2" (click)="removeUserForPage(admin, editors, index)" class="remove-admin">Löschen</span>
+      <span *ngIf="admin?.type === 2" (click)="leaveUserForPage(admin)" class="remove-admin">Verlassen</span>
+    </div>
+  </div>
+  <!-- End Editors -->
+
+  <!-- Live Chat Agents -->
+  <div *ngIf="liveChatAgents.length > 0" class="row title-row-admin">
+    <div class="col-md-12 margin-bottom--24">
+      <p>Live Chat Agents</p>
+      <span>Diese Rolle dient zur Kommunikation mit Bot-Abonnenten und erteilt alle erforderlichen Berechtigungen zum Verwalten von Unterhaltungen im Live Chat. Live Chat Agents kцnnen vorhandene Tags zuweisen und benutzerdefinierte Feldwerte verwalten. Sie dьrfen keinen Bot-Inhalt erstellen oder bearbeiten, kцnnen jedoch alle vorhandenen Kampagnen anzeigen.</span>
+    </div>
+    <div class="col-md-6">
+      <div class="admin-info">
+        <span>Name</span>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="admin-info">
+        <span>Role</span>
+      </div>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+  <div class="row admin-content" *ngFor="let admin of liveChatAgents; let index = index">
+    <div class="col-md-6">
+      <div class="admin-info">
+        <img [src]="admin?.avatar">
+        <span>{{ admin?.firstName }} {{ admin?.lastName }}</span>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <span *ngIf="admin?.type === 2" class="admin-status">Live Chat Agent</span>
+      <div *ngIf="admin?.type === 3" ngbDropdown placement="bottom-right" class="d-inline-block admin-status">
+        <a id="dropdownBasic3" class="cursor" ngbDropdownToggle>Live Chat Agent <i class="fas fa-angle-down"></i></a>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic3">
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 1)">Admin</button>
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 2)">Bearbeiter</button>
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 4)">Beobachter</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1 text-align--center">
+      <span *ngIf="admin?.type !== 2 && admin?.role === 1 || admin?.type === 3 && admin?.role === 3" (click)="removeUserForPage(admin, liveChatAgents, index)" class="remove-admin">Löschen</span>
+      <span *ngIf="admin?.type === 2" (click)="leaveUserForPage(admin)" class="remove-admin">Verlassen</span>
+    </div>
+  </div>
+  <!-- End Live Chat Agents -->
+
+  <!-- Viewers -->
+  <div *ngIf="viewers.length > 0" class="row title-row-admin">
+    <div class="col-md-12 margin-bottom--24">
+      <p>Beobachters</p>
+      <span>Mit dieser Rolle kцnnen Teammitglieder Botstatistiken verfolgen und gesendete Kampagnen-Daten im Modus "Nur Ansicht" anzeigen. Beobachter dьrfen keinen Bot-Inhalt erstellen oder bearbeiten.</span>
+    </div>
+    <div class="col-md-6">
+      <div class="admin-info">
+        <span>Name</span>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="admin-info">
+        <span>Role</span>
+      </div>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+  <div class="row admin-content" *ngFor="let admin of viewers; let index = index">
+    <div class="col-md-6">
+      <div class="admin-info">
+        <img [src]="admin?.avatar">
+        <span>{{ admin?.firstName }} {{ admin?.lastName }}</span>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <span *ngIf="admin?.type === 2" class="admin-status">Beobachter</span>
+      <div *ngIf="admin?.type === 3" ngbDropdown placement="bottom-right" class="d-inline-block admin-status">
+        <a id="dropdownBasic4" class="cursor" ngbDropdownToggle>Beobachter <i class="fas fa-angle-down"></i></a>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic4">
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 1)">Admin</button>
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 2)">Bearbeiter</button>
+          <button class="dropdown-item" (click)="changeUserRole(admin, index, 3)">Live Chat Agent</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1 text-align--center">
+      <span *ngIf="admin?.type !== 2 && admin?.role === 1 || admin?.type === 3 && admin?.role === 4" (click)="removeUserForPage(admin, viewers, index)" class="remove-admin">Löschen</span>
+      <span *ngIf="admin?.type === 2" (click)="leaveUserForPage(admin)" class="remove-admin">Verlassen</span>
+    </div>
+  </div>
+  <!-- End Viewers -->
+
+</div>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="customLabel">Neues Mitglied einladen</h5>
+      <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body new-admin-content">
+      <p *ngIf="!afterGeneration">Select Role</p>
+      <div *ngIf="!afterGeneration" class="select-type-radio">
+        <div>
+          <input id="radio-1" class="radio-custom" name="radio-group" type="radio"
+                 [checked]="typeAdmin === 1"
+                 (click)="saveAdminSettings(1)">
+          <label for="radio-1" class="radio-custom-label">Admin</label>
+        </div>
+        <div>
+          <input id="radio-2" class="radio-custom" name="radio-group" type="radio"
+                 [checked]="typeAdmin === 2"
+                 (click)="saveAdminSettings(2)">
+          <label for="radio-2" class="radio-custom-label">Bearbeiter</label>
+        </div>
+        <div>
+          <input id="radio-3" class="radio-custom" name="radio-group" type="radio"
+                 [checked]="typeAdmin === 3"
+                 (click)="saveAdminSettings(3)">
+          <label for="radio-3" class="radio-custom-label">Live Chat Agent</label>
+        </div>
+        <div>
+          <input id="radio-4" class="radio-custom" name="radio-group" type="radio"
+                 [checked]="typeAdmin === 4"
+                 (click)="saveAdminSettings(4)">
+          <label for="radio-4" class="radio-custom-label">Beobachter</label>
+        </div>
+      </div>
+      <span *ngIf="!typeAdmin">Mitarbeiter, die deinen Bot verwalten, kцnnen je nach Aufgabenstellung unterschiedliche Rollen einnehmen. Bitte wдhle eine Rolle fьr dein neues Teammitglied.</span>
+      <span *ngIf="typeAdmin === 1">Admins haben volle Kontrolle ьber die Bots, inklusive Nutzer Rollen Management and folgende Rechte: Bots deaktivieren und klonen, Inhalte teilen, Vorlagen erstellen und installieren, Rechnungen und Zahlungen verwalten.</span>
+      <span *ngIf="typeAdmin === 2">Die Bearbeiter Rolle ist die zweitwichtigste Rolle im Bot Management. Bearbeiter Bots erstellen und Inhalte bearbeiten. (inklusive Installation von Vorlagen), aber sie haben keine Berechtigung um Bots zu deaktivieren, zu klonen, zu teilen oder Vorlagen zu erstellen.</span>
+      <span *ngIf="typeAdmin === 3">Diese Rolle dient zur Kommunikation mit Bot-Abonnenten und erteilt alle erforderlichen Berechtigungen zum Verwalten von Unterhaltungen im Live Chat. Live Chat Agents kцnnen vorhandene Tags zuweisen und benutzerdefinierte Feldwerte verwalten. Sie dьrfen keinen Bot-Inhalt erstellen oder bearbeiten, kцnnen jedoch alle vorhandenen Kampagnen anzeigen.</span>
+      <span *ngIf="typeAdmin === 4">Mit dieser Rolle kцnnen Teammitglieder Botstatistiken verfolgen und gesendete Kampagnen-Daten im Modus "Nur Ansicht" anzeigen. Beobachter dьrfen keinen Bot-Inhalt erstellen oder bearbeiten.</span>
+      <div *ngIf="typeAdmin && !afterGeneration" class="button-footer-modal margin-top--15 d-flex d-flex--align-center d-flex--justify-center">
+        <button class="btn primary-button" (click)="generateLink()">Generate A Link</button>
+      </div>
+      <input *ngIf="afterGeneration" type="text" readonly="" [value]="requestToken" id="link-invite" class="form-control margin-top--15 margin-bottom--15">
+      <button *ngIf="afterGeneration && !copied" (click)="copyToClipboard(requestToken)" class="copy-board"><i class="far fa-clone"></i> Copy</button>
+      <button *ngIf="afterGeneration && copied" class="copy-board copied"><i class="far fa-clone"></i> Copied</button>
+      <p *ngIf="afterGeneration" class="note-text">Kopiere den Link und klicke anschließend den blauen "Verstanden" Button. Erst durch das Klicken des Buttons wird der Link aktiviert. Beachte, dass dieser Link 24 Stunden gültig ist und nur einmal verwendet werden kann.</p>
+      <div *ngIf="afterGeneration" class="button-footer-modal margin-top--15 d-flex d-flex--align-center d-flex--justify-center">
+        <button class="btn primary-button" (click)="c('Cross click')">Verstanden</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div class="place-preloader-settings" *ngIf="preload">
+  <span class="loader-table">Loading</span>
+</div>

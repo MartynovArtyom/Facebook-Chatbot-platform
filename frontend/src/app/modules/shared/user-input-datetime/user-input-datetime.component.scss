@@ -1,0 +1,28 @@
+.date-container-msg{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #fff;
+
+  .calendar-content{
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+
+    .footer-date-container-messenger{
+      display: flex;
+    }
+  }
+}
+
+.owl-dt-inline{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}

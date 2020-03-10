@@ -1,0 +1,182 @@
+.title-user-page{
+  color: #333333;
+  font-size: 22px;
+}
+
+.title-page{
+  display: flex;
+  align-items: center;
+
+  & > a{
+    font-size: 1rem;
+    color: #8492a6;
+    margin-right: 10px;
+
+    &:hover, &:active, &:focus{
+      text-decoration: none;
+    }
+  }
+
+  & > i{
+    margin-right: 10px;
+    font-size: 16px;
+    color: #0084ff;
+    opacity: 0.8;
+  }
+
+  & > h3{
+    margin-bottom: 0;
+    font-size: 22px;
+  }
+}
+
+.tabs-users{
+  display: flex;
+  align-items: center;
+
+  & > span{
+    padding: 10px 14px;
+    display: flex;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    min-width: 72px;
+    justify-content: center;
+
+    &:hover{
+      background: #f5f5f5;
+    }
+
+    &.active{
+      border-color: #13ce66;
+      background: #f5f5f5;
+    }
+  }
+}
+
+.load-more-users{
+  margin: 15px 0;
+}
+
+.search-users-container{
+  & > input{
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 5px 15px;
+    margin-bottom: 24px;
+  }
+}
+
+.active-tool, .disable-tool{
+  font-size: 12px;
+  padding: 2px 10px;
+  color: #ffffff;
+  border-radius: 2px;
+  font-weight: 600;
+  width: 100px;
+  text-align: center;
+}
+
+.active-tool{
+  background: #1ab394;
+}
+
+.disable-tool{
+  background: #8492a6;
+}
+
+.white-background{
+  background: #fff;
+}
+
+.users-tab-list{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #E0E6ED;
+  padding: 10px;
+
+  .user-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #E0E6ED;
+    padding: 10px;
+
+    &.not-found{
+      text-align: center;
+      justify-content: center;
+    }
+
+    &:hover{
+      background: #f5f5f5;
+    }
+
+    &:last-child{
+      border-bottom: none;
+    }
+
+    & > .d-flex{
+      align-items: center;
+
+      & > .d-flex{
+
+        & > a{
+          color: #0084ff;
+          font-weight: 600;
+          font-size: 16px;
+          margin-bottom: 3px;
+
+          &:hover{
+            text-decoration: none;
+          }
+        }
+
+        & > span{
+          font-size: 12px;
+        }
+      }
+
+      & > img{
+        height: 48px;
+        width: 48px;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+        margin: 0 20px 0 15px;
+      }
+    }
+  }
+}
+
+.user-title-avatar{
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+
+  & > img{
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+  }
+
+  & > .d-flex{
+    font-size: 24px;
+  }
+}
+
+.user-all-information{
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-info-user{
+  display: flex;
+
+  & > b{
+    display: flex;
+    min-width: 130px;
+  }
+}
+

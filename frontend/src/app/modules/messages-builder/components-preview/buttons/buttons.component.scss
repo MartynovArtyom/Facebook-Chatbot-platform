@@ -1,0 +1,125 @@
+.container-buttons-send-message{
+  position: relative;
+
+  .button-content{
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid #00BFC6;
+    border-top: 2px solid transparent;
+    overflow: hidden;
+    background: #ffffff;
+
+    &.noun{
+
+      &.noun-list-item{
+        border-radius: 5px;
+
+        .name-button{
+          width: calc(100% - 40px);
+          font-size: 14px;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .link-button{
+          width: 40px;
+        }
+      }
+    }
+
+    &.open{
+      border: 2px solid #13ce66 !important;
+
+      & > .name-button{
+        color: #13ce66;
+      }
+    }
+
+    & > .name-button{
+      padding: 7px 7px 7px 15px;
+      color: #2C8BC2;
+      width: calc(100% - 50px);
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    & > .link-button{
+      padding: 7px;
+      width: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      &.between{
+        justify-content: space-between;
+      }
+
+      &.active-circle{
+        & > .fa-circle{
+          color: #8492a6;
+          border-radius: 50%;
+          background: #8492a6;
+        }
+      }
+
+      & > .fa-circle{
+        color: #E0E6ED;
+        transition: all .1s linear;
+
+        &:hover{
+          transition: all .1s linear;
+        }
+      }
+
+      & > .fa-link, & > .fa-phone{
+        color: #2C8BC2;
+      }
+
+      & > .fa-bolt{
+        color: #FCEE21;
+        transition: all .1s linear;
+
+        &:hover{
+          transition: all .1s linear;
+        }
+      }
+    }
+  }
+
+  .bottom-button{
+    width: 100%;
+    background: transparent;
+    border: 2px dashed #00BFC6;
+    padding: 6px;
+    color: #8492a6;
+    border-top: 2px dashed transparent;
+    outline: none;
+    box-shadow: none;
+
+    &.noun-list-item{
+      border-radius: 5px;
+      border-top: 2px dashed #E0E6ED;
+    }
+  }
+}
+
+.button-clicks{
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  box-shadow: -10px 0px 20px 1px #fff;
+  padding: 0 4px;
+  color: #13ce66;
+}
+
+.text-left{
+  text-align: left !important;
+}

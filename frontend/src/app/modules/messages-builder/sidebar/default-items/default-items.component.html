@@ -1,0 +1,66 @@
+<div class="default-items" *ngIf="_builderService.view !== 'preview'">
+  <span>Fließen</span>
+  <p>{{ _builderService.requestDataSidebar.name }}</p>
+</div>
+
+<div class="default-items" *ngIf="_builderService.view === 'preview'">
+  <span>Fließen</span>
+  <p>{{ _builderService.requestDataSidebar.name }}</p>
+  <div *ngFor="let item of _builderService.requestDataAll.items">
+    <div class="stats-content" *ngIf="item?.start_step && item?.type === 'send_message'">
+      <div class="first-step-statistic">
+        <div class="icon-stats">
+          <i class="far fa-share-square"></i>
+        </div>
+        <div class="info-stats">
+          <div class="name-stats">Gesendet an</div>
+          <div class="value-stats">
+            <span>{{ item?.sent }} menschen</span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+      <div class="first-step-statistic">
+        <div class="icon-stats">
+          <i class="far fa-check-circle"></i>
+        </div>
+        <div class="info-stats">
+          <div class="name-stats">Geliefert an</div>
+          <div class="value-stats">
+            <span>{{ item?.delivered }}</span>
+            <span>{{ item?.delivered | flowStatistic:item?.sent | sentProcents }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="first-step-statistic">
+        <div class="icon-stats">
+          <i class="far fa-eye"></i>
+        </div>
+        <div class="info-stats">
+          <div class="name-stats">Geöffnet von</div>
+          <div class="value-stats">
+            <span>{{ item?.opened }}</span>
+            <span>{{ item?.opened | flowStatistic:item?.delivered | sentProcents }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="first-step-statistic">
+        <div class="icon-stats">
+          <i class="far fa-hand-pointer"></i>
+        </div>
+        <div class="info-stats">
+          <div class="name-stats">Angeklickt von</div>
+          <div class="value-stats">
+            <span>{{ item?.clicked }}</span>
+            <span>{{ item?.clicked | flowStatistic:item?.opened }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="first-step-text" *ngIf="item?.start_step && item?.type !== 'send_message'">
+      <span>Der erste Schritt dieses Ablaufs ist nicht der Schritt "Nachricht senden". Derzeit können wir keine globalen Statistiken für solche Flows anzeigen.</span>
+    </div>
+  </div>
+  <!--<p>{{ _builderService.requestDataAll }}</p>-->
+</div>

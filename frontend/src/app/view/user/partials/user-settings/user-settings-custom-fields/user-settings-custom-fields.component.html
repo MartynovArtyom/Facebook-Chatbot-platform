@@ -1,0 +1,130 @@
+<div class="component-settings" *ngIf="!preload">
+  <div class="row margin-bottom--24 border-bottom-none">
+    <div class="col-md-6 d-flex d-flex--align-center">
+      <h3 class="title-h none-margin-bottom">Benutzerdefinierte Felder</h3>
+    </div>
+    <div class="col-md-6 d-flex d-flex--justify-end d-flex--align-center">
+      <button (click)="openVerticallyCenter(contentFlow)" class="btn primary-button">Erstelle ein neues benutzerdefiniertes Feld</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+        <tr>
+          <th width="25%">Name</th>
+          <th width="15%">Typ</th>
+          <th>Beschreibung</th>
+          <th class="d-flex d-flex--justify-end d-flex--align-center">Archiv</th>
+        </tr>
+        </thead>
+        <tbody class="custom-field-table">
+        <tr *ngFor="let customField of customFieldsArray" (click)="showEditCustomField(customField)" [delayClickOutsideInit]="true" (clickOutside)="outsideShowEditCustomField(customField)">
+          <td width="25%">
+            <span *ngIf="!customField?.active">{{ customField.name }}</span>
+            <input type="text" *ngIf="customField?.active" [value]="customField.name" #name placeholder="Enter text">
+          </td>
+          <td width="15%">
+            <span *ngIf="customField?.type === 1">Text</span>
+            <span *ngIf="customField?.type === 2">Number</span>
+            <span *ngIf="customField?.type === 3">Date</span>
+            <span *ngIf="customField?.type === 4">DateTime</span>
+            <span *ngIf="customField?.type === 5">Boolean</span>
+          </td>
+          <td class="position--relative">
+            <span *ngIf="!customField?.active">{{ customField.description }}</span>
+            <input type="text" *ngIf="customField?.active" [value]="customField.description" #description placeholder="Enter text">
+            <button *ngIf="customField?.active" class="btn primary-button margin-left--15" (click)="editCustomField(customField)">Speichern change</button>
+          </td>
+          <td class="d-flex d-flex--justify-end d-flex--align-center">
+            <a (click)="addCustomFieldArchive(customField, false)" class="archive-custom"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a>
+          </td>
+        </tr>
+        <tr *ngIf="customFieldsArray.length === 0">
+          <td width="100%">
+            <span>Nicht gefunden</span>
+          </td>
+          <td>
+          </td>
+          <td class="position--relative">
+          </td>
+          <td class="d-flex d-flex--justify-end d-flex--align-center">
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="table-archive" *ngIf="customFieldsArchiveArray.length > 0">
+        <h3 class="title-h margin-bottom--10">Archiviert</h3>
+        <table class="table border-top-display">
+          <tbody class="custom-field-table">
+          <tr *ngFor="let customFieldArchive of customFieldsArchiveArray" (click)="showEditCustomField(customFieldArchive)" [delayClickOutsideInit]="true" (clickOutside)="outsideShowEditCustomField(customFieldArchive)">
+            <td width="25%">
+              <span *ngIf="!customFieldArchive?.active">{{ customFieldArchive.name }}</span>
+              <input type="text" *ngIf="customFieldArchive?.active" [value]="customFieldArchive.name" #name placeholder="Enter text">
+            </td>
+            <td width="15%">
+              <span *ngIf="customFieldArchive?.type === 1">Text</span>
+              <span *ngIf="customFieldArchive?.type === 2">Number</span>
+              <span *ngIf="customFieldArchive?.type === 3">Date</span>
+              <span *ngIf="customFieldArchive?.type === 4">DateTime</span>
+              <span *ngIf="customFieldArchive?.type === 5">Boolean</span>
+            </td>
+            <td class="position--relative">
+              <span *ngIf="!customFieldArchive?.active">{{ customFieldArchive.description }}</span>
+              <input type="text" *ngIf="customFieldArchive?.active" [value]="customFieldArchive.description" #description placeholder="Enter text">
+              <button *ngIf="customFieldArchive?.active" class="btn primary-button margin-left--15" (click)="editCustomField(customFieldArchive)">Speichern change</button>
+            </td>
+            <td class="d-flex d-flex--justify-end d-flex--align-center">
+              <a (click)="addCustomField(customFieldArchive, false)" class="archive-custom"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></a>
+            </td>
+          </tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="place-preloader-settings" *ngIf="preload">
+  <span class="loader-table">Loading</span>
+</div>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="customLabel">Erstelle ein neues benutzerdefiniertes Feld</h5>
+      <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <span class="d-flex margin-bottom--18">Mit benutzerdefinierten Attributen kannst Du Informationen zu Deinen Abonnenten speichern. Speichere E-Mails, Telefonnummern, Termine, Verhaltensweisen oder andere Dinge, die Du möchtest. Später kannst Du Deine Zielgruppe anhand dieser Daten segmentieren.</span>
+      <form [formGroup]="newCustomFieldForm" class="d-flex d-flex--wrap d-flex--justify-between">
+        <div class="form-group new-custom-name margin-bottom--24">
+          <label class="custom-add margin-bottom--8">Name</label>
+          <input type="text" class="form-control" formControlName="name" placeholder="" required>
+          <!--<span class="help-bpx" *ngIf="businessForm.controls.lastName.invalid && !businessForm.controls.lastName.untouched">Please enter the Surname</span>-->
+        </div>
+        <div class="form-group new-custom-type d-flex d-flex--direction-column margin-bottom--24">
+          <label class="custom-add margin-bottom--8">Typ</label>
+          <select formControlName="type" placeholder="" class="form-control-select">
+            <option value="1">Text</option>
+            <option value="2">Number</option>
+            <option value="3">Date</option>
+            <option value="4">DateTime</option>
+            <option value="5">Boolean</option>
+          </select>
+          <!--<span class="help-bpx" *ngIf="businessForm.controls.lastName.invalid && !businessForm.controls.lastName.untouched">Please enter the Surname</span>-->
+        </div>
+        <div class="form-group full-width">
+          <label class="custom-add margin-bottom--8">Beschreibung(Optional)</label>
+          <input formControlName="description" type="text" class="form-control text-height" placeholder="" required>
+          <!--<span class="help-bpx" *ngIf="businessForm.controls.lastName.invalid && !businessForm.controls.lastName.untouched">Please enter the Surname</span>-->
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer d-flex d-flex--align-center d-flex--justify-between">
+      <button type="button" class="btn default-button" data-dismiss="modal" (click)="c('Cross click')">Abbrechen</button>
+      <button type="button" class="btn primary-button" (click)="createCustomFields()" data-dismiss="modal">Erstellen</button>
+    </div>
+  </div>
+</ng-template>

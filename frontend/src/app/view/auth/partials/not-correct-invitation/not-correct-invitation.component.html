@@ -1,0 +1,25 @@
+<div class="form-login" *ngIf="!sharedService.preloaderView">
+  <h3 (click)="backToLogin()" class="cursor">ChatBo</h3>
+  <div class="sign">
+    <p *ngIf="!versionCheck">Der bereitgestellte Code ist bereits verwendet oder abgelaufen.</p>
+    <p *ngIf="!versionCheck">Bitte beachten Sie, dass der Einladungscode nur für 24 Stunden gültig ist.</p>
+
+    <p *ngIf="versionCheck" class="margin-bottom--12" style="font-size: 16px; text-align: center">
+      Diese Funktion ist für deinen Plan nicht freigeschaltet. Mache bitte ein Upgrade um diese Funktion zu nutzen!
+    </p>
+    <a *ngIf="versionCheck" [href]="'https://chatbo.de/upgrade/'"
+       target="_blank"
+       class="btn primary-button">
+      Jetzt upgraden
+    </a>
+  </div>
+</div>
+
+<div class="preloader-container" *ngIf="sharedService.preloaderView">
+  <div class="loader-container">
+    <div class="loader-messages">
+      <div class="loader-item1"></div>
+      <div class="loader-item2"></div>
+    </div>
+  </div>
+</div>

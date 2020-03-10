@@ -1,0 +1,53 @@
+<div class="sidebar-logo">
+  <a [routerLink]="['/admin/dashboard']">
+    <img src="../../../../assets/img/chatbo-logo-neu.png" alt="">
+  </a>
+  <button class="btn sidebar-change-status"
+          [ngClass]="{ 'active': _sharedService.sidebarView === 'full'}"
+          (click)="_sharedService.changeSidebarView()">
+    <i class="fas fa-thumbtack"></i>
+  </button>
+</div>
+
+<div class="client-account">
+
+  <div class="before-profile"></div>
+
+  <div class="nav-profile">
+    <ul class="accordion css-accordion">
+
+      <li class="accordion-item">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd" [routerLink]="['/admin/dashboard']" routerLinkActive="active-link">
+          <img class="margin-right--12" src="../../../../assets/img/sidebar-icon/dashboard.png"> <span>Dashboard</span>
+        </label>
+      </li>
+
+      <li class="accordion-item">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd" [routerLink]="['/admin/users']" routerLinkActive="active-link">
+          <img class="margin-right--12" src="../../../../assets/img/sidebar-icon/kontakte.png"> <span>Users</span>
+        </label>
+      </li>
+
+      <li class="accordion-item">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd" [routerLink]="['/admin/pages']" routerLinkActive="active-link">
+          <img class="margin-right--12" src="../../../../assets/img/sidebar-icon/pages.png"> <span>Pages</span>
+        </label>
+      </li>
+
+      <li class="accordion-item">
+        <input class="accordion-item-input" type="checkbox" name="accordion"/>
+        <label class="accordion-item-hd" [routerLink]="['/admin/products']" routerLinkActive="active-link">
+          <img class="margin-right--12" src="../../../../../assets/img/sidebar-icon/product.png"> <span>Products</span>
+        </label>
+      </li>
+
+    </ul>
+  </div>
+
+  <div class="log-out">
+    <label (click)="logout()" class="accordion-item-hd"><i class="fa fa-sign-out"></i> <span>Abmelden</span></label>
+  </div>
+</div>

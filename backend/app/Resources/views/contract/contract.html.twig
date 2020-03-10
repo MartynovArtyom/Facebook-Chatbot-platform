@@ -1,0 +1,600 @@
+<div style="width: 100%;">
+    <!--PAGE 1 -->
+    <div style="position: relative;">
+        <div style="text-align: center;">
+            <h1>Auftrag gemäß Artikel 28 DSGVO <br>zur<br> Auftragsdatenverarbeitung</h1>
+
+            <p style="text-align: right">Datum: {{ now|date('Y-m-d') }}</p>
+
+            <h2>Vereinbarung</h2>
+
+            <p>zwischen</p>
+            <span>Firma : <strong>{{ customer.company }}</strong></span><br>
+            <span>Vorname: : <strong>{{ customer.firstName }}</strong></span><br>
+            <span>Nachname:: <strong>{{ customer.lastName }}</strong></span><br>
+            <span>Strasse: <strong>{{ customer.street }}</strong></span><br>
+            <span>Plz: <strong>{{ customer.zipcode }}</strong></span><br>
+            <span>Stadt: <strong>{{ customer.city }}</strong></span><br>
+            <span>Land: <strong>{{ customer.country }}</strong></span><br>
+            <span>BestellID: <strong>{{ customer.orderID }}</strong></span>
+
+            <p>– nachstehend Auftraggeber genannt –</p>
+            <p>und der</p>
+            <span>ProXpert GmbH.</span><br>
+            <span>Bichlweg 4</span><br>
+            <span>83471 Berchtesgaden</span><br>
+            <span>Deutschland</span><br>
+            <span>–Firmenregister: Amtsgericht Traunstein HRB 18966</span>
+
+            <p>– nachstehend Auftragnehmer genannt –</p>
+        </div>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 1 von 10</p>
+        </div>
+    </div>
+
+    <!-- END PAGE 1 -->
+    <!-- PAGE 2 -->
+    <div style="position: relative;">
+        <div style="width: 90%; margin-left: 5%;">
+            <h3>§ 1 Begriffsbestimmungen</h3>
+            <p>(1) Die Stelle, die allein oder gemeinsam mit anderen Verantwortlichen über die
+                Zwecke und Mittel der Verarbeitung von personenbezogenen Daten entscheidet, ist
+                Verantwortlicher i.S.v. Artikel 4 Ziffer 7 DSGVO. Dies ist der hiesige Auftraggeber.
+            </p>
+            <p>(2) Die natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle,
+                die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet, ist der
+                Auftragsverarbeiter i.S.v. Artikel 4 Ziffer 8 DSGVO. Dies ist der hiesige
+                Auftragnehmer.
+            </p>
+            <p>(3) Alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche
+                Person (im Folgenden „betroffene Person“) beziehen, sind personenbezogene Daten
+                i.S.v. Artikel 4 Ziffer 1 DSGVO. Als identifizierbar wird eine natürliche Person
+                angesehen, die direkt oder indirekt, insbesondere mittels Zuordnung zu einer
+                Kennung wie einem Namen, zu einer Kennnummer, zu Standortdaten, zu einer
+                Online-Kennung oder zu einem oder mehreren besonderen Merkmalen, die
+                Ausdruck der physischen, physiologischen, genetischen, psychischen,
+                wirtschaftlichen, kulturellen oder sozialen Identität dieser natürlichen Person sind,
+                identifiziert werden kann.
+            </p>
+            <p>(4) Besonders schutzbedürftige personenbezogene Daten sind personenbezogenen
+                Daten gem. Art. 9 DSGVO, aus denen die rassische und ethnische Herkunft,
+                politische Meinungen, religiöse oder weltanschauliche Überzeugungen oder die
+                Gewerkschaftszugehörigkeit von Betroffenen hervorgehen, personenbezogene
+                Daten gemäß Artikel 10 DSGVO über strafrechtliche Verurteilungen und Straftaten
+                oder damit zusammenhängende Sicherungsmaßregeln sowie genetische Daten
+                gem. Artikel 4 Ziffer 13 DSGVO, biometrischen Daten gem. Art. 4 Ziffer 14 DSGVO,
+                Gesundheitsdaten gem. Art. 4 Abs. 15 DSGVO sowie Daten zum Sexualleben oder
+                der sexuellen Orientierung einer natürlichen Person.
+            </p>
+            <p>(5) Verarbeitung ist gem. Artikel 4 Ziffer 2 DSGVO jeder mit oder ohne Hilfe
+                automatisierter Verfahren ausgeführte Vorgang oder jede solche Vorgangsreihe im
+                Zusammenhang mit personenbezogenen Daten wie das Erheben, das Erfassen, die
+                Organisation, das Ordnen, die Speicherung, die Anpassung oder Veränderung, das
+                Auslesen, das Abfragen, die Verwendung, die Offenlegung durch Übermittlung,
+                Verbreitung oder eine andere Form der Bereitstellung, den Abgleich oder die
+                Verknüpfung, die Einschränkung, das Löschen oder die Vernichtung.
+            </p>
+            <p>(6) Aufsichtsbehörde ist gemäß Artikel 4 Ziffer 21 DSGVO eine von einem
+                Mitgliedstaat gem. Art. 51 DSGVO eingerichtete unabhängige staatliche Stelle.
+            </p>
+        </div>
+        <br><br><br><br><br><br><br><br><br><br><br>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 2 von 10</p>
+        </div>
+    </div>
+    <!-- END PAGE 2 -->
+    <!-- PAGE 3 -->
+    <div style="position: relative;">
+        <div style="width: 90%; margin-left: 5%;">
+            <h3>1. Gegenstand und Dauer des Auftrags</h3>
+            <p>
+                1.1. Der Gegenstand des Auftrags ergibt sich aus aktuellen Leistungsvereinbarung,
+                auf die hier verwiesen wird (im Folgenden Leistungsvereinbarung). Diese ist
+                einsehbar unter: <a href="https://www.chatbo.de/preise">https://www.chatbo.de/preise</a>
+            </p>
+            <p>
+                1.2. Die Dauer dieses Auftrags (Laufzeit) entspricht der Laufzeit der
+                Leistungsvereinbarung (Abonnement von ChatBo).
+            </p>
+            <h3>2. Konkretisierung des Auftragsinhalts</h3>
+            <p>
+                2.1. Umfang, Art und Zweck der vorgesehenen Erhebung, Verarbeitung und / oder
+                Nutzung personenbezogener Daten durch den Auftragnehmer für den Auftraggeber
+                sind konkret beschrieben in der Datenschutzerklärung des Auftragnehmers. Diese ist
+                einsehbar unter: <a href="https://www.chatbo.de/datenschutz">https://www.chatbo.de/datenschutz</a>
+            </p>
+            <p>
+                2.2. Die Verarbeitung und Nutzung der Daten findet ausschließlich in einem
+                Mitgliedsstaat der Europäischen Union oder in einem anderen Vertragsstaat des
+                Abkommens über den Europäischen Wirtschaftsraum statt.
+            </p>
+            <p>
+                2.3. Gegenstand der Erhebung, Verarbeitung und / oder Nutzung
+                personenbezogener Daten sind folgende Datenarten / -kategorien:
+            <ul>
+                <li>Personenstammdaten</li>
+                <li>Kommunikationsdaten (z.B. Telefon, E-Mail)</li>
+                <li>Vertragsstammdaten (Vertragsbeziehung, Produkt- bzw. Vertragsinteresse)</li>
+                <li>Kundenhistorie</li>
+            </ul>
+            </p>
+            <p>
+                2.4. Der Kreis der durch den Umgang mit ihren personenbezogenen Daten im
+                Rahmen dieses Auftrags Betroffenen umfasst Kunden, Interessenten und
+                Abonnenten.
+            </p>
+            <h3>3. Technisch-organisatorische Maßnahmen</h3>
+            <p>
+                3.1. Der Auftragnehmer hat die Umsetzung der im Vorfeld der Auftragsvergabe
+                dargelegten technischen und organisatorischen Maßnahmen vor Beginn der
+                Verarbeitung, insbesondere hinsichtlich der konkreten Auftragsdurchführung zu
+                dokumentieren und dem Auftraggeber zur Prüfung zu übergeben. Bei Akzeptanz
+                durch den Auftraggeber werden die dokumentierten Maßnahmen Grundlage des
+                Auftrags. Soweit die Prüfung / ein Audit des Auftraggebers einen Anpassungsbedarf
+                ergibt, ist dieser einvernehmlich umzusetzen.
+            </p>
+            <p>
+                3.2. Insgesamt handelt es sich bei den zu treffenden Maßnahmen um nicht
+                auftragsspezifische Maßnahmen hinsichtlich der Organisationskontrolle,
+                Zutrittskontrolle, Zugangskontrolle, Zugriffskontrolle, Weitergabekontrolle,
+                Auftragskontrolle, Verfügbarkeitskontrolle sowie des Trennungsgebots (vgl.
+                Allgemeine technische und organisatorische Maßnahmen und Anlage als Bestandteil
+                dieses Vertrages) sowie andererseits um auftragsspezifische Maßnahmen,
+                insbesondere im Hinblick auf die Art des Datenaustauschs, Bereitstellung von Daten,
+                Art und Umstände der Verarbeitung und der Datenhaltung sowie Art und Umstände
+                beim Output / Datenversand,
+            </p>
+        </div>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 3 von 10</p>
+        </div>
+    </div>
+    <!-- END PAGE 3 -->
+
+    <!-- PAGE 4 -->
+    <div style="position: relative;">
+        <div style="width: 90%; margin-left: 5%;">
+            <p>
+                die – soweit sie sich nicht aus der zugrundeliegenden
+                Leistungsvereinbarung ergeben – wie folgt gesondert beschrieben werden:
+            <ul>
+                <li>SSL-Verschlüsselung der gesamten Website</li>
+                <li>Nutzung des Dienstes des Anbieters nur mit E-Mail-Adresse der Endnutzer
+                    möglich (Gebot der Datensparsamkeit)</li>
+            </ul>
+            </p>
+            <p>
+                3.3. Die technischen und organisatorischen Maßnahmen unterliegen dem
+                technischen Fortschritt und der Weiterentwicklung. Insoweit ist es dem
+                Auftragnehmer gestattet, alternative adäquate Maßnahmen umzusetzen.
+                Dabei darf das Sicherheitsniveau der festgelegten Maßnahmen nicht unterschritten
+                werden. Wesentliche Änderungen sind zu dokumentieren. Der Auftragnehmer hat
+                auf Anforderung die Angaben gemäß Art.30 Abs. 2 DSGVO dem Auftraggeber zur
+                Verfügung zu stellen.
+            </p>
+            <h3>4. Berichtigung, Sperrung und Löschung von Daten</h3>
+            <p>
+                Der Auftragnehmer hat nur nach Weisung des Auftraggebers die Daten, die im
+                Auftrag verarbeitet werden, zu berichtigen, zu löschen oder zu sperren. Soweit ein
+                Betroffener sich unmittelbar an den Auftragnehmer zwecks Berichtigung oder
+                Löschung seiner Daten wenden sollte, wird der Auftragnehmer dieses Ersuchen
+                unverzüglich an den Auftraggeber weiterleiten.
+            </p>
+            <h3>5 Informationspflichten des Auftragnehmers</h3>
+            <p>
+                5.1. Bei Störungen, Verdacht auf Datenschutzverletzungen oder Verletzungen
+                vertraglicher Verpflichtungen des Auftragnehmers, Verdacht auf sicherheitsrelevante
+                Vorfälle oder andere Unregelmäßigkeiten bei der Verarbeitung der
+                personenbezogenen Daten durch den Auftragnehmer, wird der Auftraggeber wie
+                gesetzlich geschuldet informieren. Dasselbe gilt für Prüfungen des Auftragnehmers
+                durch die DatenschutzAufsichtsbehörde.
+            </p>
+            <p>
+                5.2. Der Auftragnehmer trifft unverzüglich die erforderlichen Maßnahmen zur
+                Sicherung der Daten und zur Minderung möglicher nachteiliger Folgen der
+                Betroffenen, i
+            </p>
+            <p>
+                5.3. Der Auftragnehmer ist darüber hinaus verpflichtet, dem Auftraggeber jederzeit
+                Auskünfte zu erteilen, soweit dessen Daten von einer Verletzung nach Absatz 1
+                betroffen sind.
+            </p>
+            <p>
+                5.4. Sollten die Daten des Auftraggebers beim Auftragnehmer durch Pfändung oder
+                Beschlagnahme, durch ein Insolvenz- oder Vergleichsverfahren oder durch sonstige
+                Ereignisse oder Maßnahmen Dritter gefährdet werden, so hat der Auftragnehmer
+                den Auftraggeber unverzüglich darüber zu informieren, sofern ihm dies nicht durch
+                gerichtliche oder behördliche Anordnung untersagt ist. Der Auftragnehmer wird in
+                diesem Zusammenhang alle zuständigen Stellen unverzüglich darüber informieren,
+                dass die Entscheidungshoheit über die Daten ausschließlich beim Auftraggeber als
+                "Verantwortlichem" im Sinne der DSGVO liegen.
+            </p>
+            <p>
+                5.5. Über wesentliche Änderung der Sicherheitsmaßnahmen nach § 6 Abs. 2 hat der
+                Auftragnehmer den Auftraggeber unverzüglich zu unterrichten.
+            </p>
+        </div>
+        <br>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 4 von 10</p>
+        </div>
+    </div>
+    <!-- END PAGE 4 -->
+    <!-- PAGE 5 -->
+    <div style="position: relative;">
+        <div style="width: 90%; margin-left: 5%;">
+            <p>
+                5.6. Ein Wechsel in der Person des betrieblichen
+                Datenschutzbeauftragten/Ansprechpartners für den Datenschutz ist dem
+                Auftraggeber unverzüglich mitzuteilen.
+            </p>
+            <p>
+                5.7.Der Auftragnehmer und gegebenenfalls sein Vertreter führen ein Verzeichnis zu
+                allen Kategorien von im Auftrag des Auftraggebers durchgeführten Tätigkeiten der
+                Verarbeitung, das alle Angaben gem. Art. 30 Abs. 2 DSGVO enthält. Das
+                Verzeichnis ist dem Auftraggeber auf Anforderung zur Verfügung zu stellen.
+            </p>
+            <p>
+                5.8. An der Erstellung des Verfahrensverzeichnisses durch den Auftraggeber hat der
+                Auftragnehmer im Auftragsdatenverarbeitung, angemessenen Umfang mitzuwirken.
+                Er hat dem Auftraggeber die jeweils erforderlichen Angaben in geeigneter
+                Weise mitzuteilen.
+            </p>
+            <h3>6. Kontrollen und sonstige Pflichten des Auftragnehmers</h3>
+            <p>
+            <ul>
+                <li>Der Auftragnehmer hat zusätzlich zu der Einhaltung der Regelungen dieses
+                    Auftrags folgende Pflichten:</li>
+                <li>Schriftliche Bestellung – soweit gesetzlich vorgeschrieben – eines
+                    Datenschutzbeauftragten, der seine Tätigkeit ausüben kann. Dessen
+                    Kontaktdaten sind in der Datenschutzerklärung der Webseite angeführt
+                    <a href="https://chatbo.de/datenschutz">https://chatbo.de/datenschutz</a></li>
+                <li>Die Wahrung des Datengeheimnisses Alle Personen, die auftragsgemäß auf
+                    personenbezogene Daten des Auftraggebers zugreifen können, müssen auf
+                    das Datengeheimnis verpflichtet und über die sich aus diesem Auftrag
+                    ergebenden besonderen Datenschutzpflichten sowie die bestehende
+                    Weisungs- bzw. Zweckbindung belehrt werden.</li>
+                <li>Die Umsetzung und Einhaltung aller für diesen Auftrag notwendigen
+                    technischen und organisatorischen Maßnahmen entsprechend Anlage.</li>
+                <li>Die unverzügliche Information des Auftraggebers über Kontrollhandlungen
+                    und Maßnahmen der Aufsichtsbehörde Dies gilt auch, soweit eine zuständige
+                    Behörde beim Auftragnehmer ermittelt.</li>
+                <li>Die Durchführung der Auftragskontrolle mittels regelmäßiger Prüfungen durch
+                    den Auftragnehmer im Hinblick auf die Vertragsausführung bzw. -erfüllung,
+                    insbesondere Einhaltung und ggf. notwendige Anpassung von Regelungen
+                    und Maßnahmen zur Durchführung des Auftrags.</li>
+                <li>Nachweisbarkeit der getroffenen technischen und organisatorischen
+                    Maßnahmen gegenüber dem Auftraggeber. Hierzu kann der Auftragnehmer
+                    auch aktuelle Testate, Berichte oder Berichtsauszüge unabhängiger
+                    Instanzen (z.B. Wirtschaftsprüfer, Revision, Datenschutzbeauftragter,
+                    ITSicherheitsabteilung, Datenschutzauditoren, Qualitätsauditoren) oder eine
+                    geeignete Zertifizierung durch IT-Sicherheits- oder Datenschutzaudit (z.B.
+                    nach BSI-Grundschutz) vorlegen.</li>
+            </ul>
+            </p>
+            <h3>7. Unterauftragsverhältnisse</h3>
+            <p>
+                7.1. Der Einsatz von Subunternehmern als weiteren Auftragnehmer ist zulässig,
+                sofern der der Auftragnehmer sicher stellt, dass diese Subunternehmer die gleichen
+                Garantien bieten, zu denen sich der Auftragnehmer im Rahmen dieses Vertrags
+                verpflichtet hat. Sofern die Dienstleister in einem sogenannten Drittland die Daten
+                verarbeiten, stellt der Auftragnehmer sicher, dass es bezüglich dieser Länder
+                entweder einen Angemessenheitsbeschluss (Art. 45 DSGVO) oder seitens der
+            </p>
+        </div>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 5 von 10</p>
+        </div>
+    </div>
+    <!-- END PAGE 5 -->
+    <!-- PAGE 6 -->
+    <div style="position: relative;">
+        <div style="width: 90%; margin-left: 5%;">
+            <p>Subunternehmer andere vergleichbare Garantien (Art. 46 DSGVO) gibt.</p>
+            <p>
+                7.2. Erteilt der Auftragnehmer Aufträge an Subunternehmer, so obliegt es ihm, seine
+                datenschutzrechtlichen Pflichten aus dieser Vereinbarung zur Auftragsverarbeitung
+                dem Subunternehmer zu übertragen.
+            </p>
+            <p>
+                7.3. Ein Subunternehmerverhältnis im Sinne dieser Bestimmungen liegt nicht vor,
+                wenn der Auftragnehmer Dritte mit Dienstleistungen beauftragt, die als reine
+                Nebenleistungen anzusehen sind. Dazu gehören z. B. Post-, Transport- und
+                Versandleistungen, Reinigungsleistungen, Telekommunikationsleistungen ohne
+                konkreten Bezug zu Leistungen, die der Auftragnehmer für den Auftraggeber
+                erbringt und Bewachungsdienste. Wartungs und Prüfleistungen stellen
+                zustimmungspflichtige Subunternehmerverhältnisse dar, soweit diese für IT-Systeme
+                Auftragsdatenverarbeitung erbracht werden, die auch im Zusammenhang mit der
+                Erbringung von Leistungen für den Auftraggeber genutzt werden.
+            </p>
+            <h3>8. Kontrollrechte des Auftraggebers</h3>
+            <p>
+                8.1. Der Auftraggeber überzeugt sich vor der Aufnahme der Datenverarbeitung und
+                sodann regelmäßig alle 24 Monate von den technischen und organisatorischen
+                Maßnahmen des Auftragnehmers. Hierfür kann er z. B. Auskünfte des
+                Auftragnehmers einholen, sich vorhandene Testate von Sachverständigen,
+                Zertifizierungen oder internen Prüfungen vorlegen lassen oder die technischen und
+                organisatorischen Maßnahmen des Auftragnehmers nach rechtzeitiger Abstimmung
+                zu den üblichen Geschäftszeiten selbst persönlich prüfen bzw. durch einen
+                sachkundigen Dritten prüfen lassen, sofern dieser nicht in einem
+                Wettbewerbsverhältnis zum Auftragnehmer steht. Der Auftraggeber wird Kontrollen
+                nur im erforderlichen Umfang durchführen und die Betriebsabläufe des
+                Auftragnehmers dabei nicht unverhältnismäßig stören.
+            </p>
+            <p>
+                8.2.Der Auftragnehmer verpflichtet sich, dem Auftraggeber auf dessen mündliche
+                oder schriftliche Anforderung innerhalb einer angemessenen Frist alle Auskünfte und
+                Nachweise zur Verfügung zu stellen, die zur Durchführung einer Kontrolle der
+                technischen und organisatorischen Maßnahmen des Auftragnehmers erforderlich
+                sind.
+            </p>
+            <p>
+                8.3. Der Auftraggeber dokumentiert das Kontrollergebnis und teilt es dem
+                Auftragnehmer mit. Bei Fehlern oder Unregelmäßigkeiten, die der Auftraggeber
+                insbesondere bei der Prüfung von Auftragsergebnissen feststellt, hat
+                er den Auftragnehmer unverzüglich zu informieren. Werden bei der Kontrolle
+                Sachverhalte festgestellt, deren zukünftige Vermeidung Änderungen des
+                angeordneten Verfahrensablaufs erfordern, teilt der Auftraggeber dem
+                Auftragnehmer die notwendigen Verfahrensänderungen unverzüglich mit.
+            </p>
+            <p>
+                8.4. Der Auftragnehmer stellt dem Auftraggeber auf dessen Wunsch ein
+                umfassendes und aktuelles Datenschutz und Sicherheitskonzept für die
+                Auftragsverarbeitung sowie über zugriffsberechtigte Personen zur Verfügung
+            </p>
+            <p>
+                8.5.Der Auftragnehmer weist dem Auftraggeber die Verpflichtung der Mitarbeiter
+                nach § 6 Abs. 4 auf Verlangen nach.
+            </p>
+        </div>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 6 von 10</p>
+        </div>
+    </div>
+    <!-- END PAGE 6 -->
+    <!-- PAGE 7 -->
+    <div style="position: relative;">
+        <div style="width: 90%; margin-left: 5%;">
+            <h3>9. Weisungsbefugnis des Auftraggebers</h3>
+            <p>
+                9.1. ChatBo ist eine standardisierte, webbasierte Messenger Software mit fest
+                definierten Funktionalitäten, die je nach gebuchtem Paket freigeschaltet werden. In
+                diesem Rahmen hat der Auftraggeber die Möglichkeiten, die Datenverarbeitung
+                vollumfänglich selbst zu steuern (Weisungserteilung). Der Umgang mit den Daten
+                erfolgt ausschließlich im Rahmen der getroffenen Vereinbarungen und nach
+                Erteilung der Weisung des Auftraggebers Der Auftraggeber behält sich im Rahmen
+                der in dieser Vereinbarung getroffenen Auftragsbeschreibung ein umfassendes
+                Weisungsrecht über Art, Umfang und Verfahren der Datenverarbeitung vor, das er
+                durch Einzelweisungen innerhalb seines ChatBo Benutzerkontos, z.B. durch
+                entsprechende Konfiguration, konkretisieren kann. Vergleiche ChatBo
+                Lizenzvereinbarung unter https://chatbo.de/lizenzvereinbarung/. Auskünfte an Dritte
+                oder den Betroffenen darf der Auftragnehmer nur nach vorheriger schriftlicher
+                Zustimmung durch den Auftraggeber erteilen.
+            </p>
+            <p>
+                9.2. Weisungen wird der Auftraggeber durch die Einstellungsmöglichkeiten innerhalb
+                seines ChatBo- Benutzerkontos oder über die E-Mail-Adresse mail@chatbo.de
+                erteilen. Der Auftragnehmer verwendet die Daten für keine anderen Zwecke und ist
+                insbesondere nicht berechtigt, sie an Dritte weiterzugeben. Kopien und Duplikate
+                werden ohne Wissen des Auftraggebers nicht erstellt. Hiervon ausgenommen sind
+                Sicherheitskopien, soweit sie zur Gewährleistung einer ordnungsgemäßen
+                Datenverarbeitung erforderlich sind, sowie Daten, die im Hinblick auf die Einhaltung
+                gesetzlicher Aufbewahrungspflichten erforderlich sind.
+            </p>
+            <p>
+                9.3. Der Auftragnehmer hat den Auftraggeber unverzüglich zu informieren, wenn er
+                der Meinung ist, eine Weisung verstoße gegen datenschutzrechtliche Vorschriften.
+                Der Auftragnehmer ist berechtigt, die Durchführung der entsprechenden Weisung
+                solange auszusetzen, bis sie durch den Verantwortlichen beim Auftraggeber
+                bestätigt oder geändert wird.
+            </p>
+            <h3>10. Löschung von Daten und Rückgabe von Datenträgern</h3>
+            <p>
+                10.1. Nach Abschluss der vertraglichen Arbeiten oder früher nach Aufforderung
+                durch den Auftraggeber – spätestens mit Beendigung der Leistungsvereinbarung –
+                hat der Auftragnehmer sämtliche in seinen Besitz gelangte Unterlagen, erstellte
+                Verarbeitungs- und Nutzungsergebnisse sowie Datenbestände, die im
+                Zusammenhang mit dem Auftragsverhältnis stehen, dem Auftraggeber
+                auszuhändigen. Hierzu räumt der Auftragnehmer dem Auftraggeber die Möglichkeit
+                ein, über sein ChatBo-Benutzerkonto sämtliche Daten zu exportieren. Nimmt er von
+                dieser Möglichkeit keinen Gebrauch, so werden diese Daten datenschutzgerecht
+                vernichtet. Gleiches gilt für Test- und Ausschussmaterial. Das Protokoll der
+                Löschung ist auf Anforderung vorzulegen.
+            </p>
+            <p>
+                10.2. Dokumentationen, die dem Nachweis der auftrags- und ordnungsgemäßen
+                Datenverarbeitung dienen, sind durch den Auftragnehmer entsprechend der
+                jeweiligen Aufbewahrungsfristen über das Vertragsende hinaus aufzubewahren. Er
+                kann sie zu seiner Entlastung bei Vertragsende dem Auftraggeber übergeben.
+            </p>
+            <h3>11. Haftung</h3>
+            <p>
+                Für den Ersatz von Schäden, die ein Betroffener wegen einer nach den
+                Datenschutzgesetzen unzulässigen oder unrichtigen Datenverarbeitung oder
+                Nutzung im Rahmen der
+            </p>
+        </div>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 7 von 10</p>
+        </div>
+    </div>
+    <!-- END PAGE 7 -->
+    <!-- PAGE 8 -->
+    <div style="position: relative;">
+        <div style="width: 90%; margin-left: 5%;">
+            <p>
+                Auftragsverarbeitung erleidet, ist im
+                Innenverhältnis zum Auftragnehmer allein der Auftraggeber gegenüber dem
+                Betroffenen verantwortlich
+            </p>
+            <h3>12. Beendigung des Hauptvertrags</h3>
+            <p>
+                12.1. Der Auftraggeber kann jederzeit vor und nach Beendigung des Hauptvertrags
+                alle personenbezogenen Daten aus seinem ChatBo-Benutzerkonto exportieren
+                oder löschen. Der Auftraggeber wird die gelöschten Daten spätestens 180 Tage
+                nach der Löschung durch den Auftraggeber auch aus allen Backups löschen.
+            </p>
+            <p>
+                12.2. Der Auftraggeber hat das Recht, die vollständige und vertragsgerechte
+                Rückgabe bzw. Löschung der Daten beim Auftragnehmer in geeigneter Weise auf
+                eigene Kosten zu kontrollieren.
+            </p>
+            <p>
+                12.3. Der Auftragnehmer ist verpflichtet, auch über das Ende des Hauptvertrags
+                hinaus die ihm im Zusammenhang mit dem Hauptvertrag bekannt gewordenen
+                Daten vertraulich zu behandeln. Die vorliegende Vereinbarung bleibt über das Ende
+                des Hauptvertrags hinaus solange gültig, wie der Auftragnehmer über
+                personenbezogene Daten verfügt, die ihm vom Auftraggeber zugeleitet wurden oder
+                die er für diesen erhoben hat.
+            </p>
+            <h3>13. Zustandekommen der Beauftragung</h3>
+            <p>
+                Die Beauftragung kommt durch elektronische Bestätigung zustande.
+            </p>
+            <h3>14. Schlussbestimmungen</h3>
+            <p>
+                14.1. Änderungen und Ergänzungen dieser Vereinbarung bedürfen der Schriftform.
+                Dies gilt auch für den Verzicht auf dieses Formerfordernis. Der Vorrang individueller
+                Vertragsabreden bleibt hiervon unberührt.
+            </p>
+            <p>
+                14.2. Sollten einzelne Bestimmungen dieser Vereinbarung ganz oder teilweise nicht
+                rechtswirksam oder nicht durchführbar sein oder werden, so wird hierdurch die
+                Gültigkeit der jeweils übrigen Bestimmungen nicht berührt.
+            </p>
+            <p>
+                14.3. Gerichtsstand<br>
+                Soweit zulässig, vereinbaren die Parteien den Gerichtsstand am Sitz des
+                Auftragnehmers.
+            </p>
+        </div>
+        <br><br><br><br><br><br>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 8 von 10</p>
+        </div>
+    </div>
+    <!-- END PAGE 8 -->
+    <!-- PAGE 9 -->
+    <div style="position: relative;">
+        <div style="width: 90%; margin-left: 5%;">
+            <h1>Allgemeine technische und organisatorische Maßnahmen</h1>
+            <h3>1. Zutrittskontrolle</h3>
+            <p>
+                Der unbefugte Zutritt wird verhindert, indem technische und organisatorische
+                Maßnahmen zur Zutrittskontrolle, insbesondere auch zur Legitimation der
+                Berechtigten, getroffen worden sind:
+            <ul>
+                <li>Zutrittskontrollsysteme (Ausweisleser, Magnetkarte, Chipkarte)</li>
+                <li>Schlüssel und Schlüsselbuch</li>
+                <li>Türsicherung (elektrische Türöffner usw.)</li>
+                <li>Werkschutz, Pförtner</li>
+                <li>Überwachungseinrichtung: Alarmanlage, Video- / Fernsehmonitor</li>
+            </ul>
+            </p>
+            <h3>2. Zugangskontrolle</h3>
+            <p>
+                Das Eindringen Unbefugter in die DV-Systeme wird verhindert, indem technische
+                (Kennwort- / Passwortschutz) und organisatorische (Benutzerstammsatz)
+                Maßnahmen hinsichtlich der Benutzeridentifikation und Authentifizierung getroffen
+                worden sind:
+            <ul>
+                <li>Kennwortverfahren (u.a. Sonderzeichen, Mindestlänge, regelmäßiger
+                    Wechsel des Kennworts)</li>
+                <li>Automatische Sperrung (z.B. Kennwort oder Pausenschaltung)</li>
+                <li>Einrichtung eines Benutzerstammsatzes pro User</li>
+                <li>Verschlüsselung von Datenträgern</li>
+            </ul>
+            </p>
+            <h3>3. Zugriffskontrolle</h3>
+            <p>
+                Unerlaubte Tätigkeiten in DV-Systemen außerhalb eingeräumter Berechtigungen
+                werden verhindert, indem das Berechtigungskonzept und die Zugriffsrechte sowie
+                deren Überwachung und Protokollierung bedarfsgerecht ausgestaltet worden sind:
+            <ul>
+                <li>Differenzierte Berechtigungen (Profile, Rollen, Transaktionen und Objekte)</li>
+                <li>Auswertungen</li>
+                <li>Kenntnisnahme</li>
+                <li>Veränderung</li>
+                <li>Löschung</li>
+            </ul>
+            </p>
+            <h3>4. Weitergabekontrolle</h3>
+            <p>
+                Bei der Weitergabe personenbezogener Daten (manueller bzw. elektronischer
+                Transport, Übertragung, Übermittlung oder Speicherung auf Datenträger) sowie bei
+                der nachträglichen Überprüfung wurden die folgenden Maßnahmen getroffen:
+            </p>
+        </div>
+        <br><br><br><br>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 9 von 10</p>
+        </div>
+    </div>
+    <!-- END PAGE 9 -->
+    <!-- PAGE 10 -->
+    <div style="position: relative;">
+        <div style="width: 90%; margin-left: 5%;">
+            <p>
+            <ul>
+                <li>Verschlüsselung / Tunnelverbindung (VPN = Virtual Private Network)</li>
+                <li>Elektronische Signatur</li>
+                <li>Übermittlungskontrolle</li>
+                <li>Protokollierung</li>
+                <li>Transportsicherung</li>
+            </ul>
+            </p>
+            <h3>5. Eingabekontrolle</h3>
+            <p>
+                Die Nachvollziehbarkeit bzw. Dokumentation der Datenverwaltung und -pflege ist
+                gewährleistet. Hierzu haben wurden Protokollierungs und
+                Protokollauswertungssysteme implementiert, mit denen nachträglich überprüft
+                werden kann, ob und von wem Daten eingegeben, verändert oder entfernt (gelöscht)
+                worden sind.
+            </p>
+            <h3>6. Auftragskontrolle</h3>
+            <p>
+                Die weisungsgemäße Auftragsdatenverarbeitung ist gewährleistet. Hierzu wurden
+                technische und organisatorische Maßnahmen zur Abgrenzung der Kompetenzen
+                zwischen Auftraggeber und Auftragnehmer
+                getroffen. Hierzu zählen:
+            <ul>
+                <li>Eindeutige Vertragsgestaltung</li>
+                <li>Formalisierte Auftragserteilung (Auftragsformular)</li>
+                <li>Kriterien zur Auswahl des Auftragnehmers</li>
+                <li>Kontrolle der Vertragsausführung</li>
+            </ul>
+            </p>
+            <h3>7. Verfügbarkeitskontrolle</h3>
+            <p>
+                Die Daten sind gegen zufällige Zerstörung oder Verlust geschützt. Hierzu wurden die
+                folgenden physikalischen und logischen Maßnahmen zur Datensicherung getroffen:
+            <ul>
+                <li>Backup-Verfahren</li>
+                <li>Spiegeln von Festplatten, z.B. RAID-Verfahren</li>
+                <li>Unterbrechungsfreie Stromversorgung (USV)</li>
+                <li>Getrennte Aufbewahrung</li>
+                <li>Virenschutz / Firewall</li>
+                <li>Notfallplan</li>
+            </ul>
+            </p>
+            <h3>8. Trennungskontrolle</h3>
+            <p>
+                Daten, die zu unterschiedlichen Zwecken erhoben wurden, werden getrennt
+                verarbeitet. Hierzu wurden die folgenden Maßnahmen zur getrennten Verarbeitung
+                (Speicherung, Veränderung, Löschung, Übermittlung) von Daten mit
+                unterschiedlichen Zwecken getroffen:
+            <ul>
+                <li>"Interne Mandantenfähigkeit" / Zweckbindung</li>
+                <li>Funktionstrennung / Produktion / Test</li>
+            </ul>
+            </p>
+        </div>
+        <div style="position: absolute; bottom: 0;">
+            <p style="text-align: center;">Autragsdatenverarbeitung Seite 10 von 10</p>
+        </div>
+    </div>
+    <!-- END PAGE 10 -->
+</div>

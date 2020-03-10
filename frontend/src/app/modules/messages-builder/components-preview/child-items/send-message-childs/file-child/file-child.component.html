@@ -1,0 +1,11 @@
+<div class="text-items-view">
+  <div class="default-content" *ngIf="!config?.params['url']" data-drag="true">
+    <img class="build-component-item-image" src="/assets/img/builder-sidebar/datei-short.png" alt="bild-short">
+    <span data-drag="true">Datei</span>
+  </div>
+
+  <div class="config-content" *ngIf="config?.params['url']" data-drag="true">
+    <i class="fas fa-paperclip" data-drag="true"></i>
+    <span data-drag="true">{{ config?.params?.name }}</span>
+  </div>
+</div>

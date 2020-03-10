@@ -1,0 +1,45 @@
+<div class="title-sidebar">
+  <input type="text" #title placeholder="Enter name" [value]="config?.name"
+         [disabled]="_builderService.view === 'preview'"
+         [(ngModel)]="config.name"
+         (change)="_builderFunctionsService.setInputValue(config, 'name', title.value)">
+</div>
+
+<div class="content-sidebar-start-step" *ngIf="_builderService.view !== 'preview'">
+  <div class="switchs">
+    <input type="checkbox" id="switch1" class="switchs__input"
+           [checked]="config?.start_step"
+           [disabled]="config?.start_step"
+           (change)="_builderFunctionsService.setStartingStep(config)"
+    >
+    <label for="switch1" class="switchs__label">Kampagnen Start</label>
+  </div>
+</div>
+
+<div class="sidebar-all-items-content">
+
+  <div class="smart-delay-content">
+    <span>Zeitverzögerung</span>
+    <div class="d-flex">
+      <input type="number" #delayTime
+             [disabled]="_builderService.view === 'preview'"
+             (change)="_builderFunctionsService.choiseDelayTime(delayTime.value, config?.widget_content[0])"
+             [(ngModel)]="config?.widget_content[0]['time']">
+
+      <select title="Day" #type (change)="_builderFunctionsService.changeSmartDelayType(type.value, config?.widget_content[0])"
+              [disabled]="_builderService.view === 'preview'"
+              [(ngModel)]="config?.widget_content[0]['type_action']">
+        <option value="1">Minuten</option>
+        <option value="2">Stunde</option>
+        <option value="3">Tage</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="continue-next-step" *ngIf="!config?.next_step && _builderService.view !== 'preview' ||
+                                          config?.next_step">
+    <app-buttons-item [type]="'main'" [config]="config"></app-buttons-item>
+  </div>
+
+
+</div>

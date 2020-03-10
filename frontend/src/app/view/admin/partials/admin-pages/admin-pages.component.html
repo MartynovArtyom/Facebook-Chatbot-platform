@@ -1,0 +1,64 @@
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Pages</p>
+  </div>
+</div>
+
+<div class="dashboard-content">
+  <div class="white-background padding--10">
+    <div class="search-users-container">
+      <input type="text" placeholder="Search" [(ngModel)]="search" (ngModelChange)="searchPages()">
+    </div>
+
+    <div class="users-content-tabs">
+      <div class="tabs-users" *ngIf="!search">
+        <span *ngFor="let tab of tabs" [ngClass]="{ 'active': tabValue === tab }"
+              (click)="getTabsPages(tab)">{{ tab }}</span>
+      </div>
+
+      <div class="users-tab-list">
+        <div class="user-item" *ngFor="let page of allPages; let i = index">
+
+          <div class="d-flex">
+            <span *ngIf="page?.status" class="active-tool">Connected</span>
+            <span *ngIf="!page?.status" class="disable-tool">Disconnected</span>
+            <img [src]="page?.avatar" alt="Avatar">
+            <div class="d-flex d-flex--direction-column">
+              <a [routerLink]="'/admin/pages/' + page?.id">{{ page?.title}}</a>
+              <span>Subscribers: {{(page?.countSubscribers) ? page?.countSubscribers : 0 }}/{{ (page?.limitSubscribers) ? page?.limitSubscribers : 0 }}, Created By:
+                <a [routerLink]="'/admin/users/' + page?.userID">{{ page?.firstName }} {{ page?.lastName }}</a>
+              </span>
+            </div>
+          </div>
+
+          <div class="user-button-actions">
+            <button class="btn default-button margin-right--10"
+                    [routerLink]="'/admin/pages/' + page?.id">
+              <i class="fas fa-pencil-alt"></i>
+              Update
+            </button>
+            <button class="btn danger-button" (click)="removePage(page, i)">
+              <i class="far fa-trash-alt"></i>
+              Löschen
+            </button>
+          </div>
+        </div>
+
+        <div class="d-flex d-flex--align-center d-flex--justify-center load-more-users"
+             *ngIf="counterPages > allPages?.length && !loadPagination">
+          <button class="btn default-button" (click)="loadPaginations()">Mehr laden</button>
+        </div>
+
+        <span *ngIf="loadPagination" class="loader-button small-load-table"></span>
+
+        <div class="user-item not-found" *ngIf="allPages?.length === 0 && !loadPagination">
+          Pages not found
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>

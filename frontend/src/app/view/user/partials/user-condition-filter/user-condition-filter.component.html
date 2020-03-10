@@ -1,0 +1,44 @@
+<div class="condition-custom-select" *ngIf="_sharedService.activeCondition" (clickOutside)="onClickedOutside($event)">
+  <ul>
+    <li *ngFor="let tag of tags" (click)="choiceCondition(tag)">
+      {{ tag?.description }}
+    </li>
+  </ul>
+  <ul>
+    <li (click)="choiceCondition('status')">
+      Status
+    </li>
+    <li (click)="choiceCondition('gender')">
+      Geschlecht
+    </li>
+    <li (click)="choiceCondition('locale')">
+      Wohnort
+    </li>
+    <li (click)="choiceCondition('language')">
+      Sprache
+    </li>
+    <li (click)="choiceCondition('timezone')">
+      Zeitzone
+    </li>
+    <li (click)="choiceCondition('firstName')">
+      Vorname
+    </li>
+    <li (click)="choiceCondition('lastName')">
+      Nachname
+    </li>
+    <li (click)="choiceCondition('dateSubscribed')">
+      Datum Abonniert
+    </li>
+    <li (click)="choiceCondition('lastInteraction')">
+      Last Interaction
+    </li>
+  </ul>
+  <ul class="custom-user-fields">
+    <li *ngFor="let custom of customUserFields" (click)="choiceCondition(custom)">
+      <i *ngIf="custom?.type === 1" class="fas fa-font"></i>
+      <i *ngIf="custom?.type === 2" class="fas fa-hashtag"></i>
+      <i *ngIf="custom?.type === 3 || custom?.type === 4" class="far fa-clock"></i>
+      <i *ngIf="custom?.type === 5" class="fas fa-code"></i>
+      {{ custom?.name }}</li>
+  </ul>
+</div>

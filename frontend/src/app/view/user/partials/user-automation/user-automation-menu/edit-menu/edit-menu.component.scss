@@ -1,0 +1,46 @@
+.title-page{
+  display: flex;
+  align-items: center;
+
+  & > a{
+    font-size: 1rem;
+    color: #8492a6;
+    margin-right: 10px;
+
+    &:hover, &:active, &:focus{
+      text-decoration: none;
+    }
+  }
+
+  & > i{
+    margin-right: 10px;
+    font-size: 16px;
+    color: #0084ff;
+    opacity: 0.8;
+  }
+
+  & > h3{
+    margin-bottom: 0;
+    font-size: 22px;
+  }
+}
+
+.danger-button{
+  display: flex;
+  margin: 0 auto 20px auto;
+}
+
+.info-main{
+  margin-top: 8px;
+  color: #8492a6;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.background-default{
+  background: transparent;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}

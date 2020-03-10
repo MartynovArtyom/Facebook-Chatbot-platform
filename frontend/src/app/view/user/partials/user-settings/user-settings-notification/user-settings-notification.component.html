@@ -1,0 +1,62 @@
+<div class="component-settings" *ngIf="!preload">
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Erhalte Benachrichtigungen</h5>
+    </div>
+    <div class="col-md-4">
+      <label class="new-switch notification-switch switch-green">
+        <input type="checkbox" class="switch-input" [checked]="notificationCheck" (click)="saveNotificationSettings('status', notificationCheck)">
+        <span class="switch-label" data-on="Ja" data-off="Nein"></span>
+        <span class="switch-handle"></span>
+      </label>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+  <div [ngClass]="{'disable-notif': !notificationCheck}" class="row">
+    <div class="col-md-4">
+      <h5>Meine E-Mail-Adresse für Benachrichtigungen</h5>
+    </div>
+    <div class="col-md-8 d-flex d-flex--align-center">
+      <input class="notification-email-input" type="text" #emails [(ngModel)]="email" placeholder="Enter email"
+             (change)="saveNotificationSettings('email', emails.value)"
+             [disabled]="!notificationCheck">
+      <button [disabled]="!notificationCheck" class="bth primary-button">Update</button>
+    </div>
+  </div>
+  <div [ngClass]="{'disable-notif': !notificationCheck}" class="row">
+    <div class="col-md-4">
+      <h5>Abonnenten Report</h5>
+    </div>
+    <div class="col-md-4">
+      <div>
+        <input id="radio-1" class="radio-custom" name="radio-group" type="radio"
+               [checked]="typeNotification === 1"
+               [disabled]="!notificationCheck"
+               (click)="saveNotificationSettings('type', 1)">
+        <label for="radio-1" class="radio-custom-label">Täglich</label>
+      </div>
+      <div>
+        <input id="radio-2" class="radio-custom" name="radio-group" type="radio"
+               [checked]="typeNotification === 2"
+               [disabled]="!notificationCheck"
+               (click)="saveNotificationSettings('type', 2)">
+        <label for="radio-2" class="radio-custom-label">Wöchentlich</label>
+      </div>
+      <div>
+        <input id="radio-3" class="radio-custom" name="radio-group" type="radio"
+               [checked]="typeNotification === 3"
+               [disabled]="!notificationCheck"
+               (click)="saveNotificationSettings('type', 3)">
+        <label for="radio-3" class="radio-custom-label">Monatlich</label>
+      </div>
+      <!--<button class="bth primary-button">Bot teilen </button>-->
+    </div>
+    <div class="col-md-4">
+      <p>Regelmäßige Updates wie es in deiner Abonnenten Basis aussieht.</p>
+    </div>
+  </div>
+</div>
+
+<div class="place-preloader-settings" *ngIf="preload">
+  <span class="loader-table">Loading</span>
+</div>

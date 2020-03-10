@@ -1,0 +1,25 @@
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a [routerLink]="['/' + _userService.userID + '/broadcasts']">Newsletter</a>
+    <i class="fas fa-chevron-right"></i>
+    <a [routerLink]="['/' + _userService.userID + '/broadcasts/history']">Gesendeten</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>{{ _sharedService?.nameFlow }}</h3>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <button class="btn default-button margin-right--10"
+            *ngIf="_userService.userPageInfo?.role !== 4"
+            (click)="copyBroadcast()">
+      <i class="far fa-clone"></i>
+      Kopie & Bearbeite
+    </button>
+  </div>
+</div>
+
+<div class="broadcast-edit-container">
+  <app-builder *ngIf="!preloader" [view]="'preview'"></app-builder>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>

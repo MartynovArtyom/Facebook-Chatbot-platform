@@ -1,0 +1,188 @@
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Products</p>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <button (click)="openVerticallyCenter(createProduct, null)" class="btn primary-button">New Product</button>
+  </div>
+</div>
+
+<div class="dashboard-content">
+  <div class="white-background padding--10">
+    <div class="users-content-tabs">
+      <div class="users-tab-list">
+        <div class="user-item-header d-flex d-flex--align-center d-flex--justify-between">
+          <div class="header-cell" style="width: 5%;">ID</div>
+          <div class="header-cell" style="width: 10%;">Name</div>
+          <div class="header-cell" style="width: 10%;">Label</div>
+          <div class="header-cell" style="width: 8%;">Kampaign</div>
+          <div class="header-cell" style="width: 8%;">Autoresponder</div>
+          <div class="header-cell" style="width: 5%;">Admins</div>
+          <div class="header-cell" style="width: 7%;">Comments</div>
+          <div class="header-cell" style="width: 8%;">Download Psid</div>
+          <div class="header-cell" style="width: 7%;">Zapier</div>
+          <div class="header-cell" style="width: 8%;">Subscribers</div>
+          <div class="header-cell" style="width: 10%;">Mailchimp Tag</div>
+          <div class="header-cell" style="width: 7%;">Limit Mailchimp</div>
+          <div class="header-cell" style="width: 7%;"></div>
+        </div>
+
+        <div class="user-item product-item-list" *ngFor="let product of allProducts; let i = index">
+          <div class="product-item-cell" style="width: 5%;">{{ product?.productId }}</div>
+          <div class="product-item-cell" style="width: 10%;">{{ product?.name }}</div>
+          <div class="product-item-cell" style="width: 10%;">{{ product?.label }}</div>
+          <div class="product-item-cell" style="width: 8%;">{{ (product?.limitCompany === null) ? 'Unlimited' : product?.limitCompany }}</div>
+          <div class="product-item-cell" style="width: 8%;">{{ (product?.limitSequences === null) ? 'Unlimited' : product?.limitSequences }}</div>
+          <div class="product-item-cell" style="width: 5%;">{{ (product?.admins) ? 'Yes' : 'No' }}</div>
+          <div class="product-item-cell" style="width: 7%;">{{ (product?.comments) ? 'Yes' : 'No' }}</div>
+          <div class="product-item-cell" style="width: 8%;">{{ (product?.downloadPsid) ? 'Yes' : 'No' }}</div>
+          <div class="product-item-cell" style="width: 7%;">{{ (product?.zapier) ? 'Yes' : 'No' }}</div>
+          <div class="product-item-cell" style="width: 8%;">{{ product?.limitSubscribers }}</div>
+          <div class="product-item-cell" style="width: 10%;">{{ product?.quentnUrl }}</div>
+          <div class="product-item-cell" style="width: 7%;">{{ product?.limitedQuentn }}</div>
+          <div class="product-item-cell" style="width: 7%;">
+            <button class="btn default-button margin-right--10"
+              (click)="openVerticallyCenter(createProduct, product)">
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button class="btn danger-button" (click)="deleteProduct(product, i)">
+              <i class="far fa-trash-alt"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <div class="user-item not-found text-align--center padding--15" *ngIf="allProducts?.length === 0">
+          Products not found
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+<ng-template #createProduct let-cd="close" let-cd="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="cd('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-widget-body">
+
+    <form [formGroup]="newProduct" class="d-flex d-flex--direction-column margin-bottom--18">
+      <div class="d-flex d-flex--align-center d-flex--justify-around margin-bottom--18">
+        <div class="product-item-label">
+          <label>Product Id</label>
+          <input type="number" formControlName="productId">
+        </div>
+        <div class="product-item-label">
+          <label>Name</label>
+          <input type="text" formControlName="name">
+        </div>
+      </div>
+
+      <div class="d-flex d-flex--align-center d-flex--justify-around margin-bottom--18">
+        <div class="product-item-label">
+          <label>Label</label>
+          <input type="text" formControlName="label">
+        </div>
+        <div class="product-item-label">
+          <label>Limit Subscribers</label>
+          <input type="number" formControlName="limitSubscribers">
+        </div>
+      </div>
+
+      <div class="d-flex d-flex--align-center d-flex--justify-around margin-bottom--18">
+        <div class="product-item-label">
+          <label>Limit Kampagnen</label>
+          <input type="number" formControlName="limitCompany" class="margin-bottom--8">
+          <div class="checkbox">
+            <input type="checkbox" id="limitCompany" class="checkbox__input"
+                   [checked]="limitCompanyCheck"
+                   (click)="choiseLimit('limitCompanyCheck', 'limitCompany')">
+            <label for="limitCompany" class="checkbox__label">Unlimited</label>
+          </div>
+        </div>
+        <div class="product-item-label">
+          <label>Limit Autoresponder</label>
+          <input type="number" formControlName="limitSequences" class="margin-bottom--8">
+          <div class="checkbox">
+            <input type="checkbox" id="limitSequences" class="checkbox__input"
+                   [checked]="limitSequencesCheck"
+                   (click)="choiseLimit('limitSequencesCheck', 'limitSequences')">
+            <label for="limitSequences" class="checkbox__label">Unlimited</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex d-flex--align-center d-flex--justify-around margin-bottom--18">
+        <div class="product-item-label">
+          <label>Comments</label>
+          <div class="switch-content d-flex margin-right--18">
+            <label class="title-switch title-switch--left">No</label>
+            <div class="material-toggle">
+              <input type="checkbox" id="toggle" name="toggle" [checked]="commentsStatus" class="switch" (change)="updateStatus('commentsStatus')" />
+              <label for="toggle" class=""></label>
+            </div>
+            <label class="title-switch title-switch--right"> Yes</label>
+          </div>
+        </div>
+        <div class="product-item-label">
+          <label>Download Psid</label>
+          <div class="switch-content d-flex margin-right--18">
+            <label class="title-switch title-switch--left">No</label>
+            <div class="material-toggle">
+              <input type="checkbox" id="toggle1" name="toggle" [checked]="downloadPsidStatus" class="switch" (change)="updateStatus('downloadPsidStatus')" />
+              <label for="toggle1" class=""></label>
+            </div>
+            <label class="title-switch title-switch--right"> Yes</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex d-flex--align-center d-flex--justify-around margin-bottom--18">
+        <div class="product-item-label">
+          <label>Zapier</label>
+          <div class="switch-content d-flex margin-right--18">
+            <label class="title-switch title-switch--left">No</label>
+            <div class="material-toggle">
+              <input type="checkbox" id="toggle2" name="toggle" [checked]="zapierStatus" class="switch" (change)="updateStatus('zapierStatus')" />
+              <label for="toggle2" class=""></label>
+            </div>
+            <label class="title-switch title-switch--right"> Yes</label>
+          </div>
+        </div>
+        <div class="product-item-label">
+          <label>Admins</label>
+          <div class="switch-content d-flex margin-right--18">
+            <label class="title-switch title-switch--left">No</label>
+            <div class="material-toggle">
+              <input type="checkbox" id="toggle3" name="toggle" [checked]="adminsStatus" class="switch" (change)="updateStatus('adminsStatus')" />
+              <label for="toggle3" class=""></label>
+            </div>
+            <label class="title-switch title-switch--right"> Yes</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex d-flex--align-center d-flex--justify-around margin-bottom--18">
+        <div class="product-item-label">
+          <label>Mailchimp Tag</label>
+          <input type="text" formControlName="quentnUrl">
+        </div>
+        <div class="product-item-label">
+          <label>Limited Mailchimp</label>
+          <input type="number" formControlName="limitedQuentn">
+        </div>
+      </div>
+
+    </form>
+
+    <div class="footer-chanel-buttons d-flex d-flex--align-center d-flex--justify-between">
+      <button class="btn default-button" (click)="cd('Cross click')">Abbrechen</button>
+      <button *ngIf="!selectProduct" class="btn primary-button" [disabled]="!newProduct.valid" (click)="productActions()">Erstellen</button>
+      <button *ngIf="selectProduct" class="btn primary-button" [disabled]="!newProduct.valid" (click)="productActions()">Aktualisieren</button>
+    </div>
+  </div>
+</ng-template>

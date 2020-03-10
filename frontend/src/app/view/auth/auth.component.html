@@ -1,0 +1,31 @@
+<div class="form-login" id="login-container">
+  <h3>ChatBo</h3>
+  <div class="sign">
+    <p>Melde dich mit Facebook an, um deinen ersten Bot zu erstellen.</p>
+    <button class="btn primary-button" [disabled]="checkCondition" *ngIf="!_fbService.loginButtonLoader" (click)="loginWithFacebook()">Mit Facebook anmelden</button>
+    <button class="btn primary-button loader-button" *ngIf="_fbService.loginButtonLoader">Mit Facebook anmelden</button>
+    <div class="checkbox" id="check_condition_div">
+      <input type="checkbox" id="check_condition" class="checkbox__input" (change)="changeCheckCondition()">
+      <label for="check_condition" class="checkbox__label">
+        Ich stimme ChatBo’s <a href="https://chatbo.de/datenschutz/" target="_blank">Datenschutzbestimmungen</a>,
+        <a href="https://chatbo.de/agb/" target="_blank">AGB’s</a> und
+        <a href="https://chatbo.de/lizenzvereinbarung/" target="_blank">Lizenzvereinbarung</a> zu
+      </label>
+    </div>
+  </div>
+  <p class="m-t">Was kommt als nächstes? <br>
+    Wir brauchen einige Berechtigungen, um auf deinen Seiten automatische Antworten geben zu können. Dabei öffnet sich ein Popup von Facebook. Sobald du uns einmalig alle Berechtigungen erteilt hast, öffnet sich automatisch dein Dashboard. Bei deiner ersten Anmeldung wird auch deine E-Mail-Adresse an uns gesendet. Diese brauchen wir, um dir systemrelevante Informationen zu senden.</p>
+</div>
+
+<div class="row footer-auth">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <p>
+      Copyright © {{ date | date:'yyy' }} - ChatBo.
+      <a href="https://chatbo.de/impressum/" target="_blank">Impressum</a>
+      |
+      <a href="https://chatbo.de/haftungsausschluss/" target="_blank">Haftungsauschluss</a>
+    </p>
+  </div>
+  <div class="col-md-3"></div>
+</div>

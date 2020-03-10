@@ -1,0 +1,122 @@
+<div class="component-settings" *ngIf="!preload">
+  <div class="row margin-bottom--24 border-bottom-none d-flex--direction-column margin-bottom--24">
+    <div class="d-flex d-flex--align-center margin-bottom--18">
+      <h3 class="title-h none-margin-bottom">Erstellte Vertrage</h3>
+    </div>
+    <div class="contracts-list">
+      <div class="contract-header">
+        <div class="header-contract-cell" style="width: 30%;">Vertrag</div>
+        <div class="header-contract-cell" style="width: 50%;">Datum</div>
+        <div class="header-contract-cell" style="width: 20%;"></div>
+      </div>
+      <div class="contract-body">
+        <div class="contract-item" *ngFor="let contract of contracts">
+          <div class="contract-cell" style="width: 30%;">
+            {{ contract?.title }}
+          </div>
+          <div class="contract-cell" style="width: 50%;">
+            {{ contract?.created | date:'yyy-MM-dd - HH:mm' }}
+          </div>
+          <div class="contract-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 20%;">
+            <button class="btn primary-button" (click)="openVerticallyCenter(contentFlow, contract?.url)">
+              <i class="far fa-eye"></i>
+            </button>
+            <a class="btn primary-button margin-left--18" target="_blank"
+               *ngIf="contract?.url"
+               href="{{ contract?.url }}"
+               download="{{ contract?.url }}">
+              <i class="fas fa-cloud-download-alt"></i>
+            </a>
+            <button class="btn danger-button margin-left--18" (click)="deleteContract(contract?.id)">
+              <i class="far fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="contract-item" *ngIf="contracts.length === 0">
+          <div class="contract-cell d-flex d-flex--align-center d-flex--justify-center" style="width: 100%;">
+            Verträge nicht gefunden
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="customer?.company" class="row margin-bottom--24 border-bottom-none d-flex--direction-column margin-bottom--24">
+    <div class="d-flex d-flex--align-center margin-bottom--18">
+      <h3 class="title-h none-margin-bottom">Neu Vertrag</h3>
+    </div>
+    <div class="contract-info-container">
+      <div class="contract-item">
+        <span>Firma</span>
+        <input type="text" placeholder="Firma" [(ngModel)]="customer.company" disabled>
+      </div>
+      <div class="contract-item">
+        <span>Vorname</span>
+        <input type="text" placeholder="Vorname" [(ngModel)]="customer.firstName" disabled>
+      </div>
+      <div class="contract-item">
+        <span>Nachname</span>
+        <input type="text" placeholder="Nachname" [(ngModel)]="customer.lastName" disabled>
+      </div>
+      <div class="contract-item">
+        <span>Strasse</span>
+        <input type="text" placeholder="Straße" [(ngModel)]="customer.street" disabled>
+      </div>
+      <div class="contract-item">
+        <span>Plz</span>
+        <input type="text" placeholder="Pie" [(ngModel)]="customer.zipcode" disabled>
+      </div>
+      <div class="contract-item">
+        <span>Stadt</span>
+        <input type="text" placeholder="Stadt" [(ngModel)]="customer.city" disabled>
+      </div>
+      <div class="contract-item">
+        <span>Land</span>
+        <input type="text" placeholder="Land" [(ngModel)]="customer.country" disabled>
+      </div>
+      <div class="contract-item">
+        <span>BestellID</span>
+        <input type="text" placeholder="ReatellID" [(ngModel)]="customer.orderID" disabled>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="customer?.company" class="iframe-cv">
+    <iframe class="doc full-width" *ngIf="fileUrl" [src]="fileUrl + '#toolbar=0' | urlType" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  </div>
+
+  <div *ngIf="customer?.company" class="d-flex d-flex--align-center d-flex--direction-column margin-bottom--24">
+    <div class="checkbox">
+      <input type="checkbox" id="check" class="checkbox__input"
+             [checked]="statusCheck"
+             (click)="setStatusCheck()">
+      <label for="check" class="checkbox__label">Ich stimme der Vereinbarung zu *</label>
+    </div>
+    <button class="btn primary-button"
+            (click)="createContract()"
+            [disabled]="!statusCheck">Vertrag erstellen</button>
+  </div>
+
+</div>
+
+<div class="place-preloader-settings" *ngIf="preload">
+  <span class="loader-table">Loading</span>
+</div>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="iframe-cv">
+        <iframe class="doc full-width" *ngIf="previewContract" [src]="previewContract | urlType" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      </div>
+    </div>
+    <div class="modal-footer d-flex d-flex--align-center d-flex--justify-between">
+      <button type="button" class="btn default-button" data-dismiss="modal" (click)="c('Cross click')">Schließen</button>
+    </div>
+  </div>
+</ng-template>

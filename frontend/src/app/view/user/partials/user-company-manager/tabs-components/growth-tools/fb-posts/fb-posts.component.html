@@ -1,0 +1,22 @@
+<div class="post-list-container" *ngIf="!_preloader">
+  <div class="text-align--center" *ngIf="_items.length === 0">
+    Es gibt keine Beiträge auf dieser Seite
+  </div>
+  <div class="post-item" *ngFor="let post of _items"
+       [ngClass]="{ 'published': post?.selected_post }">
+    <div class="body-post"
+         (click)="updateChangePost(post, true)">
+      <span *ngIf="post?.message">{{ post?.message }}</span>
+      <img *ngIf="post?.picture" [src]="post?.picture" alt="Image">
+    </div>
+    <div class="setting-post">
+      <span>{{ post?.created_time | dateCreatedPost }}</span>
+      <i *ngIf="post?.selected_post" class="far fa-check-circle"></i>
+      <a [href]="post?.permalink_url" target="_blank">Auf Facebook ansehen</a>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex d-flex--justify-center" *ngIf="_preloader">
+  <span class="loader-button small-load-table"></span>
+</div>

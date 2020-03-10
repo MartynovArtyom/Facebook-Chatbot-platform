@@ -1,0 +1,21 @@
+.item-container__header {
+  background: #E094B9;
+  border: 2px solid rgba(186, 129, 182, .4);
+  color: #ffffff;
+}
+
+.item-container__body{
+  position: relative;
+  min-height: inherit !important;
+}
+
+:host {
+  z-index: 2;
+}
+.item-container {
+  z-index: 2;
+
+  &.sheer{
+    opacity: .65;
+  }
+}

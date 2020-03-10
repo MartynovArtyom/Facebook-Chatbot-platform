@@ -1,0 +1,133 @@
+<div class="company-component">
+  <div class="flow-folders">
+    <span>Keywords</span>
+  </div>
+
+  <div class="not-found-messages" *ngIf="!keywordsData || keywordsData.length === 0">
+    <span>Du hast keine Keywords</span>
+  </div>
+
+  <div class="keywords-container" *ngIf="keywordsData.length > 0 || createRuleCheck">
+    <div class="keywords-table">
+      <div class="header padding-left--20 padding-right--20">
+        <div class="keywords-col" style="width: 7%">Aktiv</div>
+        <div class="keywords-col" style="width: 53%">Regel</div>
+        <div class="keywords-col" style="width: 30%">Antwort</div>
+        <div class="keywords-col" style="width: 10%">Zusätzliche Aktionen</div>
+      </div>
+      <div class="body">
+        <div class="keywords-row" *ngFor="let keyword of keywordsData; let i = index">
+          <div class="keywords-col" style="width: 7%">
+            <div class="switch-content d-flex margin-right--18">
+              <div class="material-toggle">
+                <input type="checkbox" id="toggle + {{ i }}" name="toggle" class="switch"
+                       [disabled]="keyword?.main || _userService.userPageInfo?.role === 4"
+                       [checked]="keyword?.status"
+                       (change)="updateKeyword('status', keyword, keyword?.id)"/>
+                <label for="toggle + {{ i }}" class=""></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="keywords-col rule-keywords" style="width: 53%">
+            <ng-select class="condition-select keywords-select"
+                       [disabled]="_userService.userPageInfo?.role === 4"
+                       [clearable]="false"
+                       [ngModel]="keyword.type"
+                       [searchable]="false"
+                       (change)="updateKeyword('type', conditionMatch.selectedValues[0], keyword.id)"
+                       #conditionMatch>
+              <ng-option [value]="1">Nachricht ist</ng-option>
+              <ng-option [value]="2">Nachricht enthält</ng-option>
+              <ng-option [value]="3">Nachricht beginnt mit</ng-option>
+            </ng-select>
+            <span (click)="openEditRule(true, keyword)" *ngIf="!keyword['active']">{{ keyword?.command }}</span>
+            <form [formGroup]="updateKeywords" *ngIf="keyword['active'] === true"
+                  [delayClickOutsideInit]="true"
+                  (clickOutside)="openEditRule(false, keyword)">
+              <input type="text" placeholder="Enter keywords separated by commas (e.g. 'hi, hey, hello')" formControlName="command">
+              <button class="btn primary-button"
+                      [disabled]="!updateKeywords.controls.command.value"
+                      (click)="updateKeyword('command', updateKeywords.controls['command'].value, keyword.id); openEditRule(false, keyword)">Speichern</button>
+            </form>
+          </div>
+
+          <div class="keywords-col reply-keywords" style="width: 30%">
+            <div *ngIf="!keyword?.flow" class="d-flex d-flex--justify-around d-flex--align-center">
+              <p *ngIf="_userService.userPageInfo?.role === 4">Not found</p>
+              <p *ngIf="_userService.userPageInfo?.role !== 4" (click)="createFlow(keyword)">Erstelle eine neue Nachricht</p>
+              <span *ngIf="_userService.userPageInfo?.role !== 4">oder</span>
+              <p *ngIf="_userService.userPageInfo?.role !== 4" (click)="openVerticallyCentered(contentFlow, keyword)">Wähle eine bestehende aus</p>
+            </div>
+
+            <div *ngIf="keyword?.flow" class="d-flex d-flex--justify-around d-flex--align-center">
+              Sende <span class="route-keyword" (click)="routerToEditKeyword(keyword, keyword?.flow?.id)">{{ keyword?.flow?.name }}</span>
+            </div>
+          </div>
+
+          <div class="keywords-col actions" style="width: 10%">
+            <span *ngIf="_userService.userPageInfo?.role === 4" class="some-action">
+              {{(keyword?.actions.length === 0) ? '0 Aktion' : keyword?.actions.length + ' Aktionen'}}</span>
+            <span *ngIf="keyword?.actions.length === 0 && _userService.userPageInfo?.role !== 4" class="new-action" (click)="openActionBulk(keyword)">+ Aktion</span>
+            <span *ngIf="keyword?.actions.length > 0 && _userService.userPageInfo?.role !== 4" class="some-action" (click)="openActionBulk(keyword)">{{ keyword?.actions.length }} Aktionen</span>
+            <app-keywords-actions [openind]="keyword"></app-keywords-actions>
+            <i class="far fa-trash-alt"
+               *ngIf="!keyword?.main && _userService.userPageInfo?.role !== 4"
+               (click)="openVerticallyCenterRemove(content, keyword?.id, i)"></i>
+          </div>
+        </div>
+
+        <div class="keywords-row created-rule" *ngIf="createRuleCheck">
+          <div class="keywords-col" style="width: 90%">
+            <form [formGroup]="newKeywords">
+              <ng-select class="condition-select keywords-select" [clearable]="false" [ngModel]="1" [searchable]="false" formControlName="type">
+                <ng-option [value]="1">Nachricht ist</ng-option>
+                <ng-option [value]="2">Nachricht enthält</ng-option>
+                <ng-option [value]="3">Nachricht beginnt mit</ng-option>
+              </ng-select>
+              <input type="text" placeholder="Enter keywords separated by commas (e.g. 'hi, hey, hello')" formControlName="command">
+              <button class="btn primary-button"
+                      [disabled]="!newKeywords.controls.command.value"
+                      (click)="createKeyword()">Speichern</button>
+            </form>
+          </div>
+          <div class="keywords-col actions" style="width: 10%">
+            <i class="far fa-trash-alt" (click)="openCreateRulePanel(false)"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+    <div class="loader" id="loader-1"></div>
+  </div>
+</div>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-body d-flex d-flex--direction-column enter-folder-name">
+    <button type="button" class="close close-flow-popup" aria-label="Close" (click)="c('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <app-flow-popup
+      [config]="keywordSelected"
+      [sendPopup]="'true'"
+      [closePopup]="c">
+    </app-flow-popup>
+  </div>
+</ng-template>
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Keyword löschen</h3>
+    <span class="delete-title">Wenn du diese Keyword löscht, sind alle Daten dieser Keyword unwiderruflich gelöscht. Das kann nicht rückgängig gemacht werden.</span>
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn danger-button" (click)="deleteKeyword();c('Cross click')">Löschen</button>
+    </div>
+  </div>
+</ng-template>

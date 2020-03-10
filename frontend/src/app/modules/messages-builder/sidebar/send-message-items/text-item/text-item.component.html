@@ -1,0 +1,61 @@
+<div class="text-item-content position-relative margin-bottom--25">
+  <div class="error-content-icon">
+    <i class="fas fa-exclamation-triangle"
+       *ngIf="!item?.params['description'] && (item?.uuid | publishErrors) === true ||
+              item?.params['description'].length > 640 && (item?.uuid | publishErrors) === true"></i>
+  </div>
+
+  <div class="text-content position-relative">
+    <div class="text" (clickOutside)="closeSubTextareaPanel(item?.params)"
+         (click)="openSubTextareaPanel(item?.params)">
+      <textarea autosize
+                placeholder="Gib hier deine Nachricht ein, oder wähle eine bestehende Nachricht aus."
+                maxlength="640"
+                #desc
+                [(ngModel)]="item.params['description']"
+                [disabled]="_builderService.view === 'preview'"
+                [ngClass]="{'text-border-bottom': _builderService.view === 'preview' && item?.params['buttons'].length === 0,
+                            'error-border': !item?.params['description'] && (item?.uuid | publishErrors) === true ||
+                                            item?.params['description'].length > 640 && (item?.uuid | publishErrors) === true
+                           }"
+                (change)="_builderFunctionsService.setInputValue(item?.params, 'description', desc.value)"></textarea>
+
+      <div class="sub-panel" *ngIf="item?.params['active']" [delayClickOutsideInit]="true"
+           (clickOutside)="openEmojiPanel(false);
+                           openBulkActionsPanel(false)">
+        <button (click)="openEmojiPanel(true)">
+          <i class="far fa-smile-o"></i>
+          <app-emoji-picker *ngIf="item?.params['activeEmoji']"
+                            (clickOutside)="_builderFunctionsService.closeEmoji(item?.params['activeEmoji'])"
+                            (modelChange)="_builderFunctionsService.addEmoji(desc, $event, item.params, 'description')"
+                            [popupAnchor]="'top'"></app-emoji-picker>
+        </button>
+
+        <button (click)="openBulkActionsPanel(true)">&#123;&bull;&#125;
+          <div class="sub-bulk-actions-panel" *ngIf="item?.params['activeAction']">
+            <ul>
+              <li *ngFor="let action of _builderService.bulkActions" (click)="getCaretPos(desc, action)">
+                {{ action?.name }}
+              </li>
+              <span class="path-c-f">Custom Fields</span>
+              <li *ngFor="let action of _builderService.bulkActionsCF" (click)="getCaretPos(desc, action)">
+                {{ action?.name }}
+              </li>
+            </ul>
+          </div></button>
+
+        <span>{{ 640 - desc.value.length }}</span>
+      </div>
+    </div>
+
+    <app-buttons-item [config]="item?.params['buttons']" [opened]="opened" [type]="'some'"></app-buttons-item>
+  </div>
+
+  <div class="sidebar-actions" *ngIf="_builderService.view !== 'preview'">
+    <button class="trash-sidebar" (click)="_builderFunctionsService.deleteItemFromSidebar(item)">
+      <i class="fas fa-times"></i>
+    </button>
+    <button class="drop-sidebar-items"><i class="fas fa-arrows-alt-v"></i></button>
+    <button (click)="_builderFunctionsService.cloneItemFromSidebar(item)"><i class="far fa-clone"></i></button>
+  </div>
+</div>

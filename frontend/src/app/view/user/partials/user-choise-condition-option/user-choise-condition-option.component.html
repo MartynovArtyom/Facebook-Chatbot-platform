@@ -1,0 +1,84 @@
+<div class="condition-component-content">
+  <div class="condition-items margin-right--10" *ngFor="let condition of _sharedService.conditionArray; let i = index" (click)="statusDeleteChange()">
+    <span>{{ condition?.name | conditionName }}</span>
+    <div>
+      <span class="cursor" (click)="activeConditionPopup(condition?.opened, i)">{{ condition?.criteria | criteriaReplace }} {{ condition?.value | conditionValue: condition?.name:condition?.type }}</span>
+      <div class="condition-sub-selects"
+        [ngClass]="{'condition-date': condition?.type === 3 || condition?.type === 4 || condition?.name === 'dateSubscribed' || condition?.name === 'lastInteraction'}"
+       *ngIf="condition?.opened && _view !== 'preview'" [delayClickOutsideInit]="true" (clickOutside)="onClickedOutside($event, condition?.opened, i)">
+        <div class="left-patch">
+          <div class="criteria-path" *ngFor="let criteria of _audienceService.sendToOptionCriteria" (click)="addToConditionArrayDefinition(criteria, i)">
+            <p [ngClass]="{ 'active': criteria === condition?.criteria }">{{ criteria | criteriaReplace }}</p>
+          </div>
+        </div>
+        <div class="right-patch">
+          <input (change)="_audienceService.setOptionToConditionFilter(_statusDraft)" type="text" *ngIf="condition?.name === 'firstName' || condition?.name === 'lastName'" [(ngModel)]="condition.value" placeholder="Enter text">
+          <input (change)="_audienceService.setOptionToConditionFilter(_statusDraft)" type="number" *ngIf="condition?.name === 'timezone'" [(ngModel)]="condition.value" placeholder="Enter number">
+
+          <owl-date-time-inline [pickerType]="'calendar'" #dt1
+                                (change)="_audienceService.setOptionToConditionFilter(_statusDraft)"
+                                *ngIf="condition?.name === 'dateSubscribed' || condition?.name === 'lastInteraction'"
+                                [(ngModel)]="condition.value"></owl-date-time-inline>
+
+          <div class="criteria-path" *ngIf="_audienceService.sendToOptionValue.length !== 0">
+            <p class="d-flex d-flex--justify-between d-flex--align-center"
+               *ngFor="let value of _audienceService.sendToOptionValue"
+               (click)="addToConditionArrayDescription(value?.value, i)"
+               [ngClass]="{'active': value?.value === condition?.value}">
+              {{ value?.name | conditionValue }} <span *ngIf="value?.subscriberCount || value?.subscriberCount === 0">{{ value?.subscriberCount }}</span>
+            </p>
+          </div>
+          <div class="criteria-path" *ngIf="condition?.tagID || condition?.tagID === 0">
+            <p class="d-flex d-flex--justify-between d-flex--align-center"
+               *ngFor="let value of _audienceService.savedTags?.conditions"
+               (click)="addToConditionArrayDescription(value, i)"
+               [ngClass]="{'active': value?.tagID === condition?.tagID}">
+              {{ value?.name }} <span *ngIf="value?.subscriberCount || value?.subscriberCount === 0">{{ value?.subscriberCount }}</span>
+            </p>
+          </div>
+          <div class="criteria-path" *ngIf="condition?.sequenceID || condition?.sequenceID === 0">
+            <p class="d-flex d-flex--justify-between d-flex--align-center"
+               *ngFor="let value of _audienceService.savedSequences?.conditions"
+               (click)="addToConditionArrayDescription(value, i)"
+               [ngClass]="{'active': value?.sequenceID === condition?.sequenceID}">
+              {{ value?.name }} <span *ngIf="value?.subscriberCount || value?.subscriberCount === 0">{{ value?.subscriberCount }}</span>
+            </p>
+          </div>
+          <div class="criteria-path" *ngIf="condition?.widgetID || condition?.widgetID === 0">
+            <p class="d-flex d-flex--justify-between d-flex--align-center"
+               *ngFor="let value of _audienceService.savedWidgets?.conditions"
+               (click)="addToConditionArrayDescription(value, i)"
+               [ngClass]="{'active': value?.widgetID === condition?.widgetID}">
+              {{ value?.name }} <span *ngIf="value?.subscriberCount || value?.subscriberCount === 0">{{ value?.subscriberCount }}</span>
+            </p>
+          </div>
+          <div class="criteria-path" *ngIf="condition?.customFieldID || condition?.customFieldID === 0">
+            <input (change)="addToConditionArrayDescription(condition, i)" type="text" *ngIf="condition?.type === 1" [(ngModel)]="condition.value" placeholder="Enter text">
+            <input (change)="addToConditionArrayDescription(condition, i)" type="number" *ngIf="condition?.type === 2" [(ngModel)]="condition.value" placeholder="Enter number">
+            <owl-date-time-inline [pickerType]="'calendar'" #dt1
+                                  (monthSelected)="addToConditionArrayDescription(condition, i)"
+                                  *ngIf="condition?.type === 3" [(ngModel)]="condition.value"></owl-date-time-inline>
+            <owl-date-time-inline #dt2
+                                  (monthSelected)="addToConditionArrayDescription(condition, i)"
+                                  *ngIf="condition?.type === 4" [(ngModel)]="condition.value"></owl-date-time-inline>
+            <!--<input (change)="_audienceService.setOptionToConditionFilter(_statusDraft)" type="date" *ngIf="condition?.type === 3" [(ngModel)]="condition.value" placeholder="Enter value">-->
+            <!--<input (change)="_audienceService.setOptionToConditionFilter(_statusDraft)" type="datetime-local" *ngIf="condition?.type === 4" [(ngModel)]="condition.value" placeholder="Enter value">-->
+            <p class="d-flex d-flex--justify-between d-flex--align-center"
+               *ngIf="condition?.type === 5"
+               (click)="addToConditionArrayDescription('true', i)"
+               [ngClass]="{'active': condition?.value === 'true'}">
+              true <span *ngIf="value?.subscriberCount || value?.subscriberCount === 0">{{ value?.subscriberCount }}</span>
+            </p>
+            <p class="d-flex d-flex--justify-between d-flex--align-center"
+               *ngIf="condition?.type === 5"
+               (click)="addToConditionArrayDescription('false', i)"
+               [ngClass]="{'active': condition?.value === 'false'}">
+              false <span *ngIf="value?.subscriberCount || value?.subscriberCount === 0">{{ value?.subscriberCount }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <i class="fas fa-times" (click)="deleteCondition(i)" *ngIf="_view !== 'preview'"></i>
+  </div>
+</div>

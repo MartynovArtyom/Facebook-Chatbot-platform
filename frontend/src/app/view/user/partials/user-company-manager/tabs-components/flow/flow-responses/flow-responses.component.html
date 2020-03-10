@@ -1,0 +1,65 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a style="cursor: pointer" (click)="routerToPreviewFlow()">Flow</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>Responses</h3>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <button class="btn primary-button" (click)="exportCSV()">Export CSV</button>
+  </div>
+</div>
+<!-- End top sidebar page -->
+
+<!-- Responses content -->
+<div class="responses-container" style="overflow: auto;">
+  <div class="responses-table" style="width: max-content">
+    <div class="responses-question d-flex">
+      <div class="response-col subscriber"></div>
+      <div class="response-col" *ngFor="let question of responses?.questions">
+        {{ question }}
+      </div>
+    </div>
+    <div class="responses-answer">
+      <div class="d-flex" *ngFor="let answer of responses?.answers; let i = index">
+        <div class="response-col subscriber">
+          <img [src]="answer?.subscriber?.avatar">
+          <span>{{ answer?.subscriber?.firstName }} {{ answer?.subscriber?.lastName }}</span>
+        </div>
+        <div class="response-col" *ngFor="let questionKey of responses?.questions">
+          <span *ngIf="!answer[questionKey]?.type ||
+                       answer[questionKey]?.type === 0 ||
+                       answer[questionKey]?.type === 1 ||
+                       answer[questionKey]?.type === 2 ||
+                       answer[questionKey]?.type === 3 ||
+                       answer[questionKey]?.type === 4 ||
+                       answer[questionKey]?.type === 8 ||
+                       answer[questionKey]?.type === 9">
+            {{ answer[questionKey]?.response }}
+          </span>
+
+          <a *ngIf="answer[questionKey]?.type === 5" [href]="'http://' + answer[questionKey]?.response" target="_blank">
+            {{ answer[questionKey]?.response }}
+          </a>
+
+          <a *ngIf="answer[questionKey]?.type === 6 || answer[questionKey]?.type === 7"
+             [href]="answer[questionKey]?.response" target="_blank">
+            {{ answer[questionKey]?.response }}
+          </a>
+
+          <a *ngIf="answer[questionKey]?.type === 10"
+             [href]="'http://www.google.com/maps/place/' + answer[questionKey]?.response" target="_blank">
+            {{ answer[questionKey]?.response }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END Responses content -->
+
+<!-- Preloader -->
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+<!-- End preloader -->

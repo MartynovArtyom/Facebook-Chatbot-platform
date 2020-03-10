@@ -1,0 +1,17 @@
+<ul class="sub-folder">
+  <li *ngFor="let folder of _flowFolders"  [id]="folder?.id" class="sub-item-folder"
+      [ngClass]="{'active-folder': _flowFoldersService.folderID === folder.id}">
+    <i *ngIf="!folder?.status && folder?.children?.length > 0"
+       (click)="actionOpeningFolder(folder, true)"
+       class="action-folder fas fa-chevron-right size"></i>
+    <i *ngIf="folder?.status === true && folder?.children?.length > 0"
+       (click)="actionOpeningFolder(folder, false)"
+       class="action-folder fas fa-chevron-down size"></i>
+    <i class="far fa-folder color"></i>
+    <span style="outline: none"
+          (click)="_flowFoldersService.setBreadCrumb(folder?.id);
+           _flowFoldersService.getFlowsById(folder?.id)"> {{ folder?.name }} </span>
+
+    <app-folders-popup *ngIf="folder?.status === true" [flowFolders]="folder?.children"></app-folders-popup>
+  </li>
+</ul>

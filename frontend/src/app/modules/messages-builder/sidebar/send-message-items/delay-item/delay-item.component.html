@@ -1,0 +1,65 @@
+<div class="text-item-content position-relative margin-bottom--25">
+  <div class="delay-content position-relative"
+       *ngIf="_builderService.view !== 'preview'"
+       [autoClose]="'outside'"
+       [ngbPopover]="delayPopoverContent"
+       [popoverTitle]="delayPopoverTitle"
+       [popoverClass]="'delay-popover'"
+       container="body"
+       placement="right">
+    <span *ngIf="item?.params['type_action']">Tippe</span>
+    <span *ngIf="!item?.params['type_action']">Warten</span>
+    <span>
+      <img class="build-component-item-image small" src="/assets/img/builder-sidebar/warte-short.png" alt="bild-short">
+    </span>
+    <span>{{ item?.params['time'] }}</span>
+    <span *ngIf="item?.params['time'] === 1">Sekunden</span>
+    <span *ngIf="item?.params['time'] > 1">Sekunden</span>
+  </div>
+
+  <div class="delay-content position-relative" *ngIf="_builderService.view === 'preview'">
+    <span *ngIf="item?.params['type_action']">Tippe</span>
+    <span *ngIf="!item?.params['type_action']">Warten</span>
+    <span>
+      <img class="build-component-item-image small" src="/assets/img/builder-sidebar/warte-short.png" alt="bild-short">
+    </span>
+    <span>{{ item?.params['time'] }}</span>
+    <span *ngIf="item?.params['time'] === 1">second</span>
+    <span *ngIf="item?.params['time'] > 1">seconds</span>
+
+  </div>
+
+  <div class="sidebar-actions" *ngIf="_builderService.view !== 'preview'">
+    <button class="trash-sidebar" (click)="_builderFunctionsService.deleteItemFromSidebar(item)">
+      <i class="fas fa-times"></i>
+    </button>
+    <button class="drop-sidebar-items"><i class="fas fa-arrows-alt-v"></i></button>
+    <button (click)="_builderFunctionsService.cloneItemFromSidebar(item)"><i class="far fa-clone"></i></button>
+  </div>
+</div>
+
+<!-- Delay popover -->
+<ng-template #delayPopoverTitle>
+  <span>Verzögerung</span>
+</ng-template>
+<ng-template #delayPopoverContent>
+  <div class="pop-content">
+    <div class="btn-container-content delay-time-popover">
+      <span>Zeitverzögerung</span>
+      <div class="choice-number-delay">
+        <input type="number" #delayTime
+               (change)="_builderFunctionsService.choiseDelayTime(delayTime.value, item?.params)"
+               [(ngModel)]="item.params['time']">
+        <button (click)="_builderFunctionsService.choiseDelayTime('plus', item?.params)">+</button>
+        <button (click)="_builderFunctionsService.choiseDelayTime('minus', item?.params)">-</button>
+      </div>
+      <span>Aktion während der Verzögerung</span>
+      <div class="checkbox">
+        <input type="checkbox" id="checkbox5" class="checkbox__input" [checked]="item?.params['type_action']"
+               (click)="_builderFunctionsService.checkDelayShow(item?.params)">
+        <label for="checkbox5" class="checkbox__label">Zeige “tippe…” während der Verzögerung</label>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- End Delay popover -->

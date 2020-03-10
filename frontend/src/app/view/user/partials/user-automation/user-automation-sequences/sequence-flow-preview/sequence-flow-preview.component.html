@@ -1,0 +1,96 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a [routerLink]="['/' + _userService.userID + '/automation/sequences']">Autoresponder</a>
+    <i class="fas fa-chevron-right"></i>
+    <a [routerLink]="['/' + _userService.userID + '/automation/sequences/' + parentPageId]">{{ parentPageName }}</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>{{ namePage }}</h3>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+
+    <button class="btn sidebar-top-menu-button margin-right--10"
+            [disabled]="!deleteCheck"
+            (click)="routerToEditFlow()">
+      <i class="far fa-edit"></i> Kampagne bearbeiten
+      <i *ngIf="draftCheck" class="fas fa-circle draft-icon-preview"></i>
+    </button>
+
+    <button class="btn sidebar-top-menu-button margin-right--10"
+            (click)="openVerticallyCentered(contentFlow)"
+            [disabled]="!deleteCheck">
+      <i class="far fa-folder"></i> Replace
+    </button>
+
+    <div ngbDropdown placement="bottom-left" class="d-inline-block">
+      <button class="btn sidebar-top-menu-button icon-btn-main" id="dropdownBasic1" ngbDropdownToggle><i class="fas fa-ellipsis-v"></i></button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="right: 0; left: auto !important;" class="left-imp">
+        <button class="dropdown-item" (click)="restoreFlow()" *ngIf="!deleteCheck">
+          <i class="fas fa-undo"></i> Wiederherstellen
+        </button>
+
+        <button class="dropdown-item" (click)="headerActionsService.openVerticallyCentered(rename)" *ngIf="deleteCheck">
+          <i class="fas fa-pencil-alt"></i> Umbenennen
+        </button>
+        <button class="dropdown-item" (click)="_sharedService.copyFlow(currentPostId)" *ngIf="deleteCheck">
+          <i class="far fa-clone"></i> Duplizieren
+        </button>
+        <button class="dropdown-item trash" (click)="headerActionsService.openVerticallyCentered(content)" *ngIf="deleteCheck">
+          <i class="far fa-trash-alt"></i> Löschen
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End top sidebar page -->
+
+<div class="welcome-message-container" *ngIf="!preloader">
+  <app-builder *ngIf="!preloader" [view]="'preview'"></app-builder>
+</div>
+
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Löschen Flow</h3>
+    <span class="delete-title">You are going to löschen <b>{{ nameFlow }}</b></span>
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn danger-button" (click)="deleteFlow();c('Cross click')">Löschen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #rename let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Umbenennen Flow</h3>
+    <input type="text" placeholder="Gib den Namen für den Newsletter ein" #flowRename [value]="nameFlow">
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn primary-button" (click)="renameFlow(flowRename.value);c('Cross click')" [disabled]="!flowRename?.value">Umbenennen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-body d-flex d-flex--direction-column enter-folder-name">
+    <button type="button" class="close close-flow-popup" aria-label="Close" (click)="c('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <app-flow-popup
+      [config]="flowSelected"
+      [changePreloader]="preloader"
+      [sendPopup]="'true'"
+      [closePopup]="c">
+    </app-flow-popup>
+  </div>
+</ng-template>

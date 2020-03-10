@@ -1,0 +1,27 @@
+:host {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+}
+
+.builder-links {
+  width: 100%;
+  height: 100%;
+}
+
+path.arrow:hover{
+  stroke:blue;
+  cursor: pointer;
+}
+
+.btn-danger{
+  display: none;
+  position: absolute;
+
+  &.active{
+    display: block;
+    z-index: 1054544;
+  }
+}

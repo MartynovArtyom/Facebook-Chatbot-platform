@@ -1,0 +1,73 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Autoposting</p>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <button class="btn primary-button margin-right--10" (click)="openVerticallyCentered(content)">+ Neuer Kanal</button>
+  </div>
+</div>
+<!-- End top sidebar page -->
+<div class="autoposting-container">
+  <div class="autoposting-default" *ngIf="!autopostArray || autopostArray.length === 0">
+    <p>Du hast keine Kanäle eingerichtet.</p>
+    <p>Du kannst diesen
+      <button class="btn success-button" (click)="openVerticallyCentered(content)">Button verwenden</button>
+      um einen neuen Kanal einzurichten.</p>
+  </div>
+  <div class="autoposting-content" *ngIf="autopostArray.length > 0">
+    <div class="post-item" (click)="routerToEdit(item?.id)" *ngFor="let item of autopostArray; let index = index">
+      <button class="delete-post" (click)="deleteAutoposting(item?.id, index)"><i class="fas fa-times"></i></button>
+      <div class="title-post">
+        <p>
+          <i *ngIf="item?.type === 1" class="fas fa-rss"></i>
+          <i *ngIf="item?.type === 2" class="fab fa-youtube"></i>
+          <i *ngIf="item?.type === 3" class="fab fa-twitter"></i>
+          <i *ngIf="item?.type === 4" class="fab fa-facebook"></i>
+          {{ item?.title }}
+        </p>
+        <span class="account-post">Account {{ item?.url }}</span>
+      </div>
+      <div class="info-post">
+        <p *ngIf="item?.status">Active</p>
+        <p *ngIf="!item?.status">Deaktiviert</p>
+        <span *ngIf="!item?.targeting"><i class="fas fa-filter"></i> Deaktiviert filter</span>
+        <span class="enabled-filter" *ngIf="item?.targeting"><i class="fas fa-filter"></i> Aktiviert filter</span>
+        <span *ngIf="item?.typePush === 1"><i class="fas fa-bell"></i> Regular Push</span>
+        <span *ngIf="item?.typePush === 2"><i class="fas fa-bell"></i> Silent Push</span>
+        <span *ngIf="item?.typePush === 3"><i class="fas fa-bell"></i> Silent</span>
+      </div>
+    </div>
+    <div class="load-more" *ngIf="total > autopostArray.length">
+      <span>test</span>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-autoposting-chanel">
+    <p>Quelle für neuen Kanal hinzufügen</p>
+    <div class="autoposting-chanel">
+      <button [ngClass]="{'focus-btn': autopostObj.name === 'RSS Feed'}" class="btn default-button" (click)="changeCanal('RSS Feed', 1)">RSS</button>
+      <button [ngClass]="{'focus-btn': autopostObj.name === 'Youtube Kanal'}" class="btn default-button" (click)="changeCanal('Youtube Kanal', 2)">YouTube</button>
+      <button [ngClass]="{'focus-btn': autopostObj.name === 'Twitter Account'}" class="btn default-button" (click)="changeCanal('Twitter Account', 3)">Twitter</button>
+      <button [ngClass]="{'focus-btn': autopostObj.name === 'Facebook Account'}" class="btn default-button" (click)="changeCanal('Facebook Account', 4)">Facebook</button>
+    </div>
+    <div class="url-chanel">
+      <p>{{ autopostObj?.name }}</p>
+      <input type="text" placeholder="" #newChanel>
+      <div class="footer-chanel-buttons">
+        <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+        <button class="btn success-button" (click)="createAutoposting(newChanel.value)" [disabled]="!newChanel?.value">{{ autopostObj?.name }} hinzufügen</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

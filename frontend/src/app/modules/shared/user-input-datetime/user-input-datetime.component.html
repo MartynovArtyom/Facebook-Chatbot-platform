@@ -1,0 +1,11 @@
+<div class="date-container-msg">
+  <div class="calendar-content">
+    <owl-date-time-inline [(ngModel)]="date"></owl-date-time-inline>
+  </div>
+
+  <div class="footer-date-container-messenger">
+    <button class="btn primary-button" (click)="userInputService.selectUserInputDate(date, queryParams, subscriberID)">
+      Select {{ date | date:'dd-MM-yyy, HH:mm' }}
+    </button>
+  </div>
+</div>

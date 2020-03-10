@@ -1,0 +1,30 @@
+<div class="card-items" data-drag="true">
+  <div class="card-array"
+       *ngFor="let card of config?.params['cards_array']; let i = index"
+       [ngClass]="{'absolute': i > 0}"
+       [ngStyle]="{'right': 'calc(-100% * '+ i +' - 20px * '+ i +')'}">
+    <div class="card-content"
+         [ngClass]="{'border-radius-bottom-no': card['buttons'].length > 0}"
+         data-drag="true">
+      <div class="card-image" data-drag="true">
+        <img *ngIf="card?.img_url" [src]="card?.img_url" data-drag="true">
+        <div class="default-content" *ngIf="!card?.img_url" data-drag="true">
+          <img class="build-component-item-image" src="/assets/img/builder-sidebar/bild-short.png" alt="bild-short">
+          <span data-drag="true">Bild</span>
+        </div>
+      </div>
+
+      <div class="card-text-content" data-drag="true">
+        <span class="title-card" *ngIf="card?.title" data-drag="true">{{ card?.title }}</span>
+        <span class="title-card" *ngIf="!card?.title" data-drag="true">Titel eingeben</span>
+        <span class="subtitle-card" *ngIf="card?.subtitle" #blocks data-drag="true">{{ card?.subtitle }}</span>
+        <span class="subtitle-card" *ngIf="!card?.subtitle" #blocks data-drag="true">Untertitel eingeben</span>
+      </div>
+    </div>
+
+    <app-buttons
+      [buttons]="card['buttons']"
+      [opened]="opened"
+      [type]="'some'"></app-buttons>
+  </div>
+</div>

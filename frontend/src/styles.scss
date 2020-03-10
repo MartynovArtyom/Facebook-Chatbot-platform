@@ -1,0 +1,283 @@
+//@import '~ngx-toastr/toastr.css';
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~ngx-toastr/toastr-bs4-alert';
+@import "assets/scss/prism-darcula";
+@import "~nouislider/distribute/nouislider.min.css";
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~font-awesome/css/font-awesome.css";
+@import "assets/scss/general";
+@import "assets/scss/campaign";
+@import "assets/scss/colors";
+@import "assets/scss/media";
+
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700');
+@import '~angular-tree-component/dist/angular-tree-component.css';
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+
+@import "assets/scss/messages-builder";
+.toast-container .toast{
+  opacity: 1 !important;
+  cursor: inherit;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.build-component-item-image {
+  max-width: 31px;
+  margin-bottom: 7px;
+  filter: grayscale(1);
+  &.small {
+    top: 4px;
+    max-width: 16px;
+    position: relative;
+  }
+}
+
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  pointer-events: none;
+  list-style-type: none;
+
+  & + * {
+    display: none;
+  }
+
+  &.main-item{
+    .main-button{
+      width: 100%;
+    }
+  }
+
+  &.item-content{
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-bottom: 32px;
+    position: relative;
+
+    &:hover{
+      .message-input{
+        .edit-item{
+          display: flex;
+        }
+      }
+    }
+
+    .message-input{
+      display: flex;
+      flex-direction: column;
+
+      .text-added{
+        will-change: border-color, background-color, box-shadow;
+        transition: border-color 0.15s ease 0s, background-color 0.15s ease 0s;
+        background-color: rgb(241, 240, 240);
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        padding: 0.5rem;
+        margin-top: 0;
+        margin-bottom: 0;
+        height: 61px;
+        border: 2px solid rgb(241, 240, 240);
+        width: 100%;
+        font-size: 15px;
+        resize: none;
+
+        &:hover{
+          border: 2px solid #0084ff;
+        }
+        &:focus{
+          border: 2px solid #25D172;
+          outline: none;
+        }
+      }
+
+      .buttons-message{
+
+        .item-button{
+          display: block;
+          width: 100%;
+          position: relative;
+          box-sizing: border-box;
+          color: #8492a6;
+          border: 2px dashed #e0e6ed;
+          border-bottom-left-radius: 15px;
+          border-bottom-right-radius: 15px;
+          transition: border-color .15s,color .15s;
+          will-change: border-color,color;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          padding: 7px 8px;
+          border-top-color: #e0e6ed;
+          cursor: pointer;
+
+          &:hover{
+            border: 2px dashed #0084ff;
+          }
+          &:focus{
+            border: 2px dashed #25D172;
+            outline: none;
+          }
+
+          & > p{
+            text-align: center;
+            font-size: 15px;
+          }
+        }
+      }
+
+      .edit-item{
+        position: absolute;
+        right: 11px;
+        display: none;
+        flex-direction: column;
+        font-size: 20px;
+        align-items: center;
+        justify-content: space-between;
+
+        & > i{
+          margin-bottom: 15px;
+          cursor: pointer;
+          color: #8492a6;
+
+          &:last-child{
+            margin-bottom: 0;
+          }
+
+          &:hover{
+            color: #0084ff;
+          }
+          &.fa-times{
+            &:hover{
+              color: #ff6249;
+            }
+          }
+        }
+      }
+    }
+  }
+  .file-input{
+    display: flex;
+    flex-direction: column;
+
+    .text-added{
+      will-change: border-color, background-color, box-shadow;
+      transition: border-color 0.15s ease 0s, background-color 0.15s ease 0s;
+      background-color: rgb(241, 240, 240);
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      padding: 0.5rem;
+      margin-top: 0;
+      margin-bottom: 0;
+      height: 61px;
+      border: 2px solid rgb(241, 240, 240);
+      width: 100%;
+      font-size: 15px;
+      resize: none;
+
+      &:hover{
+        border: 2px solid #0084ff;
+      }
+      &:focus{
+        border: 2px solid #25D172;
+        outline: none;
+      }
+    }
+
+    .buttons-message{
+
+      .item-button{
+        display: block;
+        width: 100%;
+        position: relative;
+        box-sizing: border-box;
+        color: #8492a6;
+        border: 2px dashed #e0e6ed;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        transition: border-color .15s,color .15s;
+        will-change: border-color,color;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        padding: 7px 8px;
+        border-top-color: #e0e6ed;
+        cursor: pointer;
+
+        &:hover{
+          border: 2px dashed #0084ff;
+        }
+        &:focus{
+          border: 2px dashed #25D172;
+          outline: none;
+        }
+
+        & > p{
+          text-align: center;
+          font-size: 15px;
+        }
+      }
+    }
+
+    .edit-item{
+      position: absolute;
+      right: 11px;
+      display: none;
+      flex-direction: column;
+      font-size: 20px;
+      align-items: center;
+      justify-content: space-between;
+
+      & > i{
+        margin-bottom: 15px;
+        cursor: pointer;
+        color: #8492a6;
+
+        &:last-child{
+          margin-bottom: 0;
+        }
+
+        &:hover{
+          color: #0084ff;
+        }
+        &.fa-times{
+          &:hover{
+            color: #ff6249;
+          }
+        }
+      }
+    }
+  }
+}
+/* high-performance display:none; helper */
+.gu-hide {
+  left: -9999px !important;
+}
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+  /*-webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;*/
+}
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+}

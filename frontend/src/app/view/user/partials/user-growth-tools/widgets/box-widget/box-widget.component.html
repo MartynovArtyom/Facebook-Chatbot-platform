@@ -1,0 +1,127 @@
+<div class="slide-in r-m box-widget-container" *ngIf="tabsValue === 'initial_state' || tabsValue === 'setup'"
+     [style.width]="(config['fit_container']) ? '3000px' : config['width_container'] + 'px'"
+     [style.background]="config['color_background']">
+  <div class="d-flex d-flex--justify-center d-flex--direction-column d-flex--align-center">
+    <img *ngIf="config['image'] && config['image_place'] === 0"
+         [src]="config['image']" class="widget-img">
+    <h2 class="ed-t" contenteditable="true"
+        #barTitle
+        *ngIf="_userService.userPageInfo?.role !== 4"
+        [style.color]="config['color_headline']"
+        [textContent]="config['slidein_title']"
+        (input)="config['slidein_title']=$event.target.textContent"></h2>
+
+    <h2 class="ed-t"
+        *ngIf="_userService.userPageInfo?.role === 4"
+        [ngClass]="{'not-after': _userService.userPageInfo?.role === 4}"
+        [style.color]="config['color_headline']"
+        [textContent]="config['slidein_title']"></h2>
+
+    <img *ngIf="config['image'] && config['image_place'] === 1"
+         [src]="config['image']" class="widget-img">
+
+    <h3 class="ed-t"
+        *ngIf="_userService.userPageInfo?.role === 4 && config['show_desc']"
+        [ngClass]="{'not-after': _userService.userPageInfo?.role === 4}"
+        [style.color]="config['color_desc']"
+        [textContent]="config['slidein_desc']"></h3>
+
+    <h3 class="ed-t" contenteditable="true"
+        #barTitle
+        *ngIf="_userService.userPageInfo?.role !== 4 && config['show_desc']"
+        [style.color]="config['color_desc']"
+        [textContent]="config['slidein_desc']"
+        (input)="config['slidein_desc']=$event.target.textContent"></h3>
+
+    <img *ngIf="config['image'] && config['image_place'] === 2"
+         [src]="config['image']" class="widget-img">
+  </div>
+  <div class="d-flex d-flex--align-center d-flex--justify-center full-width"
+       [ngClass]="{'d-flex--direction-column': view === 'mobile'}">
+    <div class="button-type-check"
+         [style.background]="config['color_button_background']">
+      <div class="edit-button-text">
+        <input type="text" maxlength="15"
+               id="buttonText"
+               [disabled]="_userService.userPageInfo?.role === 4"
+               [style.color]="config['color_button_text']"
+               class="button-text"
+               [(ngModel)]="config['slidein_button_title']">
+        <label for="buttonText">
+          <i *ngIf="_userService.userPageInfo?.role !== 4" class="fa fa-pencil" aria-hidden="true"></i>
+        </label>
+      </div>
+    </div>
+    <div class="facebook-plugin-form">
+      <div class="fb-messenger-checkbox"
+           [attr.origin]="originUrl"
+           [attr.messenger_app_id]="apiId"
+           [attr.page_id]="_userService.userID"
+           [attr.user_ref]="randomValue"
+           [attr.data-ref]="currentId"
+           [attr.checked]="true"
+           [attr.prechecked]="true"
+           [attr.allow_login]="true"
+           [attr.size]="'standard'">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide-in r-m"
+     *ngIf="tabsValue !== 'initial_state' && tabsValue !== 'setup' && config['after_submit'] === 'show'"
+     [style.width]="config['width_container'] + 'px'"
+     [style.background]="config['after_submit_color_background']">
+
+  <div class="d-flex d-flex--justify-center d-flex--direction-column d-flex--align-center">
+    <img *ngIf="config['after_submit_image'] && config['after_submit_image_place'] === 0"
+         [src]="config['after_submit_image']" class="widget-img">
+
+    <h2 class="ed-t"
+        *ngIf="_userService.userPageInfo?.role === 4"
+        [ngClass]="{'not-after': _userService.userPageInfo?.role === 4}"
+        [style.color]="config['after_submit_color_headline']"
+        [textContent]="config['slidein_submit_title']"></h2>
+
+    <h2 class="ed-t" contenteditable="true"
+        #barTitle
+        *ngIf="_userService.userPageInfo?.role !== 4"
+        [style.color]="config['after_submit_color_headline']"
+        [textContent]="config['slidein_submit_title']"
+        (input)="config['slidein_submit_title']=$event.target.textContent"></h2>
+
+    <img *ngIf="config['after_submit_image'] && config['after_submit_image_place'] === 1"
+         [src]="config['after_submit_image']" class="widget-img">
+
+    <h3 class="ed-t"
+        *ngIf="_userService.userPageInfo?.role === 4 && config['show_desc_after']"
+        [ngClass]="{'not-after': _userService.userPageInfo?.role === 4}"
+        [style.color]="config['after_submit_color_desc']"
+        [textContent]="config['slidein_submit_desc']"></h3>
+
+    <h3 *ngIf="config['show_desc_after'] && _userService.userPageInfo?.role !== 4" class="ed-t" contenteditable="true"
+        #barTitle
+        [style.color]="config['after_submit_color_desc']"
+        [textContent]="config['slidein_submit_desc']"
+        (input)="config['slidein_submit_desc']=$event.target.textContent"></h3>
+
+    <img *ngIf="config['after_submit_image'] && config['after_submit_image_place'] === 2"
+         [src]="config['after_submit_image']" class="widget-img">
+  </div>
+  <div class="d-flex d-flex--align-center d-flex--justify-center full-width">
+    <div class="button-type-check"
+         [style.background]="config['after_submit_color_button_background']">
+      <div class="edit-button-text">
+        <input type="text" maxlength="15"
+               id="buttonText1"
+               [disabled]="_userService.userPageInfo?.role === 4"
+               [style.color]="config['after_submit_color_button_text']"
+               class="button-text"
+               [(ngModel)]="config['slidein_submit_button_title']">
+        <label for="buttonText1">
+          <i *ngIf="_userService.userPageInfo?.role !== 4" class="fa fa-pencil" aria-hidden="true"></i>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

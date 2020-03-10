@@ -1,0 +1,131 @@
+<div class="title-sidebar">
+  <input type="text" #title placeholder="Enter name" [value]="config?.name"
+         [disabled]="_builderService.view === 'preview'"
+         [(ngModel)]="config.name"
+         (change)="_builderFunctionsService.setInputValue(config, 'name', title.value)">
+</div>
+
+<div class="content-sidebar-start-step" *ngIf="_builderService.view !== 'preview'">
+  <div class="switchs">
+    <input type="checkbox" id="switch1" class="switchs__input"
+           [checked]="config?.start_step"
+           [disabled]="config?.start_step"
+           (change)="_builderFunctionsService.setStartingStep(config)"
+    >
+    <label for="switch1" class="switchs__label">Kampagnen Start</label>
+  </div>
+</div>
+
+<div class="content-sidebar-start-step" *ngIf="_builderService.view !== 'preview'">
+  <a class="replace-flow-item"
+          (click)="openVerticallyCentered(contentFlow)">
+    Wähle eine bestehende aus
+  </a>
+</div>
+
+<div class="sidebar-all-items-content"
+     [ngClass]="{'padding-bottom-sidebar': _builderService.view === 'preview'}">
+
+  <div [dragula]="'HANDLES'" [(dragulaModel)]="config.widget_content">
+    <div *ngFor="let item of config?.widget_content">
+      <div *ngIf="item?.type === 'text'">
+        <app-text-item [item]="item" [opened]="config?.opened"></app-text-item>
+      </div>
+      <div *ngIf="item?.type === 'image'">
+        <app-image-item [item]="item" [opened]="config?.opened"></app-image-item>
+      </div>
+      <div *ngIf="item?.type === 'card'">
+        <app-card-item [item]="item" [opened]="config?.opened"></app-card-item>
+      </div>
+      <div *ngIf="item?.type === 'gallery'">
+        <app-card-item [item]="item" [opened]="config?.opened"></app-card-item>
+      </div>
+      <div *ngIf="item?.type === 'audio'">
+          <app-audio-item [item]="item" [opened]="config?.opened"></app-audio-item>
+      </div>
+      <div *ngIf="item?.type === 'video'">
+          <app-video-item [item]="item" [opened]="config?.opened"></app-video-item>
+      </div>
+      <div *ngIf="item?.type === 'file'">
+          <app-file-item [item]="item" [opened]="config?.opened"></app-file-item>
+      </div>
+      <div *ngIf="item?.type === 'delay'">
+          <app-delay-item [item]="item" [opened]="config?.opened"></app-delay-item>
+      </div>
+      <div *ngIf="item?.type === 'user_input'">
+          <app-user-input-item [item]="item" [opened]="config?.opened"></app-user-input-item>
+      </div>
+    </div>
+  </div>
+
+  <div class="widget-content-not-found" *ngIf="config?.widget_content.length === 0">
+
+    <div class="error-content-icon">
+      <i class="fas fa-exclamation-triangle" *ngIf="config?.widget_content.length === 0 &&
+                                                    (config['uuid'] | publishErrors) === true"></i>
+    </div>
+
+    <span>Verwenden Sie die Schaltflächen unten, um Text und Bilder hinzuzufügen.</span>
+  </div>
+
+  <app-quick-reply-item *ngIf="config?.widget_content.length > 0" [item]="config?.quick_reply"></app-quick-reply-item>
+
+  <div class="created-child-items-container" *ngIf="_builderService.view !== 'preview'">
+    <div class="child-items-row">
+      <div class="child-items" (click)="_builderFunctionsService.addItemFromSidebar('text', config['widget_content'])">
+        <img src="/assets/img/builder-sidebar/text.png" alt="text">
+      </div>
+      <div class="child-items" (click)="_builderFunctionsService.addItemFromSidebar('image', config['widget_content'])">
+        <img src="/assets/img/builder-sidebar/bild.png" alt="bild">
+      </div>
+      <div class="child-items" (click)="_builderFunctionsService.addItemFromSidebar('card', config['widget_content'])">
+        <img src="/assets/img/builder-sidebar/card.png" alt="card">
+      </div>
+      <div class="child-items" (click)="_builderFunctionsService.addItemFromSidebar('gallery', config['widget_content'])">
+        <img src="/assets/img/builder-sidebar/gallerie.png" alt="gallerie">
+      </div>
+    </div>
+
+    <div class="child-items-row">
+      <div class="child-items" (click)="_builderFunctionsService.addItemFromSidebar('audio', config['widget_content'])">
+        <img src="/assets/img/builder-sidebar/audio.png" alt="audio">
+      </div>
+      <div class="child-items" (click)="_builderFunctionsService.addItemFromSidebar('video', config['widget_content'])">
+        <img src="/assets/img/builder-sidebar/video.png" alt="video">
+      </div>
+      <div class="child-items" (click)="_builderFunctionsService.addItemFromSidebar('file', config['widget_content'])">
+        <img src="/assets/img/builder-sidebar/datei.png" alt="datei">
+      </div>
+      <div class="child-items" (click)="_builderFunctionsService.addItemFromSidebar('delay', config['widget_content'])">
+        <img src="/assets/img/builder-sidebar/warte.png" alt="warte">
+      </div>
+    </div>
+
+    <div class="child-items-row centered">
+      <div class="child-items" (click)="_builderFunctionsService.addItemFromSidebar('user_input', config['widget_content'])">
+        <img src="/assets/img/builder-sidebar/nutzer-eingabe.png" alt="nutzer-eingabe">
+      </div>
+    </div>
+  </div>
+
+  <div class="continue-next-step margin-bottom--32" *ngIf="!config?.next_step && _builderService.view !== 'preview' ||
+                                          config?.next_step">
+    <app-buttons-item [type]="'main'" [config]="config"></app-buttons-item>
+  </div>
+
+</div>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-body d-flex d-flex--direction-column enter-folder-name">
+    <button type="button" class="close close-flow-popup" aria-label="Close" (click)="c('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <app-starting-step-flow-popup
+      [config]="config"
+      [returnData]="returnData"
+      [changePreloader]="preloader"
+      [sendPopup]="'true'"
+      [closePopup]="c">
+    </app-starting-step-flow-popup>
+  </div>
+</ng-template>

@@ -1,0 +1,22 @@
+<div class="child-items-container" data-drag="true" *ngIf="config?.widget_content[0]['randomData'].length > 0">
+  <div class="random-items" *ngFor="let item of config?.widget_content[0]['randomData']"
+       [ngClass]="{'blue': item?.random_leter === 'A',
+                   'turquoise': item?.random_leter === 'B',
+                   'violet': item?.random_leter === 'C',
+                   'orange': item?.random_leter === 'D',
+                   'navy-blue': item?.random_leter === 'E',
+                   'green': item?.random_leter === 'F'}" data-drag="true">
+    <span data-drag="true">{{ item?.random_leter }}</span>
+    <span data-drag="true">{{ item?.value }}%</span>
+    <i class="far fa-circle" [id]="item?.uuid"
+       (click)="_builderService.createMouseLink(item, $event, 'all')"
+       [ngClass]="{'full': item?.arrow?.to?.id}"
+       data-drag="false"></i>
+  </div>
+</div>
+
+<div class="widget-content-not-found" *ngIf="config?.widget_content[0]['randomData'].length === 0" data-drag="true">
+  <i class="fas fa-random" data-drag="true"></i>
+  <span data-drag="true">Klicken Sie hier, um A/B zu bearbeiten</span>
+  <span data-drag="true">In der Seitenleiste aufteilen</span>
+</div>

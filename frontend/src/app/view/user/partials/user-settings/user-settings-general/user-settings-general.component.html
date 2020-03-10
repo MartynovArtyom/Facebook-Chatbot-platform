@@ -1,0 +1,333 @@
+<div class="component-settings" *ngIf="!preload">
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Begrüßungstext</h5>
+    </div>
+    <div class="col-md-4 position--relative">
+      <textarea type="text" #desc placeholder="" rows="3" class="enter-text-settings" [(ngModel)]="welcomeTexts"></textarea>
+      <i *ngIf="!activeEmoji" class="far fa-grin open-emoji" (click)="displayEmoji()"></i>
+      <i *ngIf="activeEmoji" class="fas fa-times open-emoji" (click)="displayEmoji()"></i>
+      <app-emoji-picker *ngIf="activeEmoji"
+                        [delayClickOutsideInit]="true"
+                        (clickOutside)="closeEmoji(activeEmoji)"
+                        (modelChange)="addEmoji(desc, $event)"
+                        [popupAnchor]="'bottom'"></app-emoji-picker>
+      <!--<emoji-mart (emojiClick)="addEmoji($event)" class="emoji-container" [ngClass]="{'active': activeEmoji}"></emoji-mart>-->
+      <div class="d-flex d-flex--justify-between d-flex--align-center">
+        <a class="link-text" (click)="openVerticallyCenter(content)">Schau Dir an wie es aussieht</a>
+        <button class="btn default-button" *ngIf="!greetingTextCheck" (click)="saveGeneralSettings('greetingText')">Speichern</button>
+        <button class="btn default-button loader-button" *ngIf="greetingTextCheck">Speichern</button>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <p>Dieser Text wird den Benutzern angezeigt bevor sie eine Interaktion mit dem Bot beginnen</p>
+    </div>
+  </div>
+  <!-- Begrüßungstext -->
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Los geht`s</h5>
+    </div>
+    <div class="col-md-4">
+      <button class="bth primary-button" *ngIf="!getStartCheck" (click)="setGetStart()">Einstellungen Los geht`s Button</button>
+      <button class="bth primary-button loader-button" *ngIf="getStartCheck">Einstellungen Los geht`s Button</button>
+    </div>
+    <div class="col-md-4">
+      <p>Diese Funktion fügt den Los geht`s Button im Messenger ein, wenn dieser nicht automatisch erstellt wurde.</p>
+    </div>
+  </div>
+  <!-- Los geht`s -->
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Klonen auf eine andere Seite</h5>
+    </div>
+    <div class="col-md-4">
+      <button class="bth primary-button" (click)="openVerticallyCenter(botClone)">Bot klonen</button>
+    </div>
+    <div class="col-md-4">
+      <p>Übertragen Sie den gesamten Inhalt dieses Bot auf eine andere Seite</p>
+    </div>
+  </div>
+  <!-- Klonen auf eine andere Seite -->
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Bot mit einem anderen Benutzer teilen</h5>
+    </div>
+    <div class="col-md-4">
+      <button class="bth primary-button" (click)="openVerticallyC(botCopy)">Bot teilen </button>
+    </div>
+    <div class="col-md-4">
+      <p>Teile den gesamten Inhalt von diesem Bot auf die Seite eines anderen Benutzers</p>
+    </div>
+  </div>
+  <!-- Bot mit einem anderen Benutzer teilen -->
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Facebook-Berechtigungen aktualisieren</h5>
+    </div>
+    <div class="col-md-4">
+      <button class="bth primary-button" *ngIf="!updatePermissionCheck" (click)="updatePermission()">Berechtigungen aktualisieren</button>
+      <button class="bth primary-button loader-button" *ngIf="updatePermissionCheck">Berechtigungen aktualisieren</button>
+    </div>
+    <div class="col-md-4">
+      <p>Die Messenger-Plattform kann unerwartet Seitenberechtigungen für die Änderung des Administratorkennworts oder aus internen Gründen löschen. Bei Problemen mit dem Senden von Inhalten oder der Einrichtung von Diensten empfehlen wir Dir, die Berechtigungen zu aktualisieren.</p>
+    </div>
+  </div>
+  <!-- Facebook-Berechtigungen aktualisieren -->
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Meine Daten</h5>
+    </div>
+    <div class="col-md-4">
+      <label class="new-switch switch-green">
+        <input type="checkbox" class="switch-input" [checked]="mainDataCheck" (click)="saveGeneralSettings('mainData')">
+        <span class="switch-label" data-on="Aktiviert" data-off="Deaktiviert"></span>
+        <span class="switch-handle"></span>
+      </label>
+    </div>
+    <div class="col-md-4">
+      <p>Die Funktion "Meine Daten" aktiviert eine Standard-Botsequenz in allen deinen erstellten Bots, welche es deinen Abonnenten erlaubt mit der Texteingabe "Meine Daten" die vom Abonnenten gespeicherten Daten abzurufen und er bekommt die Möglichkeit mit einem Klick seine, bei uns gespeicherten, Daten zu löschen. Mit Inkrafttreten der neuen DSGVO ist dies zwingend vorgeschrieben.</p>
+    </div>
+  </div>
+  <!-- Meine Daten -->
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Lösche Facebook Berechtigungen</h5>
+    </div>
+    <div class="col-md-4">
+      <button class="bth default-button danger-text" *ngIf="!deletePermissionCheck" (click)="openVerticallyCentered(contentRemove, 1)">Facebook Berechtigungen löschen</button>
+      <button class="bth default-button danger-text loader-button" *ngIf="deletePermissionCheck">Facebook Berechtigungen löschen</button>
+    </div>
+    <div class="col-md-4">
+      <p>Wenn du die Berechtigungen löscht, die du uns erteilt hast, kannst du ChatBo für diese Seite nicht mehr nutzen. Wir brauchen deine Erlaubnis, damit wir dir alle Funktionen zur Verfügung stellen können. Beim Löschen der Berechtigungen bleiben alle Daten erhalten und du kannst uns später wieder die Berechtigungen erteilen.</p>
+    </div>
+  </div>
+  <!-- Lösche Facebook Berechtigungen -->
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Deaktiviere den Bot für diese Seite</h5>
+    </div>
+    <div class="col-md-4">
+      <button class="bth default-button danger-text" *ngIf="!disablePageCheck" (click)="openVerticallyCentered(contentRemove, 2)">Deaktivieren Bot</button>
+      <button class="bth default-button danger-text loader-button" *ngIf="disablePageCheck">Deaktivieren Bot</button>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+  <!-- Deaktiviere den Bot für diese Seite -->
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Löschen deiner Seite</h5>
+    </div>
+    <div class="col-md-4">
+      <button class="bth default-button danger-text" *ngIf="!deletePageCheck" (click)="openVerticallyCentered(contentRemove, 3)">Seite löschen</button>
+      <button class="bth default-button danger-text loader-button" *ngIf="deletePageCheck">Seite löschen</button>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+  <!-- Löschen deiner Seite -->
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Lösche deinen Account</h5>
+    </div>
+    <div class="col-md-4">
+      <button class="bth default-button danger-text" *ngIf="!deleteAccountCheck" (click)="openVerticallyCentered(contentRemove, 4)">Account löschen</button>
+      <button class="bth default-button danger-text loader-button" *ngIf="deleteAccountCheck">Account löschen</button>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+  <!-- Lösche deinen Account -->
+</div>
+
+<div class="place-preloader-settings" *ngIf="preload">
+  <span class="loader-table">Loading</span>
+</div>
+
+<!-- Bot copy -->
+<ng-template #botCopy let-c="close" let-c="dismiss">
+  <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="content-modal-container">
+    <h3 *ngIf="!preloaderCopy">Bot mit einem anderen Benutzer teilen</h3>
+    <div *ngIf="!preloaderCopy" class="bot-clone-popup">
+      <span>Sie werden den Inhalt dieses Bots mit einem anderen Benutzer teilen.</span>
+
+      <div class="bot-item disabled-item">
+        <img [src]="_userService.userPageInfo?.avatar">
+        <p>{{ _userService.userPageInfo?.title }}</p>
+      </div>
+
+      <div class="cloned-info margin-bottom--18">
+        <p class="margin-bottom--10">Wählen Sie, was Sie teilen möchten</p>
+        <div class="d-flex d-flex--direction-column margin-bottom--12">
+          <div *ngFor="let item of copyInfo; let i = index" class="d-flex d-flex--align-center">
+            <div class="checkbox margin-right--10" style="margin: 0 0 25px;">
+              <input type="checkbox" id="{{ i }}" class="checkbox__input"
+                     [checked]="item?.status"
+                     (click)="changeShareBotOption(item?.key, item)">
+              <label for="{{ i }}" class="checkbox__label"></label>
+            </div>
+            <span>{{ item?.name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cloned-info margin-bottom--18">
+        <p class="margin-bottom--10">Link teilen</p>
+        <label class="new-switch switch-green">
+          <input type="checkbox" class="switch-input"
+                 [checked]="copyStatusLink"
+                 (click)="changeShareBotOption('status', copyStatusLink)">
+          <span class="switch-label" data-on="Aktiviert" data-off="Deaktiviert"></span>
+          <span class="switch-handle"></span>
+        </label>
+      </div>
+
+      <div class="cloned-info margin-bottom--18">
+        <p>Link</p>
+        <a [href]="link" target="_blank">{{ link }}</a>
+      </div>
+
+      <button class="btn primary-button"
+              [disabled]="!checkOption"
+              (click)="changeShareBotOptionRequest()">Speichern</button>
+
+    </div>
+
+    <div class="loader-component" [ngClass]="{'close-preloader': !preloaderCopy}" style="left: 0; border-radius: 5px; min-height: 500px">
+      <div class="loader" id="loader-1"></div>
+    </div>
+  </div>
+</ng-template>
+<!-- Bot copy END -->
+
+<!-- Bot cloned -->
+<ng-template #botClone let-c="close" let-c="dismiss">
+  <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="content-modal-container">
+    <h3>Klonen auf eine andere Seite</h3>
+    <div class="bot-clone-popup" *ngIf="!confirmClone">
+      <span>Sie sind dabei, den Inhalt dieses Bot auf eine andere Seite zu kopieren.</span>
+
+      <div class="bot-item disabled-item">
+        <img [src]="_userService.userPageInfo?.avatar">
+        <p>{{ _userService.userPageInfo?.title }}</p>
+      </div>
+
+      <i class="fas fa-chevron-down"></i>
+
+      <div class="position--relative">
+        <div class="bot-item" (click)="changeStatusPagesList(true)">
+          <img *ngIf="selectedPage" [src]="selectedPage?.avatar">
+          <span *ngIf="!selectedPage" class="img-preview"></span>
+
+          <p *ngIf="selectedPage">{{ selectedPage?.title }}</p>
+          <p *ngIf="!selectedPage">Wählen Sie eine Seite</p>
+        </div>
+
+        <ul *ngIf="openPagesList" (clickOutside)="changeStatusPagesList(false)" [delayClickOutsideInit]="true">
+          <li class="bot-item" *ngFor="let page of _userService.listConnectionPages"
+              [ngClass]="{'display-none': page.role !== 1}"
+              (click)="selectClonePage(page)">
+            <img [src]="page?.avatar">
+            <p>{{ page?.title }}</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cloned-info">
+        <p>Will be cloned</p>
+        <div class="d-flex d-flex--direction-column margin-bottom--12">
+          <span *ngFor="let item of cloneInfo">
+            <i class="fas fa-check"></i>
+            {{ item }}
+          </span>
+        </div>
+      </div>
+
+      <button class="btn primary-button"
+              (click)="confirmCloneBot(true)"
+              [disabled]="!selectedPage">Klonen</button>
+
+    </div>
+
+    <div class="bot-clone-popup after-clone" *ngIf="confirmClone">
+      <span>ChatBo ist bereit, mit dem Klonen zu beginnen</span>
+      <span>Bitte beachten Sie:</span>
+      <span class="margin-bottom--24-imp">Nachdem Sie den Inhalt des Quellbots auf den empfangenden geklont haben, können Sie diesen Inhalt nicht einfach deinstallieren. Sie können trotzdem alles manuell löschen, wenn Sie möchten. Außerdem bleiben alle Messenger Flows des empfangenden Bots erhalten, sodass keine wirklich irreversiblen Änderungen vorgenommen werden.</span>
+
+      <div class="d-flex d-flex--justify-between d-flex--align-center">
+        <button class="btn default-button" (click)="confirmCloneBot(false)">Zurück</button>
+        <button class="btn primary-button" (click)="cloneBot()" *ngIf="!botCloneCheck"
+                [disabled]="!selectedPage">Jetzt klonen</button>
+        <button class="btn primary-button loader-button" *ngIf="botCloneCheck">Jetzt klonen</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- Bot cloned END -->
+
+<ng-template #contentRemove let-c="close" let-c="dismiss">
+  <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="content-modal-container">
+    <h3>Bist du sicher?</h3>
+    <div class="modal-footer d-flex d-flex--justify-between d-flex--align-center">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn danger-button" *ngIf="removeActionCount === 1" (click)="deletePermission()">Facebook Berechtigungen löschen</button>
+      <button class="btn danger-button" *ngIf="removeActionCount === 2" (click)="disablePage()">Deaktivieren Bot</button>
+      <button class="btn danger-button" *ngIf="removeActionCount === 3" (click)="deletePage()">Seite löschen</button>
+      <button class="btn danger-button" *ngIf="removeActionCount === 4" (click)="deleteAccount()">Account löschen</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Greeting text preview -->
+<ng-template #content let-c="close" let-c="dismiss">
+  <div class="modal-content">
+    <div class="modal-body new-admin-modal">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="welcomeTextLabel">Vorschau BegrüBungstext</h5>
+        <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body d-flex d-flex--justify-center">
+        <div class="back-phone">
+          <div class="camera"></div>
+          <div class="loudspeaker"></div>
+          <div class="messenger-profile">
+            <div class="mes-prof-header">
+              <span class="back"><i class="fa fa-angle-left" aria-hidden="true"></i> Zurück</span>
+              <div class="center-bl">
+                <p>{{ _userService.userPageInfo?.title }}</p>
+                <span>Antwortet in der Regel sofort</span>
+              </div>
+              <span class="manage">Bearbeiten</span>
+            </div>
+            <div class="mes-prof-page">
+              <img src="{{ _userService.userPageInfo?.avatar }}">
+              <p>{{ _userService.userPageInfo?.title }}</p>
+              <div class="content-block">
+                <i class="fa fa-comment-o" aria-hidden="true"></i>
+                <p> Antwortet in der Regel sofort</p>
+              </div>
+              <div class="content-block">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                <p id="text-preview-greeting">{{ welcomeTexts }}</p>
+              </div>
+            </div>
+            <div class="mes-prof-footer">
+              <button class="btn primary-button full-width">Los geht`s</button>
+            </div>
+          </div>
+          <div class="touch"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- END Greeting text preview -->

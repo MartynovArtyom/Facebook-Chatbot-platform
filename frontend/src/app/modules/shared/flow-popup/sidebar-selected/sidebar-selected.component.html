@@ -1,0 +1,12 @@
+<div class="right-bar">
+  <div class="bar-container">
+    <app-mobile-flow-preview class="preview-flow"
+                             [id]="null"
+                             [config]="_data.items"
+    ></app-mobile-flow-preview>
+  </div>
+
+  <button class="primary-button" [disabled]="_data.items.length === 0"
+          (click)="selectFlowToContent(_data)">Wählen Sie diese Kampagne aus</button>
+</div>
+

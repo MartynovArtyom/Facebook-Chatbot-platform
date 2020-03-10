@@ -1,0 +1,623 @@
+<div class="top-navbar-page">
+  <div class="title-page d-flex d-flex--align-center position--relative">
+    <p style="width: 260px">Kampagne auswählen</p>
+    <input type="text" placeholder="Kampagne suchen" id="search" class="flow-search" #searchKampaign
+           [value]="searchKampaign.value"
+           (change)="routeSearch(searchKampaign.value)"
+           (keyup.enter)="routeSearch(searchKampaign.value)">
+    <i (click)="routeSearch(searchKampaign.value)" class="fas fa-search" style="position: absolute; right: 6px; font-size: 16px; cursor: pointer;"></i>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <!--<button *ngIf="renderList !== 'autoresponder'" (click)="openVerticallyCenter(newCompanyPopup)" class="btn primary-button">+ neue Kampagne</button>-->
+    <!--<button *ngIf="renderList === 'autoresponder'" (click)="openSendTitlePopup(companyTitlePopup, 'Autoresponder')" class="btn primary-button">+ neuer Autoresponder</button>-->
+  </div>
+</div>
+
+<div class="flow-content">
+  <div class="flow-sidebar full-height">
+    <div class="full-height">
+      <div class="flow-top-menu">
+        <ul class="sub-folder">
+          <li class="sub-item-folder margin-bottom--0-imp"
+              (click)="setRenderList('company', searchKampaign.value)"
+              [ngClass]="{'active-folder': renderList === 'company'}">
+            <i class="far fa-folder"></i>
+            <span style="outline: none">Kampagnen</span>
+          </li>
+          <!--<li>
+            <ul class="sub-folder">
+              <li class="sub-item-folder" *ngFor="let item of companyManagerService.widgetData | slice:0:widgetCount"
+                  (click)="openSidebar(item)">
+                <img *ngIf="item?.type === 1" src="../../../../../../../assets/img/widget/bar.png">
+                <img *ngIf="item?.type === 2" src="../../../../../../../assets/img/widget/slidein.png">
+                <img *ngIf="item?.type === 3" src="../../../../../../../assets/img/widget/modal.png">
+                <img *ngIf="item?.type === 4" src="../../../../../../../assets/img/widget/page_takeover.png">
+                <img *ngIf="item?.type === 5" src="../../../../../../../assets/img/widget/button.png">
+                <img *ngIf="item?.type === 6" src="../../../../../../../assets/img/widget/box.png">
+                <img *ngIf="item?.type === 7" src="../../../../../../../assets/img/widget/messenger_ref.png">
+                <img *ngIf="item?.type === 8" src="../../../../../../../assets/img/widget/fb_ads.png">
+                <img *ngIf="item?.type === 9" src="../../../../../../../assets/img/widget/fb_messenger_code.png">
+                <img *ngIf="item?.type === 10" src="../../../../../../../assets/img/widget/chat.png">
+                <img *ngIf="item?.type === 11" src="../../../../../../../assets/img/widget/chat.png">
+                <img *ngIf="item?.type === 12" src="../../../../../assets/img/sidebar-icon/automatisierung1.png">
+                <span>{{ item?.name }}</span>
+              </li>
+              <li *ngIf="companyManagerService.widgetData && companyManagerService.widgetData.length > 5 && widgetCount === 5">
+                <span class="load-more-btn cmp" (click)="showAllCompany('widgetCount', 10000)">Zeige alles Kampagnen</span>
+              </li>
+              <li *ngIf="companyManagerService.widgetData && companyManagerService.widgetData.length > 5 && widgetCount > 5">
+                <span class="load-more-btn cmp" (click)="showAllCompany('widgetCount', 5)">Verbergen Kampagnen</span>
+              </li>
+            </ul>
+          </li>-->
+        </ul>
+      </div>
+
+      <div class="flow-top-menu">
+        <ul class="sub-folder">
+          <li class="sub-item-folder margin-bottom--0-imp"
+              (click)="setRenderList('autoresponder', searchKampaign.value)"
+              [ngClass]="{'active-folder': renderList === 'autoresponder'}">
+            <i class="far fa-folder"></i>
+            <span>Autoresponder</span>
+          </li>
+          <!--<li>
+            <ul class="sub-folder">
+              <li class="sub-item-folder" *ngFor="let item of companyManagerService.sequenceData | slice:0:sequenceCount"
+                  (click)="openSidebar(item)">
+                <i class="far fa-folder color"></i>
+                <span>{{ item?.title }}</span>
+              </li>
+              <li *ngIf="companyManagerService.sequenceData && companyManagerService.sequenceData.length > 5 && sequenceCount === 5">
+                <span class="load-more-btn cmp" (click)="showAllCompany('sequenceCount', 10000)">Zeige alles Autoresponder</span>
+              </li>
+              <li *ngIf="companyManagerService.sequenceData && companyManagerService.sequenceData.length > 5 && sequenceCount > 5">
+                <span class="load-more-btn cmp" (click)="showAllCompany('sequenceCount', 5)">Verbergen Autoresponder</span>
+              </li>
+            </ul>
+          </li>-->
+        </ul>
+      </div>
+
+      <div class="flow-top-menu">
+        <ul class="sub-folder">
+          <li class="sub-item-folder margin-bottom--0-imp"
+              (click)="setRenderList('keywords', searchKampaign.value)"
+              [ngClass]="{'active-folder': renderList === 'keywords'}">
+            <i class="far fa-folder"></i>
+            <span>Keywords</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flow-top-menu">
+        <ul class="sub-folder">
+          <li class="sub-item-folder margin-bottom--0-imp"
+              (click)="setRenderList('flows', searchKampaign.value)"
+              [ngClass]="{'active-folder': renderList === 'flows'}">
+            <i class="far fa-folder"></i>
+            <span>alle Nachrichten</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-container position--relative" id="flow-container">
+
+    <div *ngIf="renderList === 'company'">
+      <div class="company-component">
+        <div class="flow-folders">
+          <span>Kampagnen</span>
+        </div>
+
+        <div class="not-found-messages" *ngIf="!companyItems || companyItems.length === 0">
+          <span>Du hast kein Kampagnen</span>
+        </div>
+
+        <div class="sequences-container" *ngIf="companyItems.length > 0">
+          <div class="sequence-table">
+            <div class="sequence-table-title">
+              <div class="table-row">
+                <div class="table-cell" style="width: 40%">Name</div>
+                <div class="table-cell d-flex d-flex--align-center" style="width: 15%">Status</div>
+                <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 45%">
+                  <div class="d-flex d-flex--align-center" style="width: 60%">
+                    <span style="width: 33%">Impressions</span>
+                    <span style="width: 33%">Opt-Ins</span>
+                    <span style="width: 33%">Conversion</span>
+                  </div>
+                  <div class="d-flex d-flex--align-center" style="width: 40%">
+                    <span style="width: 50%">Geöffnet</span>
+                    <span style="width: 50%">Geklickt</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sequence-table-body">
+              <div class="table-row" *ngFor="let item of companyItems; let i = index"
+                   (click)="openRightSidebar(item, (item?.type !== 12) ? 'company' : 'newAutoresponder')">
+
+                <div class="table-cell" style="width: 40%">
+                  <img *ngIf="item?.type === 1" src="../../../../../../../assets/img/widget/bar.png">
+                  <img *ngIf="item?.type === 2" src="../../../../../../../assets/img/widget/slidein.png">
+                  <img *ngIf="item?.type === 3" src="../../../../../../../assets/img/widget/modal.png">
+                  <img *ngIf="item?.type === 4" src="../../../../../../../assets/img/widget/page_takeover.png">
+                  <img *ngIf="item?.type === 5" src="../../../../../../../assets/img/widget/button.png">
+                  <img *ngIf="item?.type === 6" src="../../../../../../../assets/img/widget/box.png">
+                  <img *ngIf="item?.type === 7" src="../../../../../../../assets/img/widget/messenger_ref.png">
+                  <img *ngIf="item?.type === 8" src="../../../../../../../assets/img/widget/fb_ads.png">
+                  <img *ngIf="item?.type === 9" src="../../../../../../../assets/img/widget/fb_messenger_code.png">
+                  <img *ngIf="item?.type === 10" src="../../../../../../../assets/img/widget/chat.png">
+                  <img *ngIf="item?.type === 11" src="../../../../../../../assets/img/widget/chat.png">
+                  <img *ngIf="item?.type === 12" src="../../../../../../../assets/img/sidebar-icon/automatisierung1.png">
+                  <span>{{ item?.name }}</span>
+                </div>
+
+                <div class="table-cell" style="width: 15%">
+                  <span *ngIf="!item?.status && item?.type !== 8 && item?.type !== 12" class="draft">entwurf</span>
+                  <span *ngIf="item?.status && item?.type !== 8 && item?.type !== 12" class="active-widget">aktiv</span>
+                  <span *ngIf="item?.type === 8 || item?.type === 12" class="active-widget">aktiv</span>
+                </div>
+
+                <div class="table-cell" style="width: 45%">
+                  <div class="tools-cell" style="width: 60%">
+                    <div class="row-cell d-flex d-flex--align-center">
+                      <span *ngIf="item?.type === 7 || item?.type === 8 || item?.type === 9 || item?.type === 12" style="width: 33%"> - </span>
+                      <span *ngIf="item?.type !== 7 && item?.type !== 8 && item?.type !== 9 && item?.type !== 12" style="width: 33%">
+                  {{ item?.shows }}
+                </span>
+                      <span *ngIf="item?.type === 8 || item?.type === 12" style="width: 33%"> - </span>
+                      <span *ngIf="item?.type !== 8 && item?.type !== 12" style="width: 33%">{{ item?.optIn }}</span>
+                      <span style="width: 33%">
+                  {{ (item?.type !== 12 && item?.type !== 8 && item?.type !== 9 && item?.type !== 7) ? (item?.shows > 0) ? ((item?.optIn / item?.shows * 100) | number:'.0-2') + '%' : 'n/a' : '-' }}
+                </span>
+                    </div>
+                  </div>
+                  <div class="tools-cell" style="width: 40%">
+                    <div class="row-cell d-flex d-flex--align-center">
+                      <span style="width: 50%">
+                        {{ (item?.type !== 8) ? (item?.sent > 0) ? ((item?.opened / item?.sent * 100) | number:'.0-2') + '%' : 'n/a' :'-' }}
+                      </span>
+                      <span style="width: 50%">{{ (item?.type !== 8) ? (item?.opened > 0) ? ((item?.clicked / item?.opened * 100) | number:'.0-2') + '%' : 'n/a' : item?.clicked }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="loader-component" [ngClass]="{'close-preloader': !preloaderPath}">
+          <div class="loader" id="loader-1"></div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="renderList === 'autoresponder'">
+      <div class="company-component">
+        <div class="flow-folders">
+          <span>Autoresponder</span>
+        </div>
+
+        <div class="not-found-messages" *ngIf="!autoresponderItems || autoresponderItems.length === 0">
+          <span>Du hast kein Autoresponder</span>
+        </div>
+
+        <div class="sequences-container" *ngIf="autoresponderItems.length > 0 && !openingAutoresponder">
+          <div class="sequence-table">
+            <div class="sequence-table-title">
+              <div class="table-row">
+                <div class="table-cell" style="width: 60%">Name</div>
+                <div class="table-cell d-flex d-flex--align-center" style="width: 10%">Abonnenten</div>
+                <div class="table-cell d-flex d-flex--align-center" style="width: 10%">Nachrichten</div>
+                <div class="table-cell d-flex d-flex--align-center" style="width: 10%">Öffnungsrate</div>
+                <div class="table-cell d-flex d-flex--align-center" style="width: 10%">CTR</div>
+              </div>
+            </div>
+
+            <div class="sequence-table-body">
+              <div class="table-row" *ngFor="let item of autoresponderItems; let i = index"
+                   (click)="openAutoresponder(item)">
+                <div class="table-cell" style="width: 60%">
+                  <i class="far fa-folder"></i> {{ item?.title }}
+                </div>
+                <div class="table-cell" style="width: 10%">
+                  {{ item?.countSubscribers }}
+                </div>
+                <div class="table-cell" style="width: 10%">
+                  {{ item?.countItems }}
+                </div>
+                <div class="table-cell" style="width: 10%">
+                  {{ item?.openRate }}
+                </div>
+                <div class="table-cell" style="width: 10%">
+                  {{ item?.ctr }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="openingAutoresponder">
+          <button class="btn default-button margin-bottom--10" (click)="setRenderList('autoresponder', searchKampaign.value)">Zurück</button>
+
+
+          <div class="flow-table">
+            <div class="flow-title-row">
+              <div class="flow-col" style="width: 70%">Name</div>
+              <div class="flow-col text-right d-flex--justify-end" style="width: 30%; padding-bottom: 0; padding-top: 0">
+                <button class="btn btn-modified">
+                  Modified
+                </button>
+              </div>
+            </div>
+
+            <div class="flow-content-row"
+                 *ngFor="let item of flowItems; let i = index"
+                 [ngClass]="{'deleted-flow-items': item?.flow?.status === false,
+                             'display-none': !item?.flow}">
+              <div class="flow-row-col d-flex d-flex--align-center" style="width: 70%"
+                   *ngIf="item?.flow"
+                   (click)="openRightSidebar(item, 'autoresponder')">
+                <i *ngIf="item?.flow?.draft" class="fas fa-circle draft-icon-st"></i>
+                {{ item?.flow?.name }}
+              </div>
+              <div class="flow-row-col d-flex d-flex--align-center" style="width: 70%" *ngIf="!item?.flow">
+                Keine Nachricht ausgewählt
+              </div>
+              <div class="flow-row-col text-right" style="width: 30%; padding-right: 10px"
+                   *ngIf="item?.flow"
+                   (click)="openRightSidebar(item, 'autoresponder')">
+                {{ item?.flow?.modified | date: 'd.M.y' }}
+              </div>
+              <div class="flow-row-col text-right" style="width: 30%; padding-right: 10px" *ngIf="!item?.flow">
+                -
+              </div>
+            </div>
+
+            <div class="flow-content-row" *ngIf="flowItems.length === 0">
+              <div *ngIf="!loadPagination" class="flow-row-col d-flex d-flex--align-center d-flex--justify-center" style="width: 100%">Flows not found</div>
+            </div>
+
+            <div class="d-flex d-flex--justify-center margin-bottom--32 margin-top--15">
+              <span *ngIf="totalCount > flowItems.length &&
+                          !loadPagination &&
+                          flowItems.length !== 0"
+                    (click)="loadMore()" class="load-more-btn">Mehr laden</span>
+              <span *ngIf="loadPagination" class="loader-button small-load-table"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="loader-component" [ngClass]="{'close-preloader': !preloaderPath}">
+          <div class="loader" id="loader-1"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="renderList === 'keywords'">
+      <div class="company-component">
+        <div class="flow-folders">
+          <span>Keywords</span>
+        </div>
+
+        <div class="not-found-messages" *ngIf="!keywordsData || keywordsData.length === 0">
+          <span>Du hast keine Keywords</span>
+        </div>
+
+        <div class="keywords-container" *ngIf="keywordsData.length > 0">
+          <div class="keywords-table">
+            <div class="header padding-left--20 padding-right--20">
+              <div class="keywords-col" style="width: 7%">Aktiv</div>
+              <div class="keywords-col" style="width: 63%">Regel</div>
+              <div class="keywords-col" style="width: 30%">Antwort</div>
+            </div>
+            <div class="body">
+              <div class="keywords-row" *ngFor="let keyword of keywordsData; let i = index"
+                   [ngClass]="{'display-none': !keyword?.flow}"
+                   (click)="openRightSidebar(keyword, 'keywords')">
+                <div class="keywords-col" style="width: 7%">
+                  <div class="switch-content d-flex margin-right--18">
+                    <div class="material-toggle">
+                      <input type="checkbox" id="toggle + {{ i }}" name="toggle" class="switch"
+                             [disabled]="true"
+                             [checked]="keyword?.status"/>
+                      <label for="toggle + {{ i }}" class=""></label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="keywords-col rule-keywords" style="width: 63%">
+                  <ng-select class="condition-select keywords-select"
+                             [clearable]="false"
+                             [disabled]="true"
+                             [ngModel]="keyword.type" [searchable]="false">
+                    <ng-option [value]="1">Nachricht ist</ng-option>
+                    <ng-option [value]="2">Nachricht enthält</ng-option>
+                    <ng-option [value]="3">Nachricht beginnt mit</ng-option>
+                  </ng-select>
+                  <span *ngIf="!keyword['active']">{{ keyword?.command }}</span>
+                </div>
+
+                <div class="keywords-col reply-keywords" style="width: 30%">
+                  <div *ngIf="!keyword?.flow" class="d-flex d-flex--justify-around d-flex--align-center">
+                    <p>Erstelle eine neue Nachricht</p>
+                    <span>oder</span>
+                    <p>Wähle eine bestehende aus</p>
+                  </div>
+
+                  <div *ngIf="keyword?.flow" class="d-flex d-flex--justify-around d-flex--align-center">
+                    Sende <span class="route-keyword">{{ keyword?.flow?.name }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="loader-component" [ngClass]="{'close-preloader': !preloaderPath}">
+          <div class="loader" id="loader-1"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="renderList === 'flows'">
+      <div class="company-component">
+        <div class="flow-folders">
+          <span>alle Nachrichten</span>
+        </div>
+
+        <div class="flows-items">
+          <div class="flow-table">
+            <div class="flow-title-row">
+              <div class="flow-col" style="width: 70%">Name</div>
+              <div class="flow-col text-right d-flex--justify-end" style="width: 30%; padding-bottom: 0; padding-top: 0">
+                <button class="btn btn-modified">
+                  Modified
+                </button>
+              </div>
+            </div>
+
+            <div class="flow-content-row"
+                 *ngFor="let item of flowItems; let i = index"
+                 (click)="openRightSidebar(item, 'flows')"
+                 [ngClass]="{'deleted-flow-items': item?.status === false}">
+              <div class="flow-row-col d-flex d-flex--align-center" style="width: 70%">
+                <i *ngIf="item?.draft" class="fas fa-circle draft-icon-st"></i>
+                {{ item?.name }}
+              </div>
+              <div class="flow-row-col text-right" style="width: 30%; padding-right: 10px">{{ item?.modified | date: 'd.M.y' }}</div>
+            </div>
+
+            <div class="flow-content-row" *ngIf="flowItems.length === 0">
+              <div *ngIf="!loadPagination" class="flow-row-col d-flex d-flex--align-center d-flex--justify-center" style="width: 100%">Flows not found</div>
+            </div>
+
+            <div class="d-flex d-flex--justify-center margin-bottom--32 margin-top--15">
+              <span *ngIf="totalCount > flowItems.length &&
+                          !loadPagination &&
+                          flowItems.length !== 0"
+                    (click)="loadMore()" class="load-more-btn">Mehr laden</span>
+              <span *ngIf="loadPagination" class="loader-button small-load-table"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="loader-component" [ngClass]="{'close-preloader': !preloaderPath}">
+          <div class="loader" id="loader-1"></div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="renderList === 'search'">
+      <div class="company-component">
+        <div class="flow-folders">
+          <span>Suche</span>
+        </div>
+
+        <div class="not-found-messages" *ngIf="!dataCompany || dataCompany.length === 0">
+          <span>Nicht gefunden</span>
+        </div>
+
+        <div class="sequences-container" *ngIf="dataCompany.length > 0">
+          <div class="sequence-table">
+            <div class="sequence-table-title">
+              <div class="table-row">
+                <div class="table-cell" style="width: 40%">Name</div>
+                <div class="table-cell d-flex d-flex--align-center" style="width: 15%"></div>
+                <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 45%"></div>
+              </div>
+            </div>
+
+            <div class="sequence-table-body">
+              <div class="table-row" *ngFor="let item of dataCompany; let i = index">
+
+                <div class="search-company-row" *ngIf="item?.campaign_type === 'widget'"
+                     (click)="openRightSidebar(item, (item?.type !== 12) ? 'company' : 'newAutoresponder')">
+                  <div class="table-cell" style="width: 40%">
+                    <img *ngIf="item?.type === 1" src="../../../../assets/img/widget/bar.png">
+                    <img *ngIf="item?.type === 2" src="../../../../assets/img/widget/slidein.png">
+                    <img *ngIf="item?.type === 3" src="../../../../assets/img/widget/modal.png">
+                    <img *ngIf="item?.type === 4" src="../../../../assets/img/widget/page_takeover.png">
+                    <img *ngIf="item?.type === 5" src="../../../../assets/img/widget/button.png">
+                    <img *ngIf="item?.type === 6" src="../../../../assets/img/widget/box.png">
+                    <img *ngIf="item?.type === 7" src="../../../../assets/img/widget/messenger_ref.png">
+                    <img *ngIf="item?.type === 8" src="../../../../assets/img/widget/fb_ads.png">
+                    <img *ngIf="item?.type === 9" src="../../../../assets/img/widget/fb_messenger_code.png">
+                    <img *ngIf="item?.type === 10" src="../../../../assets/img/widget/chat.png">
+                    <img *ngIf="item?.type === 11" src="../../../../assets/img/widget/chat.png">
+                    <img *ngIf="item?.type === 12" src="../../../../assets/img/sidebar-icon/automatisierung1.png">
+                    <span>{{ item?.name }}</span>
+                  </div>
+
+                  <div class="table-cell" style="width: 15%">
+                    <span *ngIf="!item?.status && item?.type !== 8" class="draft">entwurf</span>
+                    <span *ngIf="item?.status && item?.type !== 8" class="active-widget">aktiv</span>
+                    <span *ngIf="item?.type === 8" class="active-widget">aktiv</span>
+                  </div>
+
+                  <div class="table-cell" style="width: 45%"></div>
+                </div>
+
+                <div class="search-company-row" *ngIf="item?.campaign_type === 'sequence'"
+                     (click)="openRightSidebar(item, 'autoresponder')">
+                  <div class="table-cell" style="width: 40%">
+                    <i class="far fa-folder"></i> {{ item?.title }}
+                  </div>
+                  <div class="table-cell" style="width: 15%"></div>
+                  <div class="table-cell" style="width: 45%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex d-flex--justify-center margin-bottom--32 margin-top--15">
+            <span *ngIf="total > dataCompany.length &&
+                        !preloaderPagination &&
+                        dataCompany.length !== 0"
+                  (click)="loadPaginations(searchKampaign.value)" class="load-more-btn">Mehr laden</span>
+            <span *ngIf="preloaderPagination" class="loader-button small-load-table"></span>
+          </div>
+        </div>
+
+        <div class="loader-component" [ngClass]="{'close-preloader': !preloaderPath}">
+          <div class="loader" id="loader-1"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="flow-preview-sidebar" [ngClass]="{'active': rightSidebarPreview}">
+    <div class="flow-preview-content" style="height: 100%">
+      <app-sidebar-selected class="full-width" *ngIf="!loadRightSidebar"
+                            [closePopup]="closePopup"
+                            [config]="_config"
+                            [data]="dataPreviewSidebar"
+                            [changePreloader]="_changePreloader"
+      ></app-sidebar-selected>
+      <div *ngIf="loadRightSidebar" class="loader-table load-right-bar"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+<!--<ng-template #newCompanyPopup let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex&#45;&#45;direction-column create-widget-body">
+
+    <div class="add-widget-container">
+      <h3>Welche Kampagne möchtest du erstellen?</h3>
+
+      <span>Widgets überlagern</span>
+      <div class="type-adding-widget">
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '1')">
+          <img src="../../../../../assets/img/widget/bar.png">
+          <span>Bar</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '2')">
+          <img src="../../../../../assets/img/widget/slidein.png">
+          <span>Slide-In</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '3')">
+          <img src="../../../../../assets/img/widget/modal.png">
+          <span>Popup klein</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '4')">
+          <img src="../../../../../assets/img/widget/page_takeover.png">
+          <span>Popup groß</span>
+        </div>
+      </div>
+
+      <span>Einbettbare Widgets</span>
+      <div class="type-adding-widget">
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '5')">
+          <img src="../../../../../assets/img/widget/button.png">
+          <span>Button</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '6')">
+          <img src="../../../../../assets/img/widget/box.png">
+          <span>Box</span>
+        </div>
+      </div>
+
+      <span>Andere Conversion Tools</span>
+      <div class="type-adding-widget">
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '7')">
+          <img src="../../../../../assets/img/widget/messenger_ref.png">
+          <span>Messenger Ref URL</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '8')">
+          <img src="../../../../../assets/img/widget/fb_ads.png">
+          <span>Facebook Ads JSON</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '10')">
+          <img src="../../../../../assets/img/widget/chat.png">
+          <span>Kundenchat</span>
+        </div>
+      </div>
+
+      <div class="type-adding-widget">
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '12')" style="padding: 5px 10px;">
+          <img src="../../../../../assets/img/sidebar-icon/automatisierung1.png" style="width: 50px; margin-right: 15px;">
+          <span>Autoresponder</span>
+        </div>
+      </div>
+
+      <div class="type-adding-widget">
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, 'Keywords')" style="padding: 5px 10px;">
+          <img src="../../../../../assets/img/sidebar-icon/keywords.png" style="width: 50px; margin-right: 15px;">
+          <span>Keywords</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #companyTitlePopup let-cd="close" let-cd="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="cd('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex&#45;&#45;direction-column create-widget-body">
+
+    <div *ngIf="createCompanyType !== 'Keywords'" class="add-widget-container">
+      <h4 *ngIf="renderList !== 'autoresponder'" class="margin-bottom&#45;&#45;18">Name der Kampagne</h4>
+      <h4 *ngIf="renderList === 'autoresponder'" class="margin-bottom&#45;&#45;18">Name der Autoresponder</h4>
+      <input type="text" placeholder="Name eingeben" class="company-name" [(ngModel)]="companyTitle">
+    </div>
+
+    <div *ngIf="createCompanyType === 'Keywords'" class="keywords-row created-rule">
+      <div class="keywords-col" style="width: 90%">
+        <form [formGroup]="newKeywords">
+          <ng-select class="condition-select keywords-select" [clearable]="false" [ngModel]="1" [searchable]="false" formControlName="type">
+            <ng-option [value]="1">Nachricht ist</ng-option>
+            <ng-option [value]="2">Nachricht enthält</ng-option>
+            <ng-option [value]="3">Nachricht beginnt mit</ng-option>
+          </ng-select>
+          <input type="text" placeholder="Enter keywords separated by commas (e.g. 'hi, hey, hello')" formControlName="command">
+          <button class="btn primary-button"
+                  [disabled]="!newKeywords.controls.command.value"
+                  (click)="createCompany()">Speichern</button>
+        </form>
+      </div>
+    </div>
+
+    <div *ngIf="createCompanyType !== 'Keywords'" class="footer-chanel-buttons d-flex d-flex&#45;&#45;align-center d-flex&#45;&#45;justify-between">
+      <button class="btn default-button" (click)="cd('Cross click')">Abbrechen</button>
+      <button class="btn primary-button" [disabled]="!companyTitle" (click)="createCompany(companyTitle)">Erstellen</button>
+    </div>
+  </div>
+</ng-template>-->

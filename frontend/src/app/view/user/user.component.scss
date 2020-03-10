@@ -1,0 +1,129 @@
+$front-color: #4d7fc1;
+$back-color: #d3d2d2;
+$size: 60px;
+$size-tail: 10px;
+$shift: 10px;
+
+$animation-duration: 3s;
+
+.preloader-container{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+}
+.loader-container {
+  background-color: #fff;
+  padding: 50px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.loader-messages {
+  width: 100px;
+  height: 100px;
+  position: relative;
+}
+.loader-item1, .loader-item2 {
+  transform: scale(1);
+  background-color: $back-color;
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -$size/2 -$size-tail;
+  tranform-origin: 50% 50%;
+
+  &:before {
+    content: '';
+    width: $size-tail;
+    height: $size*0.70;
+    position: absolute;
+    left: 50%;
+    margin-left: -$size-tail/2;
+    top: 100%;
+    margin-top: -$size-tail;
+    background-color: inherit;
+    border-radius: 2px;
+  }
+}
+
+.loader-item1 {
+  margin-left: -$size/2 -$shift;
+  animation: bubble $animation-duration linear infinite;
+  &:before {
+    transform: rotate(70deg);
+    transform-origin: 100% $size-tail;
+  }
+}
+.loader-item2 {
+  margin-left: -$size/2 +$shift;
+  animation: bubble2 $animation-duration linear infinite;
+  &:before {
+    transform: rotate(-70deg);
+    transform-origin: 0 $size-tail;
+  }
+}
+
+
+@keyframes bubble {
+  0%, 15% {
+    opacity: 0;
+  }
+  20%, 35% {
+    z-index: 2;
+    opacity: 1;
+    transform: scale(1.1);
+    background-color: $front-color;
+  }
+  40%, 55% {
+    z-index: 1;
+    opacity: 1;
+    transform: scale(1);
+    background-color: $back-color;
+  }
+  60%, 75% {
+    z-index: 2;
+    opacity: 1;
+    transform: scale(1.1);
+    background-color: $front-color;
+  }
+  80%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes bubble2 {
+  0%, 35% {
+    opacity: 0;
+  }
+  40%, 55% {
+    z-index: 2;
+    opacity: 1;
+    transform: scale(1);
+    background-color: $front-color;
+  }
+  60%, 75% {
+    z-index: 1;
+    opacity: 1;
+    transform: scale(1);
+    background-color: $back-color;
+  }
+  80%, 95% {
+    z-index: 2;
+    opacity: 1;
+    transform: scale(1.1);
+    background-color: $front-color;
+  }
+  100%, 100% {
+    opacity: 0;
+  }
+}

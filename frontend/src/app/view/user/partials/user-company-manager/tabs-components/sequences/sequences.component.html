@@ -1,0 +1,133 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <input type="text" [(ngModel)]="sequenceName"
+           [disabled]="_userService.userPageInfo?.role === 4"
+           (change)="updateSequenceTitle(sequence, sequenceName)">
+  </div>
+</div>
+<!-- End top sidebar page -->
+
+<div class="not-found-messages" *ngIf="!sequence?.items || sequence?.items.length === 0">
+  <span>Du hast keine Nachrichten</span>
+  <span>Sie können verwenden <button class="btn success-button" (click)="createNewSequenceMessage()">Dieser Knopf</button> um eine neue Nachricht zu erstellen</span>
+</div>
+
+<div class="sequences-messages" *ngIf="sequence?.items && sequence?.items.length > 0">
+  <div class="sequences-container">
+    <div class="title-container">
+      <div class="col-title border-right-col" style="width: 15%">Verzögerung</div>
+      <div class="col-title generally-message" style="width: 56%">Aktiv</div>
+      <div class="col-title d-flex d-flex--justify-end" style="width: 7%">Gesendet</div>
+      <div class="col-title d-flex d-flex--justify-end" style="width: 7%">Klicks</div>
+      <div class="col-title d-flex d-flex--justify-end" style="width: 8%">Öffnungsrate</div>
+      <div class="col-title d-flex d-flex--justify-end" style="width: 7%">CTR</div>
+      <div class="col-title" style="width: 5%"></div>
+    </div>
+    <div class="body-container" [dragula]="'SEQUENCE' + uuidDrag" [(dragulaModel)]="sequence.items">
+      <div *ngFor="let item of sequence?.items; let i = index">
+        <div class="body-row">
+          <div class="col-title border-right-col position-relative" style="width: 15%">
+            <span (click)="closeDelayContainer(item, true)"
+                  *ngIf="item?.delay?.type !== 'immediately'"
+                  class="opening-delay">
+              Nach {{ item?.delay?.value }} {{ item?.delay?.type }}
+            </span>
+            <span (click)="closeDelayContainer(item, true)"
+                  *ngIf="item?.delay?.type === 'immediately'"
+                  class="opening-delay">
+              Immediately
+            </span>
+
+            <div class="delay-container" *ngIf="item?.openDelay === true"
+                 (clickOutside)="closeDelayContainer(item, false)"
+                 [delayClickOutsideInit]="true">
+              <span>Diese Nachricht wird gesendet</span>
+              <div class="d-flex d-flex--align-center d-flex--justify-between">
+                <input type="number" [(ngModel)]="sequenceItem.delay.value" placeholder="Enter value" *ngIf="sequenceItem.delay.type !== 'immediately'">
+                <select placeholder="Enter option" [(ngModel)]="sequenceItem.delay.type">
+                  <option value="immediately">Immediately</option>
+                  <option value="minutes">Minutes</option>
+                  <option value="hours">Hours</option>
+                  <option value="days">Days</option>
+                </select>
+              </div>
+              <button class="btn primary-button"
+                      (click)="updateSequenceItem(item, 'delay', {value: sequenceItem.delay.value, type: sequenceItem.delay.type})"
+              >Anfügen</button>
+            </div>
+          </div>
+          <div class="col-title message-col border-left d-flex d-flex--align-center" style="width: calc(56% - 15px)">
+            <i class="fas fa-grip-vertical" *ngIf="_userService.userPageInfo?.role !== 4"></i>
+            <div class="switch-content d-flex margin-right--18">
+              <div class="material-toggle">
+                <input type="checkbox" id="{{ i + 'test' }}" name="toggle" [disabled]="!item?.flow || _userService.userPageInfo?.role === 4" [checked]="item.status" class="switch"
+                       (change)="updateSequenceItem(item, 'status', null)"/>
+                <label for="{{ i + 'test' }}" class="" (click)="checkFlowItem(item)"></label>
+              </div>
+            </div>
+
+            <div *ngIf="!item?.flow" class="d-flex d-flex--justify-around d-flex--align-center">
+              <p (click)="createFlow(item)">Erstelle eine neue Nachricht</p>
+              <span>oder</span>
+              <p (click)="openVerticallyCentered(contentFlow, item)">Wähle eine bestehende aus</p>
+            </div>
+
+            <div *ngIf="item?.flow" class="d-flex d-flex--justify-around d-flex--align-center">
+              Senden <span class="route-keyword" (click)="routerToEditSequenceItem(item)">{{ item?.flow?.name }}</span>
+            </div>
+          </div>
+          <div class="col-title message-col d-flex d-flex--justify-end d-flex--align-center" style="width: 7%">{{ item?.sent }}</div>
+          <div class="col-title message-col d-flex d-flex--justify-end d-flex--align-center" style="width: 7%">{{ item?.clicked }}</div>
+          <div class="col-title message-col d-flex d-flex--justify-end d-flex--align-center" style="width: 8%">{{ item?.opened }}%</div>
+          <div class="col-title message-col d-flex d-flex--justify-end d-flex--align-center" style="width: 7%">{{ item?.delivered }}%</div>
+          <div class="col-title message-col border-right d-flex d-flex--justify-center d-flex--align-center" style="width: 5%">
+            <i class="far fa-trash-alt"
+               *ngIf="_userService.userPageInfo?.role !== 4"
+               (click)="removeSequenceItem(item, i)"></i>
+          </div>
+        </div>
+        <div class="title-container default-cont">
+          <div class="col-title border-right-col" style="width: 15%"></div>
+          <div class="col-title generally-message" style="width: 56%"></div>
+          <div class="col-title d-flex d-flex--justify-end" style="width: 7%"></div>
+          <div class="col-title d-flex d-flex--justify-end" style="width: 7%"></div>
+          <div class="col-title d-flex d-flex--justify-end" style="width: 8%"></div>
+          <div class="col-title d-flex d-flex--justify-end" style="width: 7%"></div>
+          <div class="col-title" style="width: 5%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="title-container default-cont">
+      <div class="col-title border-right-col position-relative" style="width: 15%">
+        <button class="btn default-button"
+                [disabled]="_userService.userPageInfo?.role === 4"
+                (click)="createNewSequenceMessage()">+ Nachricht</button>
+      </div>
+      <div class="col-title generally-message" style="width: 56%"></div>
+      <div class="col-title d-flex d-flex--justify-end" style="width: 7%"></div>
+      <div class="col-title d-flex d-flex--justify-end" style="width: 7%"></div>
+      <div class="col-title d-flex d-flex--justify-end" style="width: 8%"></div>
+      <div class="col-title d-flex d-flex--justify-end" style="width: 7%"></div>
+      <div class="col-title" style="width: 5%"></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-body d-flex d-flex--direction-column enter-folder-name">
+    <button type="button" class="close close-flow-popup" aria-label="Close" (click)="c('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <app-flow-popup
+      [config]="keywordSelected"
+      [sendPopup]="'true'"
+      [closePopup]="c">
+    </app-flow-popup>
+  </div>
+</ng-template>

@@ -1,0 +1,20 @@
+<div class="container-app">
+  <div class="content-app"
+       [ngClass]="{ 'active': sharedService.sidebarView === 'full' }">
+    <div class="sidebar-app" style="position: absolute;">
+      <app-admin-sidebar></app-admin-sidebar>
+    </div>
+    <div class="pages-app">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<div class="preloader-container" *ngIf="sharedService.preloaderView">
+  <div class="loader-container">
+    <div class="loader-messages">
+      <div class="loader-item1"></div>
+      <div class="loader-item2"></div>
+    </div>
+  </div>
+</div>

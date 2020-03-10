@@ -1,0 +1,291 @@
+// SETTINGS PAGE
+
+.payment-prof{
+  margin: 20px;
+  width: 450px;
+  background: #fff;
+  border: 1px solid #e0e6ed;
+  border-radius: 4px;
+
+  .title-payment{
+    border-bottom: 1px solid #e0e6ed;
+    padding: 22px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+
+    & > span{
+      text-transform: uppercase;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 2px 7px 1px 7px;
+      border-radius: 4px;
+    }
+
+    .name-plan{
+      & > h5{
+        font-size: 16px;
+        margin-top: 5px;
+        font-weight: 600;
+      }
+      & > a{
+        color: #0084ff;
+        font-size: 13px;
+
+        &:hover{
+          text-decoration: none;
+        }
+      }
+    }
+
+    .test{
+      text-transform: uppercase;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 2px 7px 1px 7px;
+      border-radius: 4px;
+      background-color: #bbb;
+    }
+  }
+
+  .button-payment{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px 40px;
+    font-size: 14px;
+  }
+}
+
+.title-row-admin{
+  padding: 20px !important;
+  display: flex;
+  align-items: center;
+
+  & > .col-md-12{
+    & > p{
+      font-size: 16px !important;
+    }
+
+    & > span{
+      font-size: 14px;
+      line-height: 13px;
+      color: #a5a5a5;
+    }
+  }
+
+  & > .col-md-6{
+    display: flex;
+    align-items: center;
+
+    &:first-child{
+      justify-content: flex-start;
+    }
+    &:last-child{
+      justify-content: flex-end;
+    }
+
+    & > h3{
+      font-size: 16px;
+      margin-bottom: 0;
+      font-weight: 600;
+    }
+
+    & > a{
+      color: #008eff;
+      font-size: 13px;
+
+      &:hover, &:active, &:focus{
+        text-decoration: none;
+        cursor: pointer;
+        color: #008eff;
+      }
+    }
+  }
+
+  & > .col-md-5{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    & > h3{
+      font-size: 16px;
+      margin-bottom: 0;
+      font-weight: 600;
+    }
+
+    & > a{
+      color: #008eff;
+      font-size: 13px;
+
+      &:hover, &:active, &:focus{
+        text-decoration: none;
+        cursor: pointer;
+        color: #008eff;
+      }
+    }
+  }
+
+}
+
+.admin-content{
+  padding: 15px 20px !important;
+  display: flex;
+  align-items: center;
+
+  &:last-child{
+    border-bottom: none !important;
+  }
+
+  .admin-info{
+    & > img{
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+    }
+    & > span{
+      padding-left: 5px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+  }
+
+  .admin-status{
+    margin: 5px 0;
+    float: right;
+    font-size: 13px;
+  }
+
+
+  &:hover{
+    & > .col-md-1 {
+      & > span {
+        display: block;
+      }
+    }
+  }
+
+  & > .col-md-1{
+    & > span{
+      display: none;
+
+      &:hover{
+        color: #ff6249;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.archive-custom{
+  cursor: pointer;
+
+  & > i{
+    color: #000;
+  }
+}
+
+.new-switch{
+  &.notification-switch{
+    width: 60px;
+
+    .switch-input:checked ~ .switch-handle {
+      left: 36px;
+    }
+  }
+}
+
+.notification-email-input {
+  outline: none;
+  padding: 5px 10px;
+  margin-right: 20px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  min-width: 270px;
+}
+
+.place-preloader-settings{
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.new-admin-content{
+  & > p{
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  & > span{
+    width: 100%;
+    display: flex;
+    margin-top: 15px;
+    color: #b5b5b5;
+  }
+}
+
+.note-text{
+  font-weight: 400 !important;
+  font-style: italic;
+  color: #a5a5a5;
+  text-align: center;
+}
+
+.copy-board{
+  float: right;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  padding: 0.4rem 0.75rem;
+  background: transparent;
+  border: none;
+  color: #0084ff;
+  cursor: pointer;
+
+  &.copied{
+    color: #13ce66;
+  }
+}
+
+#link-invite{
+  width: 80% !important;
+  display: initial;
+}
+
+.tags-edit-input{
+  padding: 0;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 2px;
+  outline: none;
+}
+
+.tag-input-name{
+  width: 100%;
+  padding: 5px 15px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.archive-custom-tag{
+  cursor: pointer;
+  transition: all .1s linear;
+
+  &:hover{
+    background: #f3f3f4;
+    transition: all .1s linear;
+
+    & > a{
+      & > i{
+        color: #ff6249;
+      }
+    }
+  }
+}
+
+// END SETTINGS PAGE

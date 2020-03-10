@@ -1,0 +1,24 @@
+<div [ngStyle]="{'transform': 'translate(' + positionX + 'px, ' + positionY + 'px)'}"
+     [ngClass]="{'sheer': _builderService.statusCreateLink === 'pr'}"
+     class="item-container red" #element appDragItem
+     (mouseDownEvent)="mouseDown($event, config, _builderService.requestDataItems, element)" (mouseUpEvent)="mouseUp()"
+     (mouseMoveEvent)="move($event, config, _builderService.requestDataItems)"
+     (click)="_builderFunctionsService.requestDataToSidebar(config)">
+  <div class="starting-step" *ngIf="config?.start_step" data-drag="true">Kampagnen Start</div>
+  <div class="item-container-action" *ngIf="_builderService.view !== 'preview'">
+    <button class="btn" (click)="_builderFunctionsService.cloneMainItems(config)"><i class="far fa-clone"></i></button>
+    <button class="btn trash-btn" (click)="_builderFunctionsService.deleteMainItem(config)">
+      <i class="far fa-trash-alt"></i>
+    </button>
+  </div>
+  <div class="item-container__header" data-drag="true">
+    <div class="item-container__drag-circle"
+         (click)="_builderService.createMouseLink(config, $event, 'all')"
+         [ngClass]="{'full': config.arrow.to.id}"
+         [id]="'link_' + config?.uuid" data-drag="false"></div>
+    {{ config?.name }}
+  </div>
+  <div class="item-container__body" data-drag="true">
+    <ng-container [config]="config" appDynamicChild></ng-container>
+  </div>
+</div>

@@ -1,0 +1,896 @@
+/*Kontacte page styles*/
+.condition-result-table {
+
+  .body-table .row-body .cell-body {
+    height: initial;
+    margin-right: 12px;
+    p {
+      color: #000000;
+      word-break: break-word;
+    }
+  } 
+
+  .head-table .row-head .cell-head {
+    margin-right: 12px;
+  }
+}
+
+.condition-filter {
+  .condition-component-content {
+    .condition-items {
+      margin-right: 0;
+      & > i {
+        font-size: 11px;
+        padding: 9px;
+        right: 6px;
+        &:hover{
+          color: #ff6249;
+        }
+      }
+
+      & > div {
+        & > .condition-sub-selects {
+          left: 0;
+        }
+      }
+    }
+  }
+}
+
+.cell-body:nth-child(3) {
+  width: 30%;
+}
+.live-chat-container .conversation-name {
+  flex-wrap: wrap;
+  height: initial;
+  padding: 5px 5px;
+}
+.conversation-name-schlieben-btn {
+  min-width: 125px;
+}
+
+.back-phone .messenger-profile .mes-prof-header .center-bl > p {
+  width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*Hauptmenu(page with phone picture)*/
+.back-phone .messenger-profile .mes-prof-header .center-bl > span {
+  width: 80px;
+  display: block;
+}
+
+.back-phone .messenger-profile .mes-prof-header .back i {
+  font-size: 19px;
+  top: 1px;
+  left: -4px;
+}
+/*Live chat page*/
+.tabs-edit-sidebar {
+  height: 44px;
+}
+/*end of page styles*/
+@media screen and (max-width: 1024px) {
+  #container {
+    height: 400px !important;
+  }
+  .filter-content {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .condition-result-table {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .contacts-table {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 100%;
+  }
+  .contacts-wrapper {
+    flex-direction: column;
+    padding: 0 20px;
+    align-items: flex-start;
+  }
+  .filter-saved {
+    margin-top: 10px;
+  }
+  .condition-result-table {
+    padding-left: 0;
+    padding-right: 0;
+
+    .body-table .row-body .cell-body {
+      height: initial;
+      p {
+        color: #000000;
+        word-break: break-word;
+      }
+    } 
+  }
+  .filter-content {
+    margin: 10px 0 5px 0;
+  }
+  .filter-saved {
+    margin-top: 15px;
+  }
+  .bulk-actions {
+    .default-button {
+      margin: 7px 0;
+    }
+    span {
+      margin: 7px 10px 7px 0;
+    }
+  }
+  .filters {
+    padding: 0 0 0 2px;
+  }
+  .top-navbar-page {
+    padding: 8px 20px;
+  }
+  .condition-filter {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+}
+
+@media screen and (max-width: 760px) {
+  .dashboard-content {
+    .chart-filters {
+      align-items: baseline;
+      flex-direction: column; 
+    }
+    .ng-select {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .cell-head {
+    margin-right: 5px;
+
+    &:first-child {
+      min-width: 35px;
+    }
+    &:nth-child(n+2) {
+      min-width: 55px;
+    }
+    &:nth-child(n+3) {
+      min-width: 80px;
+    }
+  }
+  .cell-body {
+    margin-right: 5px;
+
+    &:first-child {
+      min-width: 35px;
+    }
+    &:nth-child(n+2) {
+      min-width: 55px;
+    }
+    &:nth-child(n+3) {
+      min-width: 80px;
+    }
+  }
+  .contacts-wrapper {
+    padding: 0 15px;
+  }
+}  
+
+@media screen and (max-width: 650px) {
+  .dashboard-content {
+    #container {
+      height: 350px !important;
+    }
+  }
+  .condition-result-table {
+    font-size: 13px;
+  }
+}
+  
+@media screen and (max-width: 600px) {
+  .account-id-info {
+    h4 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+  }
+
+  .dashboard-content {
+    .statistic-abonent {
+      .statistic-content > p {
+        font-size: 16px;
+      }
+    }
+  }
+  .cell-body {
+    &:nth-child(n+6) {
+      display: none !important; 
+    }
+  }
+  .cell-head {
+    &:nth-child(n+6) {
+      display: none; 
+    }
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .contacts-table {
+    .filter-content {
+      flex-direction: column;
+      align-items: baseline;
+    }
+  }
+  .condition-result-table {
+    font-size: 14px;
+  }
+  .cell-body {
+    &:nth-child(n+5) {
+      display: none !important; 
+    }
+  }
+  .cell-head {
+    &:nth-child(n+5) {
+      display: none; 
+    }
+  }
+}  
+
+@media screen and (max-width: 500px) {
+  .dashboard-content {
+    .statistic-abonent {
+      .statistic-content > p {
+        font-size: 15px;
+      }
+    }
+
+    #container {
+      height: 300px !important;
+    }
+
+    .account-info {
+      flex-direction: column;
+      align-items: center;
+      .account-image {
+        margin-bottom: 15px;
+        margin-right: 0;
+      }
+    }
+
+    .chart-info {
+      .chart-filters {
+        padding: 15px 10px 0 10px;
+        .ng-select {
+          min-width: initial !important;
+          width: 100%;
+          .ng-select-container {
+            font-size: 15px;
+            min-width: initial;
+          }
+        }
+        .calendar-input-dashboard {
+          .range-date-input {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  .conversation-name-schlieben-btn {
+    min-width: initial;
+  }
+}
+  
+@media screen and (max-width: 460px) {
+  .dashboard-content {
+    .statistic-abonent {
+      .statistic-content > p {
+        font-size: 12px;
+      }
+    }
+  }
+  .owl-dt-inline-container,
+  .owl-dt-inline-container .owl-dt-calendar {
+    width: 230px;
+  }
+  .condition-component-content {
+    .condition-items {
+      &> div {
+        .condition-date {
+          flex-direction: column;
+          .left-patch { 
+            display: flex;
+            border: 0;
+            justify-content: center;
+          }
+        }
+      } 
+    }
+  }
+}
+  
+@media screen and (max-width: 400px) {
+  .dashboard-content {
+    .statistic-abonent {
+      .statistic-content > p {
+        font-size: 11px;
+      }
+    }
+    padding: 10px;
+
+    .account-id-info {
+      p {
+        font-size: 12px;
+      }
+      a {
+        font-size: 12px;
+      }
+      h4 {
+        font-size: 18px;
+      }
+    }
+  }
+
+  .top-navbar-page {
+    padding: 8px 20px;
+  }
+
+  .bulk-actions-content {
+    width: 242px;
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .condition-items {
+    > div {
+      > .condition-sub-selects {
+        width: 231px;
+      }
+      .right-patch {
+        min-width: 145px;
+        .criteria-path {
+          width: 145px;
+        }
+        input {
+          width: 133px;
+        }
+      }
+    }
+    .condition-component-content .condition-items > div .condition-sub-selects .right-patch {
+      min-width: 232px;
+    }
+  }
+  .filter-saved > ul > li {
+    min-width: 225px;
+  }
+
+  .search-condition {
+    position: absolute;
+    top: 40px;
+    z-index: 100;
+  }
+}
+@media screen and (max-width: 380px) {
+  .cell-body {
+    &:nth-child(n+4) {
+      display: none !important; 
+    }
+    &:nth-child(n+3) {
+      width: 100% !important;
+    }
+  }
+  .cell-head {
+    &:nth-child(n+4) {
+      display: none; 
+    }
+  }
+}
+.contacts-btn,
+.subscriber-info-btn {
+  display: none;
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid #06a206;
+  border-radius: 4px;
+  color: #06a206;
+  margin: auto;
+  cursor: pointer;
+  font-size: 16px;
+}
+.subscriber-info-btn {
+  margin-left: 15px;
+}
+.chat-btns-wrapper {
+  display: flex;
+  align-items: center;
+}
+.contacts-offnen-btn {
+  min-width: 85px;
+}
+
+@keyframes slideS {
+  0% {
+      transform: translateX(calc(-100% + 70px));
+  }
+  100% {
+      transform: translateX(0%);
+  }
+}
+@-webkit-keyframes slideS {
+  0% {
+      -webkit-transform: translateX(calc(-100% + 70px));
+  }
+  100% {
+      -webkit-transform: translateX(0%);
+  }
+}
+
+@keyframes slideR {
+  0% {
+      transform: translateX(100%);
+  }
+  10%{
+      transform: translateX(5%);
+  }
+  100% {
+      transform: translateX(0);
+  }
+}
+@-webkit-keyframes slideR {
+  0% {
+      -webkit-transform: translateX(100%);
+  }
+  10%{
+      -webkit-transform: translateX(5%);
+  }
+  100% {
+      -webkit-transform: translateX(0);
+  }
+}
+
+@media screen and (max-width: 1180px) {
+  .contacts-btn {
+    display: block;
+  }
+  .geschlossen-btn,
+  .alle-shlieben-btn,
+  .alle-offnen-btn,
+  .contacts-offnen-btn {
+    display: none;
+  }
+  .subscribers-list .subscriber-item .subscriber-preview .subscriber-info,
+  .last-message-time {
+    display: none;
+  }
+  
+  .live-chat-contacts {
+    max-width: 66px;
+    position: absolute !important;
+    height: calc(100% - 60px) !important;
+    z-index: 999;
+    background: #fff;
+    animation-name: slideR;
+    -webkit-animation-name: slideR;
+
+    animation-duration: 0.5s;
+    -webkit-animation-duration: 0.5s;
+
+    animation-timing-function: ease-out;
+    -webkit-animation-timing-function: ease-out;
+  }
+
+
+
+  .live-chat-contacts.open {
+    max-width: calc(100% - 48px);
+    animation-name: slideS;
+    -webkit-animation-name: slideS;
+
+    animation-duration: 0.5s;
+    -webkit-animation-duration: 0.5s;
+
+    animation-timing-function: ease-out;
+    -webkit-animation-timing-function: ease-out;
+    .geschlossen-btn,
+    .alle-offnen-btn,
+    .contacts-offnen-btn,
+    .default-message-content span {
+      display: block;
+    }
+    .alle-offnen-btn {
+      display: none;
+    }
+    .close-btn {
+      margin-right: 10px;
+      margin-left: auto; 
+      display: block;
+    }
+    .contacts-btn {
+      display: none;
+    }
+    .subscribers-list .subscriber-item .subscriber-preview .subscriber-info,
+    .last-message-time {
+      display: block;
+    }
+  }
+  
+  .tabs-edit-sidebar {
+    padding-left: 0;
+  }
+  .live-chat-dialog,
+  .live-chat-info {
+    max-width: calc((100% - 66px)/2);
+    flex: 1;
+  }
+  .live-chat-dialog {
+    margin-left: 66px;
+  }
+  .content-tabs-sidebar .subscribers-list .default-message-content {
+    img {
+      height: 34px;
+    }
+    span {
+      display: none;
+    }
+  }
+  .broadcast-container {
+    padding: 20px;
+  }
+  .pages-app .top-navbar-page {
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .main-menu-container-phone {
+    padding: 20px !important;
+    .menu-container {
+      width: 50% !important;
+    }
+    .preview-phone-container {
+      width: 50% !important;
+    }
+    .menu-container-bearbeiten {
+      width: 100% !important;
+    }
+  }
+ 
+}
+
+@media screen and (max-width: 900px) {
+  .live-chat-info {
+    position: absolute;
+    right: -900px;
+    position: absolute;
+    max-width: calc(100% - 66px);
+    flex: 1;
+    background: #fff;
+    z-index: 100;
+    transition: all .8s ease;
+    .close-btn {
+      display: block;
+      position: absolute;
+      right: 15px;
+      top: 15px;
+    }
+  }
+  .subscriber-info-btn {
+    display: block;
+  }
+  .live-chat-dialog {
+    max-width: 100%;
+  }
+  .subscriber-profile .close-btn {
+    display: block;
+    margin-left: auto;
+
+  }
+  .live-chat-info.open {
+    right: 0;
+  }
+  .broadcast-container .broadcast-table-gesendet {
+    width: 900px;
+    margin-bottom: 0;
+  }
+ 
+  .broadcast-gesendet-wrapper {
+    overflow-x: scroll;
+    margin-bottom: 30px;
+  }
+  .sidebar-change-status {
+    display: none;
+  }
+
+  .container-app .content-app .pages-app {
+    height: calc(100% + 60px);
+  }
+}
+@media screen and (max-width: 800px) {
+
+  .main-menu-container-phone {
+    flex-direction: column;
+    padding: 15px !important;
+    .menu-container {
+      width: 100% !important;
+      margin-bottom: 20px;
+    }
+    .preview-phone-container {
+      width: 100% !important;
+    }
+  }
+  .right-side-menu-bearbeiten {
+    flex-wrap: wrap;
+  }
+  
+}
+@media screen and (max-width: 650px) {
+  .right-side-hauptmenu {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .pages-app .top-navbar-page {
+    padding: 10px;
+  }
+  .sidebar-top-menu-button {
+    margin: 7px 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .broadcast-container .broadcast-table-geplant {
+    width: 600px;
+    margin-bottom: 0;
+  }
+  .broadcast-geplant-wrapper {
+    margin-bottom: 30px;
+    overflow-x: scroll;
+  }
+  .back-phone {
+    width: 200px;
+    height: 300px;
+  }
+  .back-phone .messenger-profile {
+    .main-menu-message {
+      font-size: 14px;
+    }
+    .mes-prof-header {
+      .back {
+        font-size: 12px;
+        display: flex;
+        width: 10px;
+        height: 40px;
+        i {
+          font-size: 17px;
+          top: 10px;
+          left: -2px;
+          margin-right: 2px;
+        }
+      }
+      .manage {
+        color: #007aff;
+        margin-right: 5px;
+        font-size: 12px;
+      }
+      .center-bl {
+        font-size: 11px;
+        width: calc(100% - 136px);
+      }
+    }
+  }
+  .main-menu-container-phone .menu-container .main-item:nth-child(1) .main-button {
+    padding: 5px 10px !important;
+  }
+  .main-menu-container-phone .main-button {
+    padding: 11px 10px 11px 10px !important;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .create-autoposting-chanel-close {
+    right: 2px;
+    top: -3px;
+    color: #8e8b8b !important;
+    font-size: 23px;
+    padding: 6px 6px !important;
+    cursor: pointer !important;
+    z-index: 100;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .subscriber-info-btn {
+    margin-left: 10px;
+  }
+  .head-profile {
+    flex-direction: column;
+    align-items: center;
+    img {
+      margin-bottom: 15px !important;
+    }
+  }
+  .message-body-content {
+    width: 100%;
+    audio {
+      width: 100%;
+    }
+  }
+  .custom-field-btn-wrapper {
+    justify-content: space-between;
+  }
+  .custom-field-apply-btn {
+    width: 60px;
+    padding: 5px 0;
+    margin-left: auto;
+  }
+  .custom-field-schlieben-btn {
+    padding: 5px 5px;
+  }
+
+  .broadcast-container {
+    padding: 15px;
+  }
+  .pages-app .top-navbar-page {
+    padding: 15px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .chat-offnen-btn {
+    border-radius: 4px;
+    padding: 5px 7px;
+    margin-left: 5px;
+    i {
+      display: none;
+    }
+  }
+  .live-chat-bar .search-live-chat {
+    width: 100%;
+    div {
+      width: 100%;
+    }
+  }
+  .message-body-content .card-item {
+    position: relative;
+    min-width: 105px;
+  }
+  .conversation-name-schlieben-btn {
+    padding: 5px 7px;
+    i {
+      display: none;
+    }
+  }
+  .conversation-first-name {
+    margin-right: 5px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .custom-field-btns {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .custom-field-apply-btn {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .live-chat-dialog {
+    video {
+      width: 100%;
+    }
+  }
+  .chat-container .subscriber-profile .head-profile {
+    img {
+      width: 110px;
+      height: 110px;
+      margin-right: 25px;
+    }
+  }
+  .broadcast-table-entwurf {
+    .broadcast-table-title .table-cell {
+      &:nth-child(1) {
+        width: 40% !important;
+      }
+      &:nth-child(2) {
+        width: 50% !important;
+      }
+      &:nth-child(3) {
+        width: 10% !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .live-chat-bar .search-live-chat > div > input {
+    padding: 6px 25px 6px 7px;
+    font-size: 11px;
+  }
+  .subscriber-app .subscriber-profile {
+    padding: 0 10px;
+    .head-profile p {
+      font-size: 14px;
+    }
+  }
+
+  .custom-fields-content-subscriber .custom-field-option {
+    padding: 8px;
+  }
+  .live-chat-contacts.open {
+    .contacts-offnen-btn,
+    .geschlossen-btn {
+      padding: 13px 0px !important;
+      margin: 0 3px !important;
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+  .broadcast-container {
+    padding: 10px;
+  }
+  .pages-app .top-navbar-page {
+    padding: 10px;
+  }
+  .neuer-newsletter-btn {
+    padding: 5px 6px;
+    margin-right: 0;
+    font-size: 12px;
+  }
+  .pages-app .top-navbar-page h3 {
+    font-size: 20px !important;
+  }
+}
+
+
+.live-chat-btns-wrapper {
+  display: flex;
+  margin: auto;
+  align-items: center;
+} 
+.close-btn {
+  display: none;
+  background: #f75f5f;
+  border: none;
+  font-size: 11px;
+  border-radius: 4px;
+  color: #fff;
+  width: 30px !important;
+  height: 28px;
+  opacity: .7;
+  transition: .4s ease;
+  &:hover {
+    opacity: 1;
+  }
+}
+.subscriber-profile .head-profile p {
+  word-break: break-all;
+}
+.custom-fields-content-subscriber .c-f {
+  padding: 7px 15px 7px 15px;
+}
+.news.bot-message-item .message-item-list .message-body .message-body-content {
+  .text-item {
+    word-break: break-word;
+  }
+  .button-item {
+    padding: 8px 10px;
+  }
+}
+.subscriber-profile .options-profile .profile-user .title-fields .add-tags-content{
+  max-width: 100%;
+}
+#scroller {
+  overflow-x: hidden;
+  padding: 0 3px;
+}
+.conversation-name-right {
+  display: flex;
+  margin-left: auto;
+}
+

@@ -1,0 +1,43 @@
+.text-item-content{
+  width: 100%;
+  padding-left: 30px;
+  padding-right: 30px;
+
+  &:hover{
+    .sidebar-actions{
+      display: flex;
+    }
+  }
+
+  & > .delay-content{
+    border: 2px solid #00BFC6;
+    cursor: pointer;
+    height: 80px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+
+    & > i{
+      margin-right: 5px;
+      position: relative;
+      top: 1px;
+    }
+
+
+
+    & > span{
+      margin-right: 5px;
+
+      &:last-child{
+        margin-right: 0;
+      }
+    }
+
+    &:hover{
+      border-color: #2C8BC2;
+    }
+  }
+}
+

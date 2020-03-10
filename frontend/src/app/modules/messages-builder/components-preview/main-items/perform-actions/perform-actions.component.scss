@@ -1,0 +1,44 @@
+.item-container__header {
+  background: #FFC439;
+  border: 2px solid rgba(241, 146, 48, .4);
+  color: #ffffff;
+}
+
+:host {
+  z-index: 2;
+}
+.item-container {
+  z-index: 2;
+
+  &.sheer{
+    opacity: .65;
+  }
+
+  &__drag-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #9e9e9e;
+    position: absolute;
+    cursor: pointer;
+    right: -12px;
+    transition: .3s ease;
+    background: #ffffff;
+
+    &:hover{
+      transition: all .1s linear;
+    }
+
+    &.full{
+      background: #9e9e9e;
+
+      &:hover {
+        border-color: #9e9e9e;
+      }
+    }
+
+    &:hover {
+      border-color: #2C8BC2;
+    }
+  }
+}

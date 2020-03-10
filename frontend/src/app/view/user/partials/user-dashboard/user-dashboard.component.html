@@ -1,0 +1,133 @@
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Dashboard</p>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <a *ngIf="upgradeButtonVisible" target="_blank" href="https://chatbo.de/upgrade/" class="btn primary-button mr-2">Upgrade</a>
+    <span class="product-label show-product margin-right--12">{{ limitData?.productLabel }}</span>
+    <p class="limit-user-progress">
+      <span>
+        Alle Abonnenten
+        <span>{{ limitData?.userSubscribers }}/{{ limitData?.limitSubscribers }}({{((limitData?.userSubscribers / limitData?.limitSubscribers) * 100 ) | number: '.0-0' }}%)</span>
+      </span>
+      <ngb-progressbar type="danger" [value]="(limitData?.userSubscribers / limitData?.limitSubscribers) * 100"></ngb-progressbar>
+    </p>
+    <p class="limit-user-progress">
+      <span>
+        Site Abonnenten
+        <span>{{ limitData?.pageSubscribers }}/{{ limitData?.limitSubscribers }}({{((limitData?.pageSubscribers / limitData?.limitSubscribers) * 100) | number: '.0-0' }}%)</span>
+      </span>
+      <ngb-progressbar type="danger" [value]="(limitData?.pageSubscribers / limitData?.limitSubscribers) * 100"></ngb-progressbar>
+    </p>
+  </div>
+</div>
+<div class="dashboard-content">
+  <div class="account-info">
+    <div class="account-image">
+      <img src="{{ _userService.userPageInfo?.avatar }}">
+    </div>
+    <div class="account-id-info">
+      <h4>{{ _userService.userPageInfo?.title }}</h4>
+      <p>Account ID: {{ _userService.userID }}</p>
+      <a href="https://m.me/{{ _userService.userID }}" target="_blank">https://m.me/{{ _userService.userID }}</a>
+    </div>
+  </div>
+
+  <div class="chart-info margin-bottom--32">
+    <div class="chart-filters">
+      <ng-select [(ngModel)]="filterSelect"
+                 #typeChart
+                 [clearable]="false"
+                 [searchable]="false"
+                 (change)="changeTypeChart(typeChart.selectedValues[0])">
+        <ng-option [value]="'sub-unsub'">Abonnenten and Abgemeldete Abonnenten</ng-option>
+        <ng-option [value]="'active'">Aktive Abonnenten</ng-option>
+        <ng-option [value]="'net'">Netto Abonnenten</ng-option>
+      </ng-select>
+
+      <div class="calendar-input-dashboard">
+        <input class="range-date-input" type="text" (click)="openCalendars()" [(ngModel)]="dateRange" readonly placeholder="YY/m/d-YY/m/d">
+        <div class="chart-calendar-content" *ngIf="openCalendar" (clickOutside)="closeCalendar()" [delayClickOutsideInit]="true">
+          <div class="d-flex d-flex--align-center d-flex--justify-between calender-settings">
+            <div class="d-flex d-flex--align-center d-flex--justify-start">
+                <input type="text" placeholder="From" class="margin-right--10"
+                       style="width: 110px"
+                       [(ngModel)]="fromDateCalendar"
+                       (change)="setInputsValueToCalendar(fromDateCalendar, 'from')">
+                <span class="margin-right--10">-</span>
+                <input type="text" placeholder="To"
+                       style="width: 110px"
+                       class="margin-right--15"
+                       [(ngModel)]="toDateCalendar"
+                       (change)="setInputsValueToCalendar(toDateCalendar, 'to')">
+                <button class="btn primary-button calendar-btn-date margin-right--5" (click)="selectDateRange('1 Week')">1 Woche</button>
+                <button class="btn primary-button calendar-btn-date margin-right--5" (click)="selectDateRange('1 Month')">1 Monat</button>
+                <button class="btn primary-button calendar-btn-date margin-right--5" (click)="selectDateRange('3 Months')">3 Monate</button>
+            </div>
+
+            <div class="d-flex d-flex--align-center d-flex--justify-end">
+              <button class="btn primary-button margin-right--15" [disabled]="!fromDate || !toDate" (click)="saveCalendarValues()">Anwenden</button>
+              <button class="btn default-button" (click)="closeCalendar()">Abbrechen</button>
+            </div>
+          </div>
+          <ngb-datepicker #dp (select)="onDateSelection($event)"
+                          [navigation]="'arrows'"
+                          [displayMonths]="3"
+                          [dayTemplate]="t"
+                          [outsideDays]="'collapsed'">
+
+          </ngb-datepicker>
+
+          <ng-template #t let-date let-focused="focused">
+            <span class="custom-day"
+                  [class.focused]="focused"
+                  [class.range]="isRange(date)"
+                  [class.faded]="isHovered(date) || isInside(date)"
+                  (mouseenter)="hoveredDate = date"
+                  (mouseleave)="hoveredDate = null">
+              {{ date.day }}
+            </span>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-content">
+      <div class="row">
+        <div class="col-md-12">
+          <div style="display: block;">
+            <canvas id="chart" *ngIf="calendarShow" baseChart style="height: 25vh; width: 100vh"
+                    [(datasets)]="chartData"
+                    [(labels)]="chartLabels"
+                    [options]="chartOptions"
+                    [colors]="chartColors"
+                    [chartType]="chartType"
+            ></canvas>
+            <div class="loader-table" *ngIf="!calendarShow" style="height: 300px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="statistic-abonent margin-bottom--32">
+    <div class="statistic-content">
+      <p>{{ statsSubs }}</p>
+      <p>Abonnenten</p>
+    </div>
+    <div class="statistic-content">
+      <p>{{ statsUnsubs }}</p>
+      <p>Abgemeldete Abonnenten</p>
+    </div>
+    <div class="statistic-content">
+      <p>{{ statsNet }}</p>
+      <p>Netto Abonnenten</p>
+    </div>
+  </div>
+
+  <div id="container" style="width: 100%; height: 500px;"></div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>

@@ -1,0 +1,89 @@
+<!-- Top sidebar page-->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Hauptmenü</p>
+  </div>
+  <div class="right-side-menu right-side-hauptmenu d-flex d-flex--align-center" *ngIf="_userService.userPageInfo?.role !== 4">
+    <div class="switch-content d-flex margin-right--18">
+      <label class="title-switch title-switch--left">Deaktiviert</label>
+      <div class="material-toggle">
+        <input type="checkbox" id="toggle" name="toggle" [checked]="checkStatus" class="switch" (change)="updateMainMenu('status', checkStatus)" />
+        <label for="toggle" class=""></label>
+      </div>
+      <label class="title-switch title-switch--right"> Aktiviert</label>
+    </div>
+
+    <button class="btn sidebar-top-menu-button margin-right--10" (click)="routerToEditMainMenu()">
+      <i class="far fa-edit"></i> Bearbeiten Menu
+      <i *ngIf="draftCheck" class="fas fa-circle draft-icon-preview"></i>
+    </button>
+  </div>
+</div>
+<!--End top sidebar page-->
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+<div *ngIf="!viewerCheck" class="main-menu-container main-menu-container-phone">
+  <div class="menu-container">
+    <div class="main-item">
+      <div class="main-button header-main">
+        <span>Tasten</span>
+        <span class="static-main-menu-message">Klicks</span>
+      </div>
+    </div>
+    <div class="main-item" *ngFor="let item of _mainMenuService.mainData; let i = index">
+      <div class="main-button not-hover">
+        <span>{{ item?.name }}</span>
+        <span class="static-main-menu-message">{{ item?.clicked }}</span>
+        <i class="far fa-comment-dots link-mess" *ngIf="item?.type === 'reply_message'" (click)="_mainMenuService.routerToEdit(item?.flow?.id)"></i>
+        <i class="fas fa-link link-mess" *ngIf="item?.type === 'open_website'"></i>
+      </div>
+    </div>
+
+    <div class="main-item" *ngIf="_mainMenuService.copyright">
+      <div class="main-button">
+        <span>Unterstützt von ChatBo</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-phone-container">
+    <div class="back-phone">
+      <div class="camera"></div>
+      <div class="loudspeaker"></div>
+      <div class="messenger-profile">
+        <div class="mes-prof-header">
+          <span class="back"><i class="fa fa-angle-left" aria-hidden="true"></i> Zurück</span>
+          <div class="center-bl">
+            <p>{{ _userService.userPageInfo?.title }}</p>
+            <span>Antwortet in der Regel sofort</span>
+          </div>
+          <span class="manage">Bearbeiten</span>
+        </div>
+        <div class="preview-main-menu">
+          <div class="main-menu-message">
+            <div class="top-main-menu-message">
+              <span class="preview-text" *ngIf="!_mainMenuService.prevData">Sende eine Nachricht...</span>
+              <span class="prev-text" *ngIf="_mainMenuService.prevData"
+                    (click)="_mainMenuService.prevStepMessage()">
+                <i class="fas fa-chevron-left"></i> {{ _mainMenuService.prevData?.name }}
+              </span>
+            </div>
+            <div class="content-main-menu-message">
+              <div class="message" *ngFor="let message of _mainMenuService.dataPreview; let i = index">
+                <span>{{ message?.name }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="touch"></div>
+    </div>
+  </div>
+</div>
+
+<div class="welcome-message-container" *ngIf="!preloader && viewerCheck">
+  <p class="publish-version-not-found">Veröffentlichungsversion nicht gefunden</p>
+</div>

@@ -1,0 +1,141 @@
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Kontakte</p>
+  </div>
+</div>
+<div class="row margin-bottom--32 contacts-wrapper">
+  <div class="col-md-9 contacts-table">
+    <div class="filter-content">
+      <div class="filter-bar">
+        <span (click)="displayCondition()" class="margin-right--10" [ngClass]="{'active-color': conditionButton || _sharedService.conditionArray.length > 0}"><i class="fas fa-filter"></i> Filter</span>
+        <div class="search-condition" *ngIf="conditionInput">
+          <input type="text" id="searchValue" [(ngModel)]="_audienceService.searchFilterValue" #searchValue (change)="getSubscribers(searchValue.value)" placeholder="Nach Namen filtern..." (focusout)="searchFocusOut()">
+          <i class="fas fa-search"></i>
+        </div>
+        <label *ngIf="!conditionInput" for="searchValue" class="cursor" (click)="displaySearchInput()"><i class="fas fa-search"></i> Suche</label>
+      </div>
+      <div class="bulk-actions">
+        <span>{{ _audienceService.countCheckedUsers }} ausgewählt </span>
+        <span class="margin-right--10">von {{ _audienceService.dataUsers.length }} gesamt</span>
+        <button *ngIf="_userService.userPageInfo?.role !== 4" [disabled]="!_audienceService.disabledBulkCheck" class="btn default-button" (click)="openActionBulk(null)">Bulk Aktion</button>
+        <app-user-bulk-actions></app-user-bulk-actions>
+      </div>
+    </div>
+    <div class="condition-filter" *ngIf="conditionButton || _sharedService.conditionArray.length > 0">
+      <app-user-choise-condition-option [view]="'edit'" [statusDraft]="'false'"></app-user-choise-condition-option>
+      <app-user-condition-filter></app-user-condition-filter>
+      <button class="btn margin-bottom--32" (click)="activeConditionSelect()" [ngClass]="{'width-n': _sharedService.noneConditionButton}">+ Bedingung</button>
+    </div>
+    <div class="condition-result-table">
+      <div class="head-table">
+        <div class="row-head">
+          <div class="cell-head d-flex d-flex--align-center d-flex--justify-center" style="width: 7%">
+            <div class="checkbox">
+              <input type="checkbox" id="checkbox2" class="checkbox__input" [checked]="usersCheck" (click)="choiseUsersCheck(_audienceService.dataUsers)">
+              <label for="checkbox2" class="checkbox__label"></label>
+            </div>
+          </div>
+          <div class="cell-head" style="width: 15%">Nutzer</div>
+          <div class="cell-head" style="width: 30%">Name</div>
+          <div class="cell-head" style="width: 15%">Geschlecht</div>
+          <div class="cell-head" style="width: 15%">Status</div>
+          <div class="cell-head" style="width: 18%">Abonniert</div>
+        </div>
+      </div>
+      <div class="body-table margin-bottom--12">
+        <div class="row-body" *ngFor="let user of _audienceService.dataUsers | slice:0:_audienceService.countSubsc; let i = index" [ngClass]="{'unsubscriber': !user?.status}">
+          <div class="cell-body d-flex d-flex--align-center d-flex--justify-center" style="width: 7%">
+            <div class="checkbox">
+              <input type="checkbox" id="{{ i }}" class="checkbox__input" [checked]="user.selected" (click)="choiseUsersItemCheck(user, _audienceService.dataUsers)">
+              <label for="{{ i }}" class="checkbox__label"></label>
+            </div>
+          </div>
+          <div class="cell-body" style="width: 15%" (click)="openVerticallyCentered(content, user?.subscriber_id)"><img src="{{ user?.avatar }}"></div>
+          <div class="cell-body" style="width: 30%" (click)="openVerticallyCentered(content, user?.subscriber_id)"><p>{{ user?.first_name }} {{ user?.last_name }}</p></div>
+          <div class="cell-body" style="width: 15%" (click)="openVerticallyCentered(content, user?.subscriber_id)"><p>{{ user?.gender }}</p></div>
+          <div class="cell-body" style="width: 15%" (click)="openVerticallyCentered(content, user?.subscriber_id)">
+            <p *ngIf="user?.status">Abonnieren</p>
+            <p *ngIf="!user?.status">Abgemeldet</p>
+          </div>
+          <div class="cell-body" style="width: 18%" (click)="openVerticallyCentered(content, user?.subscriber_id)"><p>{{ user?.date_subscribed | date:'MMM d y' }}</p></div>
+        </div>
+        <div class="row-body d-flex d-flex--align-center d-flex--justify-center" *ngIf="_audienceService.dataUsers.length === 0 && !_audienceService.loaderSubscriberCheck">
+          <span class="padding-top--18 padding-bottom--18">Nothing here</span>
+        </div>
+        <div class="row-body d-flex d-flex--align-center d-flex--justify-center cursor-not" *ngIf="_audienceService.loaderSubscriberCheck">
+          <span class="loader-table">Loading</span>
+        </div>
+      </div>
+      <button class="show-more" (click)="showMoreSubscribers()" *ngIf="_audienceService.dataUsers.length > _audienceService.countSubsc">Show More</button>
+    </div>
+  </div>
+  <div class="col-md-3" class="filters">
+    <div class="filter-saved">
+      <ul>
+        <li (click)="choiseSavedCondition('All')" [ngClass]="{'active-color': _sharedService.conditionArray.length === 0}">
+          <p>Alle</p>
+          <span>{{ _audienceService.dataSubscribers?.allSubscribers }} Abonnenten</span>
+        </li>
+        <li [ngClass]="{'active-color': _sharedService.conditionArray[_sharedService.conditionArray.length - 1]?.value === 'subscribe' && _sharedService.conditionArray.length === 1}" (click)="choiseSavedCondition('subscribe')">
+          <p>Abonnieren</p>
+          <span>{{ _audienceService.dataSubscribers?.subscriberSubscribers }} Abonnenten</span>
+        </li>
+        <li [ngClass]="{'active-color': _sharedService.conditionArray[_sharedService.conditionArray.length - 1]?.value === 'unsubscribe' && _sharedService.conditionArray.length === 1}" (click)="choiseSavedCondition('unsubscribe')">
+          <p>Abgemeldet</p>
+          <span>{{ _audienceService.dataSubscribers?.unSubscriberSubscribers }} Abonnenten</span>
+        </li>
+      </ul>
+    </div>
+    <div class="tag-saved">
+      <div class="title-saved"><p>{{ _audienceService.savedTags?.title }}</p> <span>Abonnenten</span></div>
+      <ul>
+        <li class="tag-filter-saved"
+            *ngFor="let item of _audienceService.savedTags?.conditions | slice:0:savedTagsCount; let i = index"
+            [ngClass]="{'active-color': _sharedService.conditionArray[_sharedService.conditionArray.length - 1]?.tagID === item?.tagID && _sharedService.conditionArray.length === 1}">
+          <p (click)="choiseSavedCondition(item)">{{ item?.name }}</p>
+          <span>{{ item?.subscriberCount }}</span>
+          <i *ngIf="_userService.userPageInfo?.role !== 4" (click)="deleteSavedTag(i, _audienceService.savedTags.conditions)" class="fas fa-times"></i>
+        </li>
+      </ul>
+      <button *ngIf="_audienceService.savedTags?.conditions.length > savedTagsCount" class="show-more" (click)="showMoreTags('savedTagsCount')">Show All Tags</button>
+    </div>
+    <div class="tag-saved">
+      <div class="title-saved"><p>Kampagnen</p> <span>Abonnenten</span></div>
+      <ul>
+        <li *ngFor="let item of _audienceService.savedWidgets?.conditions | slice:0:savedWidgetsCount;"
+            [ngClass]="{'active-color': _sharedService.conditionArray[_sharedService.conditionArray.length - 1]?.widgetID === item?.widgetID && _sharedService.conditionArray.length === 1}"
+            (click)="choiseSavedCondition(item)">
+          <p>{{ item?.name }}</p>
+          <span>{{ item?.subscriberCount }}</span>
+        </li>
+      </ul>
+      <button *ngIf="_audienceService.savedWidgets?.conditions.length > savedWidgetsCount" class="show-more" (click)="showMoreTags('savedWidgetsCount')">Show All Kampagnen</button>
+    </div>
+    <div class="tag-saved">
+      <div class="title-saved"><p>{{ _audienceService.savedSequences?.title }}</p> <span>Abonnenten</span></div>
+      <ul>
+        <li *ngFor="let item of _audienceService.savedSequences?.conditions | slice:0:savedSequencesCount;"
+            [ngClass]="{'active-color': _sharedService.conditionArray[_sharedService.conditionArray.length - 1]?.sequenceID === item?.sequenceID && _sharedService.conditionArray.length === 1}"
+            (click)="choiseSavedCondition(item)">
+          <p>{{ item?.name }}</p>
+          <span>{{ item?.subscriberCount }}</span>
+        </li>
+      </ul>
+      <button *ngIf="_audienceService.savedSequences?.conditions.length > savedSequencesCount" class="show-more" (click)="showMoreTags('savedSequencesCount')">Show All Autoresponder</button>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <app-user-subscriber-profile
+    [closePopup]="c"
+    [subscriberId]="subscriberId"></app-user-subscriber-profile>
+</ng-template>

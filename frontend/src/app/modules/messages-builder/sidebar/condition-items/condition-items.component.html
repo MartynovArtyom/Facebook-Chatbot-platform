@@ -1,0 +1,72 @@
+<div class="title-sidebar">
+  <input type="text" #title placeholder="Enter name" [value]="config?.name"
+         [(ngModel)]="config.name"
+         [disabled]="_builderService.view === 'preview'"
+         (change)="_builderFunctionsService.setInputValue(config, 'name', title.value)">
+</div>
+
+<div class="content-sidebar-start-step" *ngIf="_builderService.view !== 'preview'">
+  <div class="switchs">
+    <input type="checkbox" id="switch1" class="switchs__input"
+           [checked]="config?.start_step"
+           [disabled]="config?.start_step"
+           (change)="_builderFunctionsService.setStartingStep(config)"
+    >
+    <label for="switch1" class="switchs__label">Kampagnen Start</label>
+  </div>
+</div>
+
+<div class="sidebar-all-items-content">
+
+  <div class="continue-next-step m-b">
+    <span>Trifft folgendes zu</span>
+
+    <ng-select class="condition-select" [clearable]="false" [searchable]="false" #conditionMatch
+               [disabled]="_builderService.view === 'preview'"
+               [ngModel]="config?.widget_content[0]['following_conditions']"
+               (change)="_builderFunctionsService.selectFollowingConditionValue(conditionMatch.selectedValues[0], config?.widget_content[0])">
+      <ng-option [value]="0"> alle der folgenden Bedingungen?</ng-option>
+      <ng-option [value]="1"> eine der folgenden Bedingungen?</ng-option>
+    </ng-select>
+
+  </div>
+
+
+  <div class="condition-filter">
+
+    <div class="error-content-icon">
+      <i class="fas fa-exclamation-triangle" *ngIf="config?.widget_content[0]['conditions'].length === 0 &&
+                                                    (config['uuid'] | publishErrors) === true"></i>
+    </div>
+
+    <app-user-choise-condition-option [view]="_builderService.view" [statusDraft]="'true'"></app-user-choise-condition-option>
+    <button class="btn margin-bottom--32"
+            *ngIf="_builderService.view !== 'preview'"
+            (click)="activeConditionSelect()">+ Bedingung</button>
+    <app-user-condition-filter></app-user-condition-filter>
+  </div>
+
+
+
+
+
+  <div class="continue-next-step" *ngIf="config.widget_content[0]['valid_step'].next_step ||
+                                         !config.widget_content[0]['valid_step'].next_step && _builderService.view !== 'preview'">
+    <span>Ja Bedingung trifft zu</span>
+    <app-buttons-item [type]="'main'" [config]="config.widget_content[0]['valid_step']"
+                      [ngClass]="{'error-border': !config.widget_content[0]['valid_step'].next_step &&
+                                                  !config.widget_content[0]['invalid_step'].next_step &&
+                                                  (config?.uuid | publishErrors) === true}"
+    ></app-buttons-item>
+  </div>
+
+  <div class="continue-next-step margin-bottom--32" *ngIf="config.widget_content[0]['invalid_step'].next_step ||
+                                         !config.widget_content[0]['invalid_step'].next_step && _builderService.view !== 'preview'">
+    <span>Nein Bedingung trifft nicht zu</span>
+    <app-buttons-item [type]="'main'" [config]="config.widget_content[0]['invalid_step']"
+                      [ngClass]="{'error-border': !config.widget_content[0]['valid_step'].next_step &&
+                                                  !config.widget_content[0]['invalid_step'].next_step &&
+                                                  (config?.uuid | publishErrors) === true}"
+    ></app-buttons-item>
+  </div>
+</div>

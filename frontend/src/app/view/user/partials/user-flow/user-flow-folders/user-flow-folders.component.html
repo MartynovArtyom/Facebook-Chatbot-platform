@@ -1,0 +1,19 @@
+<ul class="sub-folder">
+  <li *ngFor="let folder of _flowFolders"  [id]="folder?.id" class="sub-item-folder"
+      draggable="true"
+      (drop)="_flowFoldersService.drop($event, folder)"
+      (dragend)="_flowFoldersService.hideDrop($event, folder)"
+      (dragenter)="_flowFoldersService.enterDrop($event)"
+      (dragleave)="_flowFoldersService.dragleave($event)"
+      (dragover)="_flowFoldersService.allowDrop($event)"
+      [ngClass]="{'active-folder': _flowFoldersService.folderID === folder.id}">
+    <i *ngIf="!folder?.status && folder?.children?.length > 0" (click)="actionOpeningFolder(folder, true)" class="action-folder fas fa-chevron-right size"></i>
+    <i *ngIf="folder?.status === true && folder?.children?.length > 0" (click)="actionOpeningFolder(folder, false)" class="action-folder fas fa-chevron-down size"></i>
+    <i class="far fa-folder color"></i>
+    <span [routerLink]="['/' + _userService.userID + '/content']" style="outline: none"
+          [queryParams]="{ path: folder?.id }"
+          (click)="_flowFoldersService.setBreadCrumb(folder?.id)"> {{ folder?.name }} </span>
+
+    <app-user-flow-folders *ngIf="folder?.status === true" [flowFolders]="folder?.children"></app-user-flow-folders>
+  </li>
+</ul>

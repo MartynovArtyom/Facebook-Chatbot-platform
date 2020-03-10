@@ -1,0 +1,44 @@
+{% extends "emails/template_email.html.twig" %}
+
+{% block mail_title %}{{ title }}{% endblock %}
+
+{% block user_name %}Hallo {{ user_name }},{% endblock %}
+
+{% block body_blue %}
+    {% autoescape false %}
+        <strong>{{ newSubscribers }}</strong>
+        {% if type == 1 %}
+            Personen haben deinen Bot gestern abonniert
+        {% elseif type == 2 %}
+            Personen haben deinen Bot letzte Woche abonniert
+        {% else %}
+            Personen haben deinen Bot in den letzten 30 Tagen abonniert
+        {% endif %}
+        <br>
+        Du hast jetzt <strong>{{ totalSubscribers }}</strong> Abonnenten gesamt.<br>
+        Ein guter Zeitpunkt <a href="{{ link_broadcasts }}" style="color: #fff;"> um einen Newsletter an deine Abonnenten zu senden</a>.
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_white %}
+    {% autoescape false %}
+        <table>
+            <tr>
+                <td>
+                    <img src="{{ page.avatar }}" alt="" style="border-radius: 50px;width: 50px;height: 50px;">
+                </td>
+                <td style="padding-left: 10px;">
+                    {{ page.title }}
+                </td>
+            </tr>
+        </table>
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_white_button %}
+    {% autoescape false %}
+        <a href="{{ link_contacts }}" style="padding:3px; border-radius: 4px;	color: #fff; cursor:pointer; display: inline-block;	font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight:bold; padding: 8px 12px; text-decoration: none;	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.075); -webkit-transition: background-color 0.1s linear; -moz-transition: background-color 0.1s linear; -o-transition: background-color 0.1s linear; transition: background-color 0.1s linear; background-color: rgb( 52, 144, 191 ); border: 1px solid rgb( 52, 144, 191 );">
+            Zeige neue Abonnenten
+        </a>
+    {% endautoescape %}
+{% endblock %}

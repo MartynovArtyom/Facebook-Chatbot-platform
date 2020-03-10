@@ -1,0 +1,39 @@
+.title-page{
+  display: flex;
+  align-items: center;
+
+  & > a{
+    font-size: 1rem;
+    color: #8492a6;
+    margin-right: 10px;
+
+    &:hover, &:active, &:focus{
+      text-decoration: none;
+    }
+  }
+
+  & > i{
+    margin-right: 10px;
+    font-size: 16px;
+    color: #0084ff;
+    opacity: 0.8;
+  }
+
+  & > h3{
+    margin-bottom: 0;
+    font-size: 22px;
+  }
+}
+
+.broadcast-edit-container{
+  overflow: hidden;
+  position: relative;
+}
+
+.default-button{
+  color: #0084ff;
+
+  & > i{
+    margin-right: 5px;
+  }
+}

@@ -1,0 +1,186 @@
+<div class="company-component">
+  <div class="flow-folders">
+    <span>Kampagnen</span>
+  </div>
+
+  <div class="not-found-messages" *ngIf="!companyItems || companyItems.length === 0">
+    <span>Du hast kein Kampagnen</span>
+  </div>
+
+  <div class="sequences-container" *ngIf="companyItems.length > 0">
+    <div class="sequence-table">
+      <div class="sequence-table-title">
+        <div class="table-row">
+          <div class="table-cell" style="width: 27%">Name</div>
+          <div class="table-cell d-flex d-flex--align-center" style="width: 8%">Status</div>
+          <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 38%">
+            <div class="d-flex d-flex--align-center" style="width: 60%">
+              <span style="width: 33%">Impressions</span>
+              <span style="width: 33%">Opt-Ins</span>
+              <span style="width: 33%">Conversion</span>
+            </div>
+            <div class="d-flex d-flex--align-center" style="width: 40%">
+              <span style="width: 50%">Geöffnet</span>
+              <span style="width: 50%">Geklickt</span>
+            </div>
+          </div>
+          <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 22%"></div>
+          <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 5%"></div>
+        </div>
+      </div>
+
+      <div class="sequence-table-body">
+        <div class="table-row" *ngFor="let item of companyItems; let i = index">
+
+          <div class="table-cell" style="width: 27%" (click)="routeToBuilder(item)">
+            <img *ngIf="item?.type === 1" src="../../../../../../../assets/img/widget/bar.png">
+            <img *ngIf="item?.type === 2" src="../../../../../../../assets/img/widget/slidein.png">
+            <img *ngIf="item?.type === 3" src="../../../../../../../assets/img/widget/modal.png">
+            <img *ngIf="item?.type === 4" src="../../../../../../../assets/img/widget/page_takeover.png">
+            <img *ngIf="item?.type === 5" src="../../../../../../../assets/img/widget/button.png">
+            <img *ngIf="item?.type === 6" src="../../../../../../../assets/img/widget/box.png">
+            <img *ngIf="item?.type === 7" src="../../../../../../../assets/img/widget/messenger_ref.png">
+            <img *ngIf="item?.type === 8" src="../../../../../../../assets/img/widget/fb_ads.png">
+            <img *ngIf="item?.type === 9" src="../../../../../../../assets/img/widget/fb_messenger_code.png">
+            <img *ngIf="item?.type === 10" src="../../../../../../../assets/img/widget/chat.png">
+            <img *ngIf="item?.type === 11" src="../../../../../../../assets/img/widget/comments.png">
+            <img *ngIf="item?.type === 12" src="../../../../../../../assets/img/sidebar-icon/automatisierung1.png">
+            <span>{{ item?.name }}</span>
+          </div>
+
+          <div class="table-cell" style="width: 8%" (click)="routeToBuilder(item)">
+            <span *ngIf="!item?.status && item?.type !== 8 && item?.type !== 12" class="draft">entwurf</span>
+            <span *ngIf="item?.status && item?.type !== 8 && item?.type !== 12" class="active-widget">aktiv</span>
+            <span *ngIf="item?.type === 8 || item?.type === 12" class="active-widget">aktiv</span>
+          </div>
+
+          <div class="table-cell" style="width: 38%" (click)="routeToBuilder(item)">
+            <div class="tools-cell" style="width: 60%">
+              <div class="row-cell d-flex d-flex--align-center">
+                <span *ngIf="item?.type === 7 || item?.type === 8 || item?.type === 9 || item?.type === 12" style="width: 33%"> - </span>
+                <span *ngIf="item?.type !== 7 && item?.type !== 8 && item?.type !== 9 && item?.type !== 12" style="width: 33%">
+                  {{ item?.shows }}
+                </span>
+                <span *ngIf="item?.type === 8 || item?.type === 12" style="width: 33%"> - </span>
+                <span *ngIf="item?.type !== 8 && item?.type !== 12" style="width: 33%">{{ item?.optIn }}</span>
+                <span style="width: 33%">
+                  {{ (item?.type !== 12 && item?.type !== 8 && item?.type !== 9 && item?.type !== 7) ? (item?.shows > 0) ? ((item?.optIn / item?.shows * 100) | number:'.0-2') + '%' : 'n/a' : '-' }}
+                </span>
+              </div>
+            </div>
+            <div class="tools-cell" style="width: 40%">
+              <div class="row-cell d-flex d-flex--align-center">
+                <span style="width: 50%">
+                  {{ (item?.type !== 8) ? (item?.sent > 0) ? ((item?.opened / item?.sent * 100) | number:'.0-2') + '%' : 'n/a' :'-' }}
+                </span>
+                <span style="width: 50%">{{ (item?.type !== 8) ? (item?.opened > 0) ? ((item?.clicked / item?.opened * 100) | number:'.0-2') + '%' : 'n/a' : item?.clicked }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-cell d-flex d-flex--align-center d-flex--justify-end" style="width: 22%">
+            <button class="btn primary-button"
+                    (click)="companyManagerService.navigateToTab(item,
+                                                                 (item?.type !== 12) ? 'widget' : 'newAutoresponder',
+                                                                 (item?.type === 12) ? true : false)">
+              Zum Kampagnenbuilder
+            </button>
+          </div>
+
+          <div class="table-cell d-flex--justify-end" style="width: 5%">
+            <div ngbDropdown placement="bottom-left" *ngIf="_userService.userPageInfo?.role !== 4" class="d-inline-block">
+
+              <button class="btn sidebar-top-menu-button icon-btn-main" id="dropdownBasic1" ngbDropdownToggle><i class="fas fa-ellipsis-v"></i></button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="right: 0; left: auto !important;" class="left-imp">
+                <button *ngIf="!item?.status && item?.type !== 8 && item?.type !== 12 && item?.type !== 11" class="dropdown-item" (click)="changedGrowthTool(item, true)">
+                  <i class="fas fa-play"></i> Veröffentlichen
+                </button>
+                <button *ngIf="item?.status && item?.type !== 8 && item?.type !== 12 && item?.type !== 11" class="dropdown-item" (click)="changedGrowthTool(item, false)">
+                  <i class="fas fa-pause"></i> Unpublish
+                </button>
+                <button class="dropdown-item" (click)="openVerticallyCenter(update, item)">
+                  <i class="fas fa-pencil-alt"></i> Umbenennen
+                </button>
+                <button class="dropdown-item" (click)="duplicateWidget(item?.id)">
+                  <i class="far fa-clone"></i> Duplizieren
+                </button>
+                <button class="dropdown-item" (click)="openVerticallyCentered(share, item)">
+                  <i class="far fa-share-square"></i> Teilen Sie diese Kampagne
+                </button>
+                <button class="dropdown-item trash" (click)="openVerticallyCenterRemove(content, item?.id, i)">
+                  <i class="far fa-trash-alt"></i> Löschen
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+    <div class="loader" id="loader-1"></div>
+  </div>
+</div>
+
+<ng-template #update let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-autoposting-chanel">
+    <h3 class="title-modals">Umbenennen kampagnen</h3>
+    <input type="text" placeholder="Kampagnen" [ngModel]="companyUpdate['name']" #updateS>
+    <div class="footer-chanel-buttons d-flex d-flex--justify-between">
+      <button class="btn default-button" (click)="c('Cross click')">Schließen</button>
+      <button class="btn success-button" (click)="renameCompany(companyUpdate, updateS?.value)" [disabled]="!companyUpdate['name']">Aktualisieren</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #share let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div *ngIf="!preloaderPopup" class="modal-body d-flex d-flex--direction-column create-autoposting-chanel">
+    <h3 class="title-modals">Kampagne teilen</h3>
+    <span class="link-span">Link teilen</span>
+
+    <div class="d-flex">
+      <a [href]="shareData?.url" target="_blank" id="link-invite" class="margin-top--15 margin-bottom--15">{{shareData?.url}}</a>
+      <button *ngIf="!copied" (click)="copyToClipboard(shareData?.url)" class="copy-board"><i class="far fa-clone"></i> Copy</button>
+      <button *ngIf="copied" class="copy-board copied"><i class="far fa-clone"></i> Copied</button>
+    </div>
+
+
+    <div class="d-flex d-flex--align-center margin-bottom--18">
+      <label class="new-switch notification-switch switch-green">
+        <input type="checkbox" class="switch-input" [checked]="shareData?.status" (click)="editShareStatus()">
+        <span class="switch-label" data-on="Aktiviert" data-off="Deaktiviert"></span>
+        <span class="switch-handle"></span>
+      </label>
+
+      <span class="status-share">Status</span>
+    </div>
+    <div class="footer-chanel-buttons d-flex d-flex--justify-between">
+      <button class="btn default-button" (click)="c('Cross click')">Schließen</button>
+    </div>
+  </div>
+
+  <div class="loader-component" style="min-height: 350px" [ngClass]="{'close-preloader': !preloaderPopup}">
+    <div class="loader" id="loader-1"></div>
+  </div>
+</ng-template>
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Kampagne löschen</h3>
+    <span class="delete-title">Wenn du diese Kampagne löscht, sind alle Daten dieser Kampagne unwiderruflich gelöscht. Das kann nicht rückgängig gemacht werden.</span>
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn danger-button" (click)="deleteWidget();c('Cross click')">Löschen</button>
+    </div>
+  </div>
+</ng-template>

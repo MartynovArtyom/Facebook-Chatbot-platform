@@ -1,0 +1,399 @@
+<div class="title-sidebar">
+  <input type="text" #title placeholder="Enter name" [value]="config?.name"
+         [disabled]="_builderService.view === 'preview'"
+         [(ngModel)]="config.name"
+         (change)="_builderFunctionsService.setInputValue(config, 'name', title.value)">
+</div>
+
+<div class="content-sidebar-start-step" *ngIf="_builderService.view !== 'preview'">
+  <div class="switchs">
+    <input type="checkbox" id="switch1" class="switchs__input"
+           [checked]="config?.start_step"
+           [disabled]="config?.start_step"
+           (change)="_builderFunctionsService.setStartingStep(config)"
+    >
+    <label for="switch1" class="switchs__label">Kampagnen Start</label>
+  </div>
+</div>
+
+<div class="sidebar-all-items-content">
+
+  <div class="action-container" *ngFor="let action of config.widget_content; let i = index"
+  [ngClass]="{'none-background': _builderService.view === 'preview'}">
+    <div class="action-content">
+      <span><i [class]="action?.type | iconPerformActions"></i> {{ action?.type | namePerformActions }}</span>
+      <i *ngIf="_builderService.view !== 'preview'" class="fas fa-times" (click)="_builderFunctionsService.deleteActions(config.widget_content, i)"></i>
+    </div>
+    <div class="action-side-container" *ngIf="action.hasOwnProperty('value') || action.type === 'notify_admins'">
+      <ng-select *ngIf="action?.type === 'add_tag'"
+                 [ngClass]="{'error-border': !action['id'] && (config?.uuid | publishErrors) === true ||
+                                             !action['value'] && (config?.uuid | publishErrors) === true}"
+                 [disabled]="_builderService.view === 'preview'" [items]="addTag"
+                 [placeholder]="'Tag eingeben'"
+                 [addTag]="true"
+                 [(ngModel)]="action['value']"
+                 (clear)="clearID(action)"
+                 (change)="createTag(addTags.selectedValues[0], action)"
+                 #addTags>
+      </ng-select>
+      <ng-select *ngIf="action?.type === 'remove_tag'"
+                 [ngClass]="{'error-border': !action['id'] && (config?.uuid | publishErrors) === true ||
+                                             !action['value'] && (config?.uuid | publishErrors) === true}"
+                 [disabled]="_builderService.view === 'preview'" [items]="addTag"
+                 [placeholder]="'Tag eingeben'"
+                 [addTag]="true"
+                 [(ngModel)]="action['value']"
+                 (clear)="clearID(action)"
+                 (change)="createTag(addTags.selectedValues[0], action)"
+                 #addTags>
+      </ng-select>
+
+      <button *ngIf="action?.type === 'subscribe_sequence' && action['value'] && queryParams.view ||
+                     action?.type === 'unsubscribe_sequence' && action['value'] && queryParams.view"
+              class="btn open-autoresponder-button" (click)="openAutoresponder(action)">
+        Öffnen
+      </button>
+
+      <ng-select *ngIf="action?.type === 'subscribe_sequence'"
+                 [ngClass]="{'error-border': !action['id'] && (config?.uuid | publishErrors) === true ||
+                                             !action['value'] && (config?.uuid | publishErrors) === true}"
+                 [disabled]="_builderService.view === 'preview'" [items]="subscribeSequence"
+                 [placeholder]="'Reihenfolge eingeben'"
+                 [addTag]="true"
+                 [(ngModel)]="action['value']"
+                 (clear)="clearID(action)"
+                 (change)="createNewAutoresponder(sequence.selectedValues[0], action)"
+                 #sequence>
+      </ng-select>
+      <ng-select *ngIf="action?.type === 'unsubscribe_sequence'"
+                 [ngClass]="{'error-border': !action['id'] && (config?.uuid | publishErrors) === true ||
+                                             !action['value'] && (config?.uuid | publishErrors) === true}"
+                 [disabled]="_builderService.view === 'preview'" [items]="subscribeSequence"
+                 [placeholder]="'Reihenfolge eingeben'"
+                 [addTag]="true"
+                 [(ngModel)]="action['value']"
+                 (clear)="clearID(action)"
+                 (change)="createNewAutoresponder(sequence.selectedValues[0], action)"
+                 #sequence>
+      </ng-select>
+      <ng-select *ngIf="action?.type === 'clear_subscriber_custom_field'"
+                 [ngClass]="{'error-border': !action['id'] && (config?.uuid | publishErrors) === true ||
+                                             !action['value'] && (config?.uuid | publishErrors) === true}"
+                 [disabled]="_builderService.view === 'preview'" [items]="customField"
+                 [placeholder]="'Feldname eingeben'"
+                 [addTag]="true"
+                 [(ngModel)]="action['value']"
+                 (clear)="clearID(action)"
+                 (change)="createNewCustomFiled(customFields.selectedValues[0], action)"
+                 #customFields>
+      </ng-select>
+
+      <div class="action-custom-field" *ngIf="action?.type === 'set_custom_field' && _builderService.view !== 'preview'"
+           [ngClass]="{'error-border': !action['id'] && (config?.uuid | publishErrors) === true ||
+                                       !action['value'] && (config?.uuid | publishErrors) === true}"
+           [autoClose]="false"
+           #p="ngbPopover"
+           triggers="manual"
+           (click)="p.open()"
+           [ngbPopover]="actionPopoverContent"
+           [popoverTitle]="actionPopoverTitle"
+           [popoverClass]="'add-next-steps perform-action'"
+           container="body"
+           placement="right">
+        <div class="span-text" *ngIf="action['custom_field']['name']">
+          <span>{{ action['custom_field'].name }}</span> to
+          <span *ngIf="action['value'] && action['custom_field'].type !== 3 || action['value'] && action['custom_field'].type !== 4">{{ action['value'] }}</span>
+          <span *ngIf="action['value'] && action['custom_field'].type === 3">{{ action['value'] | date: 'dd MMMM yyy' }}</span>
+          <span *ngIf="action['value'] && action['custom_field'].type === 4">{{ action['value'] | date: 'dd MMMM yyy, hh:mm' }}</span>
+          <span class="danger-text" *ngIf="!action['value']">Unbekannte</span>
+        </div>
+        <span *ngIf="!action['custom_field']['name']">Bitte wählen Sie ein benutzerdefiniertes Feld und einen Wert aus</span>
+
+        <ng-template #actionPopoverTitle>
+          <span>Bearbeiten 'Benutzerdefiniertes Feld festlegen' Aktion</span>
+        </ng-template>
+        <ng-template #actionPopoverContent>
+          <div class="pop-content">
+            <div class="popover-container-content">
+              <span>Benutzerdefinierte Feld</span>
+              <ng-select [items]="cf"
+                         bindLabel="name" bindValue="name"
+                         [placeholder]="'Feldname eingeben'"
+                         (clear)="clearID(action)"
+                         [addTag]="true"
+                         [(ngModel)]="action['custom_field']['name']"
+                         (change)="createNewSubCF(customFields.selectedValues[0], action)"
+                         #customFields>
+                <ng-template ng-label-tmp let-item="item">
+                  <i *ngIf="item?.type === 1" class="fas fa-font"></i>
+                  <i *ngIf="item?.type === 2" class="fas fa-hashtag"></i>
+                  <i *ngIf="item?.type === 3" class="far fa-clock"></i>
+                  <i *ngIf="item?.type === 4" class="far fa-clock"></i>
+                  <i *ngIf="item?.type === 5" class="fas fa-code"></i>
+                  {{ item?.name }}
+                </ng-template>
+              </ng-select>
+
+              <span *ngIf="action['custom_field']['type'] &&
+                           action['custom_field'].type !== 1 &&
+                           action['custom_field'].type !== 2 &&
+                           action['custom_field'].type !== 5">Operation</span>
+
+              <select *ngIf="action['custom_field']?.type === 3 ||
+                             action['custom_field']?.type === 4" title="act"
+                      #date
+                      [(ngModel)]="action['custom_field_option']['type']"
+                      (change)="setCustomFieldOptionDate(action, date.value)">
+                <option value="1">Auf ein bestimmtes Datum einstellen</option>
+                <option value="2">Stellen Sie das Datum der Aktion ein</option>
+              </select>
+
+              <span>Wert</span>
+              <input *ngIf="action['custom_field']?.type === 1" type="text" placeholder="Text eingeben"
+                     (change)="_builderService.updateDraftItem()"
+                     [(ngModel)]="action['value']">
+              <input *ngIf="action['custom_field']?.type === 2" type="number" placeholder="Nummer eingeben"
+                     (change)="_builderService.updateDraftItem()"
+                     [(ngModel)]="action['value']">
+
+              <p *ngIf="action['custom_field']?.type === 3 && action['custom_field_option']['type'] === '2' ||
+                        action['custom_field']?.type === 4 && action['custom_field_option']['type'] === '2'">
+                Diese Operation speichert das Datum, an dem die Aktion für das angegebene Feld ausgeführt wird
+              </p>
+              <input *ngIf="action['custom_field']?.type === 3 && action['custom_field_option']['type'] !== '2'"
+                     [(ngModel)]="action['value']"
+                     (focusout)="_builderService.updateDraftItem()"
+                     #valueField class="calendar-input" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" placeholder="Datum eingeben">
+              <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+
+              <!--<input *ngIf="action['custom_field']?.type === 3 && action['custom_field_option']['type'] !== '2'"
+                     type="date" [placeholder]="'Enter date'" [(ngModel)]="action['value']"
+                     (change)="_builderService.updateDraftItem()">-->
+
+              <input *ngIf="action['custom_field']?.type === 4 && action['custom_field_option']['type'] !== '2'"
+                     [(ngModel)]="action['value']"
+                     (focusout)="_builderService.updateDraftItem()"
+                     #valueField class="calendar-input" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" placeholder="Datum und Uhrzeit eingeben">
+              <owl-date-time #dt1></owl-date-time>
+
+              <!--<input *ngIf="action['custom_field']?.type === 4 && action['custom_field_option']['type'] !== '2'"
+                     type="datetime-local" [placeholder]="'Enter date'" [(ngModel)]="action['value']"
+                     (change)="_builderService.updateDraftItem()">-->
+
+              <div *ngIf="action['custom_field']?.type === 5">
+                <input id="radio-1" class="radio-custom" name="radio-group" type="radio"
+                       [checked]="action['value'] === '1'"
+                       (click)="saveBooleanAction(action, 'type', 'Yes')">
+                <label for="radio-1" class="radio-custom-label">Ja</label>
+
+                <input id="radio-2" class="radio-custom" name="radio-group" type="radio"
+                       [checked]="action['value'] === '2'"
+                       (click)="saveBooleanAction(action, 'type', 'No')">
+                <label for="radio-2" class="radio-custom-label">Nein</label>
+              </div>
+
+              <p *ngIf="!action['custom_field']['type']">Bitte wählen Sie zuerst ein Feld aus</p>
+
+              <button class="btn default-button" (click)="p.close()">Schließen</button>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+      <div class="action-custom-field" *ngIf="action?.type === 'set_custom_field' && _builderService.view === 'preview'">
+        <div class="span-text" *ngIf="action['custom_field']['name']">
+          <span>{{ action['custom_field'].name }}</span> to
+          <span *ngIf="action['value']">{{ action['value'] }}</span>
+          <span class="danger-text" *ngIf="!action['value']">Unbekannte</span>
+        </div>
+        <span *ngIf="!action['custom_field']['name']">Bitte wählen Sie ein benutzerdefiniertes Feld und einen Wert aus</span>
+      </div>
+
+      <div class="action-custom-field" *ngIf="action?.type === 'notify_admins' && _builderService.view !== 'preview'"
+           [ngClass]="{'error-border': action['team'].length === 0 && (config?.uuid | publishErrors) === true ||
+                                       !action['notificationText'] && (config?.uuid | publishErrors) === true}"
+           [autoClose]="'outside'"
+           #p="ngbPopover"
+           [ngbPopover]="adminsPopoverContent"
+           [popoverTitle]="adminsPopoverTitle"
+           [popoverClass]="'add-next-steps perform-action'"
+           container="body"
+           placement="right">
+        <div class="span-text">
+          <span>{{ action['team'] | counterNotifyAdmins }} person </span>
+          via
+          <span> E-mail</span>
+        </div>
+
+        <ng-template #adminsPopoverTitle>
+          <span>Bearbeiten Benachrichtigen Sie Admins Action</span>
+        </ng-template>
+        <ng-template #adminsPopoverContent>
+          <div class="pop-content">
+            <div class="popover-container-content">
+              <span>Benachrichtigungstext</span>
+              <div class="text"
+                   (clickOutside)="_builderFunctionsService.closeSubTextareaPanelAction(action)"
+                   (click)="_builderFunctionsService.openSubTextareaPanel(title, action, 'activeTitlePanel')">
+
+                <textarea #title title="Text eingeben..." [placeholder]="'Enter text...'"
+                  [(ngModel)]="action['notificationText']"
+                  (change)="_builderFunctionsService.setInputValue(action, 'notificationText', title.value);
+                            _builderFunctionsService.closeSubTextareaPanelAction(action)"></textarea>
+
+                <div class="sub-panel" *ngIf="action['activeTitlePanel'] === true">
+                  <button (click)="_builderFunctionsService.openEmojiPanel(true, action, 'activeEmojiTitle', 'activeActionTitle')">
+                    <i class="far fa-smile-o"></i>
+                  </button>
+                  <button (click)="_builderFunctionsService.openBulkActionsPanel(true, title, action, 'activeActionTitle', 'activeEmojiTitle')">&#123;&bull;&#125;</button>
+
+                  <!--<emoji-mart *ngIf="action['activeEmojiTitle']"
+                              class="emoji-conteiner"
+                              size="16"
+                              [set]="'facebook'"
+                              [perLine]="6"
+                              (emojiClick)="_builderFunctionsService.addEmoji(title, $event, action, 'notificationText')"
+                  ></emoji-mart>-->
+
+
+                  <app-emoji-picker *ngIf="action['activeEmojiTitle']"
+                                    (clickOutside)="_builderFunctionsService.closeEmoji(action['activeEmojiTitle'])"
+                                    (modelChange)="_builderFunctionsService.addEmoji(title, $event, action, 'notificationText')"
+                                    [popupAnchor]="'top'"></app-emoji-picker>
+
+                  <div class="sub-bulk-actions-panel" *ngIf="action['activeActionTitle']">
+                    <ul>
+                      <li *ngFor="let actions of _builderService.bulkActions" (click)="_builderFunctionsService.getCaretPosAction(actions, title, action, 'notificationText')">
+                        {{ actions?.name }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <span>Senden an</span>
+              <div class="admins-container">
+                <div class="admin" *ngFor="let admin of _builderService.admins; let i = index">
+                  <span>{{ admin?.firstName }} {{ admin?.lastName }} </span>
+                  <div class="checkbox" style="margin: 0 0 25px;">
+                    <input type="checkbox" id="admin + {{ admin?.adminID }}" class="checkbox__input" [checked]="action?.team | checkAdminsTeam:admin"
+                           (click)="_builderFunctionsService.choiceAdminActionStatus(admin, action.team)">
+                    <label for="admin + {{ admin?.adminID }}" class="checkbox__label"></label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </ng-template>
+      </div>
+      <div class="action-custom-field" *ngIf="action?.type === 'notify_admins' && _builderService.view === 'preview'">
+        <div class="span-text">
+          <span>{{ action['team'] | counterNotifyAdmins }} person </span>
+          via
+          <span> E-mail</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ngbDropdown class="actions-dropdown" *ngIf="_builderService.view !== 'preview'">
+    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>+ Aktion</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <div class="action-list">
+        <span *ngFor="let action of _builderService.listActions"
+              (click)="_builderFunctionsService.createNewAction(action, config?.widget_content)">
+          {{ action?.name }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="continue-next-step margin-bottom--32" *ngIf="!config?.hideNextStep && !config?.next_step && _builderService.view !== 'preview' ||
+  !config?.hideNextStep && config?.next_step">
+    <span>Nächster Schritt, wenn Aktion ausgeführt wurde</span>
+    <app-buttons-item [type]="'main'" [config]="config"></app-buttons-item>
+  </div>
+</div>
+
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="customLabel">Erstelle ein neues benutzerdefiniertes Feld</h5>
+      <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <span class="d-flex margin-bottom--18">Mit benutzerdefinierten Attributen kannst Du Informationen zu Deinen Abonnenten speichern. Speichere E-Mails, Telefonnummern, Termine, Verhaltensweisen oder andere Dinge, die Du möchtest. Später kannst Du Deine Zielgruppe anhand dieser Daten segmentieren.</span>
+      <form [formGroup]="newCustomFieldForm" class="d-flex d-flex--wrap d-flex--justify-between">
+        <div class="form-group new-custom-name margin-bottom--24">
+          <label class="custom-add margin-bottom--8">Name</label>
+          <input type="text" class="form-control" formControlName="name" placeholder="" required>
+          <!--<span class="help-bpx" *ngIf="businessForm.controls.lastName.invalid && !businessForm.controls.lastName.untouched">Please enter the Surname</span>-->
+        </div>
+        <div class="form-group new-custom-type d-flex d-flex--direction-column margin-bottom--24">
+          <label class="custom-add margin-bottom--8">Typ</label>
+          <select formControlName="type" placeholder="" class="form-control-select">
+            <option value="1">Text</option>
+            <option value="2">Number</option>
+            <option value="3">Date</option>
+            <option value="4">DateTime</option>
+            <option value="5">Boolean</option>
+          </select>
+          <!--<span class="help-bpx" *ngIf="businessForm.controls.lastName.invalid && !businessForm.controls.lastName.untouched">Please enter the Surname</span>-->
+        </div>
+        <div class="form-group full-width">
+          <label class="custom-add margin-bottom--8">Beschreibung(Optional)</label>
+          <input formControlName="description" type="text" class="form-control text-height" placeholder="" required>
+          <!--<span class="help-bpx" *ngIf="businessForm.controls.lastName.invalid && !businessForm.controls.lastName.untouched">Please enter the Surname</span>-->
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer d-flex d-flex--align-center d-flex--justify-between">
+      <button type="button" class="btn default-button" data-dismiss="modal" (click)="c('Cross click')">Abbrechen</button>
+      <button type="button" class="btn primary-button" (click)="createCF()" data-dismiss="modal">Erstellen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentFlowSub let-c="close" let-c="dismiss">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="customLabel1">Erstelle ein neues benutzerdefiniertes Feld</h5>
+      <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <span class="d-flex margin-bottom--18">Mit benutzerdefinierten Attributen kannst Du Informationen zu Deinen Abonnenten speichern. Speichere E-Mails, Telefonnummern, Termine, Verhaltensweisen oder andere Dinge, die Du möchtest. Später kannst Du Deine Zielgruppe anhand dieser Daten segmentieren.</span>
+      <form [formGroup]="newCustomFieldForm" class="d-flex d-flex--wrap d-flex--justify-between">
+        <div class="form-group new-custom-name margin-bottom--24">
+          <label class="custom-add margin-bottom--8">Name</label>
+          <input type="text" class="form-control" formControlName="name" placeholder="" required>
+          <!--<span class="help-bpx" *ngIf="businessForm.controls.lastName.invalid && !businessForm.controls.lastName.untouched">Please enter the Surname</span>-->
+        </div>
+        <div class="form-group new-custom-type d-flex d-flex--direction-column margin-bottom--24">
+          <label class="custom-add margin-bottom--8">Typ</label>
+          <select formControlName="type" placeholder="" class="form-control-select">
+            <option value="1">Text</option>
+            <option value="2">Number</option>
+            <option value="3">Date</option>
+            <option value="4">DateTime</option>
+            <option value="5">Boolean</option>
+          </select>
+          <!--<span class="help-bpx" *ngIf="businessForm.controls.lastName.invalid && !businessForm.controls.lastName.untouched">Please enter the Surname</span>-->
+        </div>
+        <div class="form-group full-width">
+          <label class="custom-add margin-bottom--8">Beschreibung(Optional)</label>
+          <input formControlName="description" type="text" class="form-control text-height" placeholder="" required>
+          <!--<span class="help-bpx" *ngIf="businessForm.controls.lastName.invalid && !businessForm.controls.lastName.untouched">Please enter the Surname</span>-->
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer d-flex d-flex--align-center d-flex--justify-between">
+      <button type="button" class="btn default-button" data-dismiss="modal" (click)="c('Cross click')">Abbrechen</button>
+      <button type="button" class="btn primary-button" (click)="createCFSub()" data-dismiss="modal">Erstellen1</button>
+    </div>
+  </div>
+</ng-template>

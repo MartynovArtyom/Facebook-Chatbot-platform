@@ -1,0 +1,40 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a [routerLink]="['/' + _userService.userID + '/autoposting']">Autoposting</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>{{ postItem?.title }}</h3>
+  </div>
+</div>
+<!-- End top sidebar page -->
+<div class="post-item-container">
+  <div class="post-content condition-filter">
+    <span>Account Titel</span>
+    <input type="text" value="{{ postItem?.title }}" #title placeholder="Enter title..." (change)="changePostItem('title', title.value)">
+    <span>Status</span>
+    <select [(ngModel)]="postItem.status" #status (change)="changePostItem('status', status.value)">
+      <option value="true">Aktiv</option>
+      <option value="false">Deaktiviert</option>
+    </select>
+    <span>Einstellungen Benachrichtigungen</span>
+    <select [(ngModel)]="postItem.typePush" #typePush (change)="changePostItem('typePush', typePush.value)">
+      <option value="1">Regulärer Push</option>
+      <option value="2">Lautloser Push</option>
+      <option value="3">Lautlos</option>
+    </select>
+    <span>Abonnenten filtern</span>
+    <app-user-choise-condition-option
+      [view]="'edit'"
+      [statusDraft]="'false'"
+    ></app-user-choise-condition-option>
+    <app-user-condition-filter></app-user-condition-filter>
+    <button class="btn margin-bottom--32" (click)="activeConditionSelect()" [ngClass]="{'width-n': _sharedService.noneConditionButton}">+ Bedingung</button>
+    <div class="save-footer">
+      <button class="success-button" (click)="savePostItem()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>

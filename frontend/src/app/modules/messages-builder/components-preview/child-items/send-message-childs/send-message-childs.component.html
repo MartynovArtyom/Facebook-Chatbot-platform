@@ -1,0 +1,16 @@
+<div class="child-items-container" data-drag="true">
+  <ng-container *ngFor="let item of config?.widget_content"
+                [config]="item"
+                [opened]="config?.opened"
+                appDynamicChildSendMessage></ng-container>
+
+  <app-quick-reply-child [item]="config['quick_reply']"
+                         [opened]="config?.opened"></app-quick-reply-child>
+</div>
+
+<div class="widget-content-not-found" *ngIf="config['widget_content'].length === 0"
+     [ngClass]="{'padding-bottom': config['quick_reply'].length > 0}"
+     data-drag="true">
+  <i class="far fa-comment-alt" data-drag="true"></i>
+  <span data-drag="true">Klicken Sie hier, um Nachrichten in die Seitenleiste einzufügen</span>
+</div>

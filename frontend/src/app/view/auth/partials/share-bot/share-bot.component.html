@@ -1,0 +1,77 @@
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <h3>Bot teilen</h3>
+
+    <div class="bot-clone-popup" *ngIf="!selectCheck && checkLink">
+      <span class="deaktiv-link">{{ textError }}</span>
+    </div>
+
+    <div class="bot-clone-popup" *ngIf="!selectCheck && !checkLink">
+      <span>Dieser Bot wird geteilt.</span>
+
+      <div class="bot-item disabled-item">
+        <p>{{ campaign?.pageName }}</p>
+      </div>
+
+      <i class="fas fa-chevron-down"></i>
+
+      <div class="position--relative">
+        <div class="bot-item" (click)="changeStatusPagesList(true)">
+          <img *ngIf="selectedPage" [src]="selectedPage?.avatar">
+          <span *ngIf="!selectedPage" class="img-preview"></span>
+
+          <p *ngIf="selectedPage">{{ selectedPage?.title }}</p>
+          <p *ngIf="!selectedPage">Wählen Sie eine Seite</p>
+        </div>
+
+        <ul *ngIf="openPagesList" (clickOutside)="changeStatusPagesList(false)" [delayClickOutsideInit]="true">
+          <li class="bot-item" *ngFor="let page of userService.listConnectionPages"
+              [ngClass]="{'display-none': page.role !== 1}"
+              (click)="selectClonePage(page)">
+            <img [src]="page?.avatar">
+            <p>{{ page?.title }}</p>
+          </li>
+
+          <li class="bot-item" *ngIf="userService.listConnectionPages.length === 0">
+            <p>Seiten nicht gefunden</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cloned-info margin-bottom--18">
+        <p class="margin-bottom--10">Wählen Sie, was Sie teilen möchten</p>
+        <div class="d-flex d-flex--direction-column margin-bottom--12">
+          <div *ngFor="let item of copyInfo; let i = index" class="d-flex d-flex--align-center">
+            <div class="checkbox margin-right--10" style="margin: 0 0 25px;">
+              <input type="checkbox" id="{{ i }}" class="checkbox__input"
+                     [checked]="item?.status"
+                     (click)="changeShareBotOption(item?.key, item)">
+              <label for="{{ i }}" class="checkbox__label"></label>
+            </div>
+            <span>{{ item?.name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <button *ngIf="!buttonPreloader" class="btn primary-button" (click)="sharedBot()"
+              [disabled]="!selectedPage || !checkOption">Teilen</button>
+      <button *ngIf="buttonPreloader" class="btn primary-button loader-button">Teilen</button>
+
+    </div>
+
+    <div class="bot-clone-popup-cloned" *ngIf="selectCheck && !checkLink">
+      <p>Erfolg! Bot ist geteilt.</p>
+      <a (click)="routeToBot()">Gehe zum Bot</a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <a class="logout-link" (click)="logOut()">Abmelden</a>
+  </div>
+</div>
+
+<app-update-plan></app-update-plan>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloaderPage}" style="left: 0">
+  <div class="loader" id="loader-1"></div>
+</div>

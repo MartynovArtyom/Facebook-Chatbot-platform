@@ -1,0 +1,45 @@
+.product-label{
+  background: #ccc;
+  padding: 4px 8px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 11px;
+  margin-left: 10px;
+
+  &.show-product{
+    background: #13ce66;
+  }
+}
+
+.search-users-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & > input{
+    width: 70% !important;
+  }
+
+  ng-select{
+    width: 25%;
+    margin-bottom: 24px;
+  }
+}
+
+.total {
+  align-items: center;
+  display: flex;
+}
+
+.search-users-created-account{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & > input{
+    width: 50%;
+    border: 1px solid #ccc;
+    padding: 5px 15px;
+    margin-bottom: 24px;
+  }
+}

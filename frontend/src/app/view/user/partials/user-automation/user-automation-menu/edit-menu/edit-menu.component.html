@@ -1,0 +1,158 @@
+ <!--Top sidebar page-->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a [routerLink]="['/' + _userService.userID + '/automation/menu']">Hauptmenü</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>Bearbeiten</h3>
+  </div>
+  <div class="right-side-menu right-side-menu-bearbeiten d-flex d-flex--align-center">
+
+    <div class="switch-content d-flex margin-right--18">
+      <label class="title-switch title-switch--left">Deaktiviert</label>
+      <div class="material-toggle">
+        <input type="checkbox" id="toggle" name="toggle" [checked]="checkStatus" class="switch" (change)="updateMainMenu('status', checkStatus)" />
+        <label for="toggle" class=""></label>
+      </div>
+      <label class="title-switch title-switch--right"> Aktiviert</label>
+    </div>
+
+    <div class="switch-content d-flex margin-right--18">
+      <span class="saved-span" *ngIf="_sharedService.savedCheck"><i class="fas fa-check"></i> Gespeichert</span>
+      <span class="saved-span" *ngIf="!_sharedService.savedCheck">Saving...</span>
+    </div>
+
+    <div>
+      <button class="btn primary-button margin-right--10" (click)="saveMainMenu()">Update Hauptmenü</button>
+      <div ngbDropdown placement="bottom-left" class="d-inline-block">
+        <button class="btn sidebar-top-menu-button icon-btn-main" id="dropdownBasic1" ngbDropdownToggle><i class="fas fa-ellipsis-v"></i></button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="right: 0; left: auto !important;" class="left-imp">
+          <button class="dropdown-item"
+                  [disabled]="!_mainMenuService.checkRevert"
+                  (click)="revertMainMenu()">Zurück zu veröffentlicht</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+   <div class="loader" id="loader-1"></div>
+ </div>
+
+
+<div class="main-menu-container main-menu-container-phone">
+  <div class="request-main position--relative">
+    <div class="menu-container menu-container-bearbeiten" [dragula]="'DRAG'" [(dragulaModel)]="_mainMenuService.mainData">
+      <div class="main-item" *ngFor="let item of _mainMenuService.mainData; let i = index"
+           data-level="1"
+           [attr.data-item]="i">
+        <div class="main-button"
+             [class.open]="p.isOpen()"
+             [autoClose]="false"
+             #p="ngbPopover"
+             triggers="manual"
+             (click)="closeAdminPanel(item); _sharedService.triggersMainMenuPanel(p)"
+             [ngbPopover]="buttonsSomePopoverContent"
+             [popoverTitle]="buttonsSomePopoverTitle"
+             [popoverClass]="'add-next-steps buttons-popover'"
+             container="body"
+             [placement]="['right', 'auto']"
+
+        >
+          <span class="drag-main"><i class="fas fa-grip-vertical"></i></span>
+          <i class="fas fa-exclamation-triangle error-icon"
+             *ngIf="item?.type === 'reply_message' &&
+                (!item?.flow?.id || item?.flow.length === 0) &&
+                (item?.uuid | validMainMenu) === true ||
+                item?.type === 'open_website' &&
+                !item?.url &&
+                (item?.uuid | validMainMenu) === true ||
+                !item?.name &&
+                (item?.uuid | validMainMenu) === true"
+          ></i>
+          <input type="text" [(ngModel)]="item.name" (change)="_mainMenuService.updateMainMenuDraft()" placeholder="Enter caption...">
+          <i class="far fa-comment-dots link-mess" *ngIf="item?.type === 'reply_message' && !item?.flow"></i>
+          <i class="far fa-comment-dots link-mess" *ngIf="item?.type === 'reply_message' && item?.flow?.id" (click)="_mainMenuService.routerToEdit(item?.flow?.id)"></i>
+          <i class="fas fa-link link-mess" *ngIf="item?.type === 'open_website'"></i>
+
+          <ng-template #buttonsSomePopoverTitle>
+            <span>Bearbeiten Menüpunkt</span>
+          </ng-template>
+          <ng-template #buttonsSomePopoverContent>
+            <app-main-menu-popover
+              [data]="_mainMenuService.mainData"
+              [item]="item"
+              [index]="i"
+              [p]="p"
+            ></app-main-menu-popover>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="menu-container menu-container-bearbeiten">
+      <button class="btn created-button"
+              *ngIf="!_mainMenuService.copyright && _mainMenuService.mainData && _mainMenuService.mainData.length < 3 ||
+                   _mainMenuService.copyright && _mainMenuService.mainData && _mainMenuService.mainData.length < 2"
+              (click)="_mainMenuService.createNewMainItem(null, _mainMenuService.mainData)">+ Menüpunkt</button>
+
+      <div class="main-item" *ngIf="_mainMenuService.copyright">
+        <div [class.open]="p.isOpen()"
+             class="main-button"
+             [autoClose]="'outside'"
+             #p="ngbPopover"
+             [ngbPopover]="buttonsSome"
+             [popoverClass]="'add-next-steps buttons-popover'"
+             container="body"
+             [placement]="['right', 'auto']">
+          <span>Unterstützt von ChatBo</span>
+
+          <ng-template #buttonsSome>
+            <div class="pop-content">
+              <div class="popover-container-content">
+                <span>Möchten Sie dieses Copyright entfernen?</span>
+                <button class="btn danger-button" (click)="updateMainMenu('copyright', false); p.close();">Entfemen</button>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <span class="info-main">Es können maximal 3 Menüpunkte angelegt werden</span>
+    </div>
+  </div>
+
+  <div class="preview-phone-container">
+    <div class="back-phone">
+      <div class="camera"></div>
+      <div class="loudspeaker"></div>
+      <div class="messenger-profile">
+        <div class="mes-prof-header">
+          <span class="back"><i class="fa fa-angle-left" aria-hidden="true"></i> Zurück</span>
+          <div class="center-bl">
+            <p>{{ _userService.userPageInfo?.title }}</p>
+            <span>Antwortet in der Regel sofort</span>
+          </div>
+          <span class="manage">Bearbeiten</span>
+        </div>
+        <div class="preview-main-menu">
+          <div class="main-menu-message">
+            <div class="top-main-menu-message">
+              <span class="preview-text" *ngIf="!_mainMenuService.prevData">Sende eine Nachricht...</span>
+              <span class="prev-text" *ngIf="_mainMenuService.prevData"
+                    (click)="_mainMenuService.prevStepMessage()">
+                <i class="fas fa-chevron-left"></i> {{ _mainMenuService.prevData?.name }}
+              </span>
+            </div>
+            <div class="content-main-menu-message">
+              <div class="message" *ngFor="let message of _mainMenuService.dataPreview; let i = index">
+                <span>{{ message?.name }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="touch"></div>
+    </div>
+  </div>
+</div>
+

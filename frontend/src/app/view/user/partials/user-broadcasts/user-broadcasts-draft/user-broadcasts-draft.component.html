@@ -1,0 +1,50 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a [routerLink]="['/' + _userService.userID + '/broadcasts']">Newsletter</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>Entwurf Posts</h3>
+  </div>
+</div>
+<!-- End top sidebar page -->
+<div class="broadcast-container">
+  <!-- Drafts table -->
+  <div class="broadcast-table broadcast-table-entwurf">
+    <div class="broadcast-table-title">
+      <div class="table-row">
+        <div class="table-cell" style="width: 35%">Newsletter</div>
+        <div class="table-cell" style="width: 35%">Gepeichert am</div>
+        <div class="table-cell" style="width: 30%"></div>
+      </div>
+    </div>
+    <div class="broadcast-table-body">
+      <div class="table-row" *ngFor="let item of draftsPosts; let i = index" (click)="routerToEdit(item?.id)">
+        <div class="table-cell" style="width: 35%">{{ item?.name }}</div>
+        <div class="table-cell" style="width: 35%">{{ item?.created | date: 'MMM d, y h:mm' }}</div>
+        <div class="table-cell d-flex d-flex--justify-end d-flex--align-center" style="width: 30%">
+          <button class="btn icon-button"
+                  *ngIf="_userService.userPageInfo?.role !== 4"
+                  (click)="copyBroadcast(item?.id, draftsPosts)">
+            <i class="far fa-clone"></i>
+          </button>
+          <button class="btn icon-button"
+                  *ngIf="_userService.userPageInfo?.role !== 4"
+                  (click)="deleteBroadcast(item, draftsPosts, i)">
+            <i class="far fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+      <div class="table-row view-all" *ngIf="draftsPosts.length === 0">
+        <div class="table-cell d-flex d-flex--align-center d-flex--justify-center" style="width: 100%">
+          Du hast keine Entwürfe
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End drafts table -->
+</div>
+
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>

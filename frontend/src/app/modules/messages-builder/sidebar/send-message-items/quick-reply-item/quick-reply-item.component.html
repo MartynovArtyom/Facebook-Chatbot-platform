@@ -1,0 +1,177 @@
+<div class="quick-reply-container">
+
+  <div *ngFor="let quick of item; let i = index" class="quick-item"
+       [autoClose]="'outside'"
+       #p="ngbPopover"
+       [ngbPopover]="quickReplyPopoverContent"
+       [popoverTitle]="quickReplyPopoverTitle"
+       [popoverClass]="'quick-reply-popover add-next-steps'"
+       container="body"
+       placement="right">
+    <div class="text"
+         (clickOutside)="_builderFunctionsService.closeSubTextareaPanel(quick, 'activeTitlePanel', 'activeEmojiTitle', 'activeActionTitle')"
+         (click)="_builderFunctionsService.openSubTextareaPanel(quicks, quick, 'activeTitlePanel')">
+      <input type="text" #quicks placeholder="Text hinzufügen" maxlength="20" [class.open]="p.isOpen()"
+             [disabled]="_builderService.view === 'preview'"
+             [ngClass]="{
+                          'right': quick?.next_step,
+                          'error-border': !quick?.next_step && (quick?.uuid | publishErrors) === true ||
+                                          !quick?.title && (quick?.uuid | publishErrors) === true ||
+                                          quick?.title.length > 20 && (quick?.uuid | publishErrors) === true
+                        }"
+             (change)="_builderFunctionsService.setInputValue(quick, 'title', quicks.value);
+                        _builderFunctionsService.closeSubTextareaPanel(quick, 'activeTitlePanel', 'activeEmojiTitle', 'activeActionTitle')"
+             [(ngModel)]="quick.title">
+      <span class="button-clicks" *ngIf="quick?.buttons[0]?.click && _builderService.view === 'preview'">CTR {{ quick?.buttons[0]?.click | flowStatistic:opened }}%</span>
+      <span class="button-clicks" *ngIf="!quick?.buttons[0]?.click && _builderService.view === 'preview'">CTR 0%</span>
+
+      <div class="sub-panel" *ngIf="_builderService.view !== 'preview'" [delayClickOutsideInit]="true"
+           (clickOutside)="_builderFunctionsService.openEmojiPanel(false, quick, 'activeEmojiTitle', 'activeActionTitle')"
+           [ngClass]="{'right': quick?.next_step}">
+
+        <button (click)="_builderFunctionsService.openEmojiPanel(true, quick, 'activeEmojiTitle', 'activeActionTitle')">
+          <i class="far fa-smile-o"></i>
+
+          <app-emoji-picker *ngIf="quick['activeEmojiTitle']"
+                            (clickOutside)="_builderFunctionsService.closeEmoji(quick['activeEmojiTitle'])"
+                            (modelChange)="_builderFunctionsService.addEmoji(quicks, $event, quick, 'title')"
+                            [popupAnchor]="'top'"></app-emoji-picker>
+        </button>
+        <!--<button (click)="_builderFunctionsService.openBulkActionsPanel(true, quicks, quick, 'activeActionTitle', 'activeEmojiTitle')">&#123;&bull;&#125;</button>-->
+        <span>{{ 20 - quicks.value.length }}</span>
+
+        <div class="sub-bulk-actions-panel" *ngIf="quick['activeActionTitle']">
+          <ul>
+            <li *ngFor="let action of _builderService.bulkActions" (click)="_builderFunctionsService.getCaretPos(quicks, action, quicks, quick, 'title')">
+              {{ action?.name }}
+            </li>
+            <span class="path-c-f">Custom Fields</span>
+            <li *ngFor="let action of _builderService.bulkActionsCF" (click)="getCaretPos(desc, action)">
+              {{ action?.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="quick-next-step" *ngIf="quick?.next_step"
+           (click)="_builderFunctionsService.transitionToNextStep(quick?.next_step)">
+        <i class="fas fa-chevron-right"></i>
+      </div>
+    </div>
+
+    <ng-template #quickReplyPopoverTitle>
+      <span>Bearbeiten Quick Reply</span>
+    </ng-template>
+    <ng-template #quickReplyPopoverContent>
+      <div class="pop-content" *ngIf="_builderService.view !== 'preview'">
+        <div class="popover-container-content">
+          <span>Wenn diese Taste gedrückt wird</span>
+
+          <div class="next-step-button" *ngIf="quick?.next_step"
+               [ngClass]="{'grey': (quick?.next_step | typeNextStep) === 'send_message',
+                  'yellow': (quick?.next_step | typeNextStep) === 'perform_actions',
+                  'green': (quick?.next_step | typeNextStep) === 'start_another_flow',
+                  'blue': (quick?.next_step | typeNextStep) === 'condition',
+                  'dark-blue': (quick?.next_step | typeNextStep) === 'open_website',
+                  'violet': (quick?.next_step | typeNextStep) === 'randomizer',
+                  'red': (quick?.next_step | typeNextStep) === 'smart_delay'}">
+            <div class="info-next-step" (click)="_builderFunctionsService.transitionToNextStep(quick?.next_step)">
+              <img *ngIf="quick?.next_step !== 'open_website' &&
+                          quick?.next_step !== 'call_number'" [src]="quick?.next_step | typeNextStep | typeIconButton">
+              <i *ngIf="quick?.next_step === 'open_website' ||
+                        quick?.next_step === 'call_number'" class="{{ quick?.next_step | typeNextStep | typeIconButton }}"></i>
+
+              <!--<i class="{{ quick?.next_step | typeNextStep | typeIconButton }}"></i>-->
+              <div class="text-button">
+                <p>{{ quick?.next_step | typeNextStep | nameNextButton }}</p>
+                <span>{{ quick?.next_step | nameNextStep }}</span>
+              </div>
+            </div>
+            <div class="delete-step-item" (click)="_builderFunctionsService.deleteNextStep(quick)">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
+          <ul *ngIf="!quick?.next_step" class="list-items">
+            <li *ngFor="let main of listMainItems"
+                [ngClass]="{'grey': main?.type === 'send_message',
+                  'yellow': main?.type === 'perform_actions',
+                  'green': main?.type === 'start_another_flow',
+                  'blue': main?.type === 'condition',
+                  'violet': main?.type === 'randomizer',
+                  'red': main?.type === 'smart_delay'}"
+                (click)="_builderFunctionsService.createNewMainFromQuickReply(quick, main?.type, main?.name)">
+              <img *ngIf="main?.type !== 'open_website' &&
+                          main?.type !== 'call_number'" [src]="main?.icon">
+              <i *ngIf="main?.type === 'open_website' ||
+                        main?.type === 'call_number'" class="{{ main?.icon }}"></i>
+
+              <!--<i [class]="main?.icon"></i>-->
+              {{ main?.name }}
+            </li>
+            <li class="dark-blue"
+                (click)="openVerticallyCenterFlow(content, quick)">
+              <i class="far fa-hand-pointer"></i>
+              Bestehenden Schritt auswählen
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="pop-content" *ngIf="_builderService.view === 'preview'">
+        <div class="popover-container-content">
+          <span style="margin-bottom: 24px" *ngIf="quick?.buttons[0]?.click">Gesamtanzahl an Klicks: {{ quick?.buttons[0]?.click }}</span>
+          <span style="margin-bottom: 24px" *ngIf="!quick?.buttons[0]?.click">Gesamtanzahl an Klicks:  0</span>
+        </div>
+      </div>
+
+      <div class="pop-footer" *ngIf="_builderService.view !== 'preview'">
+        <button class="btn default-btn" (click)="_builderFunctionsService.deleteQuickReply(item, i)">Löschen</button>
+        <button class="btn success-btn" (click)="p.close()">Erledigt</button>
+      </div>
+    </ng-template>
+
+  </div>
+
+  <button class="add-quick-btn"
+          *ngIf="item['length'] < 11 && _builderService.view !== 'preview'"
+          (click)="_builderFunctionsService.createNewQuickReply(item)">
+    + Schnelle Antwort
+  </button>
+
+</div>
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-header">
+    <span>Wählen Sie einen Schritt</span>
+  </div>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <div class="select-flow-next-step text-align--center" *ngIf="_builderService.selectedNextStep.length === 0">
+      <span>Nichts hier</span>
+    </div>
+    <div class="select-flow-next-step" *ngFor="let step of _builderService.selectedNextStep">
+      <div class="next-step-button"
+           [ngClass]="{'grey': step?.type === 'send_message',
+                  'yellow': step?.type === 'perform_actions',
+                  'green': step?.type === 'start_another_flow',
+                  'blue': step?.type === 'condition',
+                  'dark-blue': step?.type === 'open_website',
+                  'violet': step?.type === 'randomizer',
+                  'red': step?.type === 'smart_delay'}">
+        <div class="info-next-step" style="width: 100%;" (click)="selectedMainLink(step)">
+          <img *ngIf="step?.type !== 'open_website' &&
+                      step?.type !== 'call_number'" [src]="step?.type | typeIconButton">
+          <i *ngIf="step?.type === 'open_website' ||
+                    step?.type === 'call_number'" class="{{ step?.type | typeIconButton }}"></i>
+
+          <!--<i class="{{ step?.type | typeIconButton }}"></i>-->
+          <div class="text-button">
+            <p>{{ step?.type | nameNextButton }}</p>
+            <span>{{ step?.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

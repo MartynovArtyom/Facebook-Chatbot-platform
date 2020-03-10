@@ -1,0 +1,9 @@
+app_topic_conversation:
+    channel: socket/conversation/{page_id}
+    handler:
+        callback: 'app.topic.chat'
+
+app_topic_chat:
+    channel: socket/chat/{page_id}
+    handler:
+        callback: 'app.topic.chat'

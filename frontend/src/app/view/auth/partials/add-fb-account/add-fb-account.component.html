@@ -1,0 +1,25 @@
+<div class="text-center add-fb-account">
+  <span class="logout-link" (click)="logout()">Anmelden</span>
+  <h3>Verbinde Deine Facebook Seite</h3>
+  <p>Wir brauchen die Erlaubnis Deine Seiten Nachrichten zu managen, damit wir Deine Nachrichten automatisieren können</p>
+  <div class="users-pages">
+    <div class="user-page-item" *ngFor="let page of allPages">
+      <div class="page-info">
+        <img src="{{ page?.picture?.data?.url }}">
+        <span>{{ page?.name }}</span>
+      </div>
+      <div class="page-connect">
+        <span class="connecting-page" (click)="routerToPage(page?.id)" *ngIf="page?.is_webhooks_subscribed"><i class="fas fa-check"></i> Verbunden</span>
+        <button (click)="connectPage(page)" *ngIf="!page?.is_webhooks_subscribed && !page?.loader" class="btn primary-button">Verbinden</button>
+        <button *ngIf="!page?.is_webhooks_subscribed && page?.loader" class="btn primary-button loader-button">Verbinden</button>
+      </div>
+    </div>
+    <div class="new-page">
+      <a href="https://www.facebook.com/pages/create/" target="_blank">Neue Facebook Seite erstellen</a>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloaderPage}" style="left: 0">
+  <div class="loader" id="loader-1"></div>
+</div>

@@ -1,0 +1,43 @@
+<div class="text-items-view">
+  <div class="default-content" *ngIf="!config?.params['description']" data-drag="true">
+    <img class="build-component-item-image" src="/assets/img/builder-sidebar/text-short.png" alt="bild-short">
+    <span data-drag="true">Gib eine Frage ein...</span>
+  </div>
+
+  <div class="config-content" *ngIf="config?.params['description']" data-drag="true">
+    {{ config?.params?.description }}
+  </div>
+
+  <div class="quick-container" data-drag="true">
+    <div class="quick-item" *ngFor="let quick of config?.params['quick_reply']" data-drag="true">
+      <span data-drag="true">{{ quick?.title }}</span>
+      <span class="button-clicks" *ngIf="quick?.click && _builderService.view === 'preview'">CTR {{ quick?.click | flowStatistic:opened }}%</span>
+      <span class="button-clicks" *ngIf="!quick?.click && _builderService.view === 'preview'">CTR 0%</span>
+    </div>
+  </div>
+
+  <div class="quick-container free-user" data-drag="true">
+    <div class="quick-item" data-drag="true"
+         *ngIf="config?.params['keyboardInput'].replyType !== 1 ||
+                (config?.params['keyboardInput'].replyType === 1 && config?.params['keyboardInput'].active)">
+      <span data-drag="true" style="margin-right: 10px">Texteingabe durch Nutzer</span>
+      <div class="link-button between" data-drag="true">
+        <span data-drag="false" [id]="config?.params?.buttons[0]?.uuid"
+              (click)="_builderService.createMouseLink(config?.params?.buttons[0], $event, 'pr')">
+          <img src="../../../../../../../assets/img/flows/sub-link.svg" class="fas fa-bolt" style="width: 16px; height: 28px">
+        </span>
+      </div>
+    </div>
+    <div class="quick-item not-allow" data-drag="true"
+         *ngIf="config?.params['keyboardInput'].replyType === 1 && !config?.params['keyboardInput'].active">
+      <div class="link-button between" data-drag="true">
+        <span data-drag="false" [id]="config?.params?.buttons[0]?.uuid"
+              (click)="_builderService.createMouseLink(config?.params?.buttons[0], $event, 'pr')">
+          <img src="../../../../../../../assets/img/flows/sub-link.svg" class="fas fa-bolt" style="width: 16px; height: 28px">
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <span class="user-input-output" data-drag="true">Warte auf Antwort vom Nutzer</span>
+</div>

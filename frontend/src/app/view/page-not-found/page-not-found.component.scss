@@ -1,0 +1,166 @@
+.not-found-content{
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: #fff;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Error Page */
+.error .clip .shadows
+{
+  height: 180px;  /*Contrall*/
+}
+.error .clip:nth-of-type(2) .shadows {
+  width: 130px;
+}
+.error .clip:nth-of-type(1) .shadows, .error .clip:nth-of-type(3) .shadows
+{
+  width: 250px; /*Contrall*/
+}
+.error .digit
+{
+  width: 150px;   /*Contrall*/
+  height: 150px;  /*Contrall*/
+  line-height: 150px; /*Contrall*/
+  font-size: 120px;
+  font-weight: bold;
+}
+.error h2   /*Contrall*/
+{
+  font-size: 32px;
+}
+
+
+.error .container-error-404 {
+  position: relative;
+}
+.error .container-error-404 .clip {
+  display: inline-block;
+  transform: skew(-45deg);
+}
+.error .clip .shadows {
+  overflow: hidden;
+}
+.error .clip:nth-of-type(2) .shadows {
+  overflow: hidden;
+  position: relative;
+  box-shadows: inset 20px 0px 20px -15px rgba(150, 150, 150,0.8), 20px 0px 20px -15px rgba(150, 150, 150,0.8);
+}
+
+.error .clip:nth-of-type(3) .shadows:after, .error .clip:nth-of-type(1) .shadows:after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  bottom: 0px;
+  z-index: 9999;
+  height: 100%;
+  width: 10px;
+  background: linear-gradient(90deg, transparent, rgba(173,173,173, 0.8), transparent);
+  border-radius: 50%;
+}
+
+.error .clip:nth-of-type(3) .shadows:after {
+  left: -8px;
+}
+
+.error .digit {
+  position: relative;
+  top: 8%;
+  color: white;
+  background: #0084ff;
+  border-radius: 50%;
+  display: inline-block;
+  transform: skew(45deg);
+}
+
+.error .clip:nth-of-type(2) .digit {
+  left: -10%;
+}
+.error .clip:nth-of-type(1) .digit {
+  right: -20%;
+}.error .clip:nth-of-type(3) .digit  {
+   left: -20%;
+ }
+.error h2 {
+  color: #A2A2A2;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+.error .triangle {
+  position: absolute;
+  z-index: 999;
+  transform: rotate(45deg);
+  content: "";
+  width: 0;
+  height: 0;
+}
+
+/* Error Page */
+@media(max-width: 767px) {
+  /* Error Page */
+  .error .clip .shadows {
+    height: 100px;  /*Contrall*/
+  }
+  .error .clip:nth-of-type(2) .shadows {
+    width: 80px;   /*Contrall play with javascript*/
+  }
+  .error .clip:nth-of-type(1) .shadows, .error .clip:nth-of-type(3) .shadows {
+    width: 100px; /*Contrall*/
+  }
+  .error .digit {
+    width: 80px;   /*Contrall*/
+    height: 80px;  /*Contrall*/
+    line-height: 80px; /*Contrall*/
+    font-size: 52px;
+  }
+  .error h2 {
+    font-size: 24px;
+  }
+  .error .container-error-404 {
+    height: 150px;
+  }
+  /* Error Page */
+}
+
+.overlay { position: relative; z-index: 20; } /*done*/
+.ground-color { background: white; }  /*done*/
+.item-bg-color { background: #EAEAEA } /*done*/
+
+/* Padding Section*/
+.padding-top { padding-top: 10px; } /*done*/
+.padding-bottom { padding-bottom: 10px; }   /*done*/
+.padding-vertical { padding-top: 10px; padding-bottom: 10px; }
+.padding-horizontal { padding-left: 10px; padding-right: 10px; }
+.padding-all { padding: 10px; }   /*done*/
+
+.no-padding-left { padding-left: 0; }    /*done*/
+.no-padding-right { padding-right: 0; }   /*done*/
+.no-vertical-padding { padding-top: 0; padding-bottom: 0; }
+.no-horizontal-padding { padding-left: 0; padding-right: 0; }
+.no-padding { padding: 0; }   /*done*/
+/* Padding Section*/
+
+/* Margin section */
+.margin-top { margin-top: 10px; }   /*done*/
+.margin-bottom { margin-bottom: 10px; } /*done*/
+.margin-right { margin-right: 10px; } /*done*/
+.margin-left { margin-left: 10px; } /*done*/
+.margin-horizontal { margin-left: 10px; margin-right: 10px; } /*done*/
+.margin-vertical { margin-top: 10px; margin-bottom: 10px; } /*done*/
+.margin-all { margin: 10px; }   /*done*/
+.no-margin { margin: 0; }   /*done*/
+
+.no-vertical-margin { margin-top: 0; margin-bottom: 0; }
+.no-horizontal-margin { margin-left: 0; margin-right: 0; }
+
+.inside-col-shrink { margin: 0 20px; }    /*done - For the inside sections that has also Title section*/
+
+hr
+{ margin: 0; padding: 0; border-top: 1px dashed #999; }
+/*--------------------------------------------FrameWork------------------------*/

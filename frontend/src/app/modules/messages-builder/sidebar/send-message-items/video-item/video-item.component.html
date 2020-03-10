@@ -1,0 +1,31 @@
+<div class="text-item-content position-relative margin-bottom--25">
+  <div class="error-content-icon">
+    <i class="fas fa-exclamation-triangle" *ngIf="!item?.params['url'] && (item?.uuid | publishErrors) === true"></i>
+  </div>
+
+  <div class="image-content position-relative"
+       [ngClass]="{
+          'border-radius-bottom-no': item?.params['url'],
+          'text-border-bottom': _builderService.view === 'preview' && item?.params['buttons'].length === 0,
+          'error-border': !item?.params['url'] && (item?.uuid | publishErrors) === true
+       }">
+    <label class="file-upload file-upload__show-image">
+      <img src="/assets/img/builder-sidebar/video-short.png" alt="video-short">
+      <span *ngIf="!item?.params['url']">Video</span>
+      <a [href]="item?.params?.url" target="_blank" [download]="item?.params?.url" *ngIf="item?.params['url']">{{ item?.params?.name }} <i class="fas fa-download"></i></a>
+      <input type="file" accept="video/*"
+             [disabled]="_builderService.view === 'preview'"
+             (change)="_builderFunctionsService.uploadVideoFile(item?.params, $event.target.files, null)"/>
+    </label>
+  </div>
+
+  <app-buttons-item *ngIf="item?.params['url']" [config]="item?.params['buttons']" [opened]="opened" [type]="'some'"></app-buttons-item>
+
+  <div class="sidebar-actions" *ngIf="_builderService.view !== 'preview'">
+    <button class="trash-sidebar" (click)="_builderFunctionsService.deleteItemFromSidebar(item)">
+      <i class="fas fa-times"></i>
+    </button>
+    <button class="drop-sidebar-items"><i class="fas fa-arrows-alt-v"></i></button>
+    <button (click)="_builderFunctionsService.cloneItemFromSidebar(item)"><i class="far fa-clone"></i></button>
+  </div>
+</div>

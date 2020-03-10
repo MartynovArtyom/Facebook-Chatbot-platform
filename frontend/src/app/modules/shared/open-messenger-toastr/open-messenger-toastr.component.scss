@@ -1,0 +1,36 @@
+.open-messanger-popup{
+  position: fixed;
+  top: 70px;
+  right: 10px;
+  background-color: #fff;
+  z-index: 1050;
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  display: flex;
+
+  .fa-times{
+    position: absolute;
+    right: 9px;
+    cursor: pointer;
+    color: #8492a6;
+  }
+
+  & > .d-flex{
+    & > i{
+      font-size: 44px;
+      color: #13ce66;
+    }
+
+    & > p{
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .default-button{
+      width: 100%;
+      color: #0084ff;
+      padding: 4px;
+    }
+  }
+}

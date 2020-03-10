@@ -1,0 +1,39 @@
+.product-label{
+  background: #ccc;
+  padding: 4px 8px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 11px;
+  margin-left: 10px;
+
+  &.show-product{
+    background: #13ce66;
+  }
+}
+
+.product-item-label{
+  width: 100%;
+  align-items: center;
+  display: flex;
+
+  & > label{
+    margin-right: 15px;
+    width: 120px;
+  }
+
+  & > input, & > .ng-select{
+    width: calc(100% - 135px);
+    border: 1px solid #E0E6ED;
+    padding: 5px 2px;
+  }
+
+  & > .ng-select{
+    padding: 0;
+    border: none;
+
+    .ng-select-container{
+      border: 1px solid #E0E6ED;
+      border-radius: 0;
+    }
+  }
+}

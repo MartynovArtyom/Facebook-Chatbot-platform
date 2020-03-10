@@ -1,0 +1,17 @@
+<div class="text-items-view">
+  <div class="default-content" *ngIf="!config?.params['url']" data-drag="true">
+    <img class="build-component-item-image" src="/assets/img/builder-sidebar/video-short.png" alt="bild-short">
+    <span data-drag="true">Video</span>
+  </div>
+
+  <div class="config-content" *ngIf="config?.params['url']"
+       [ngClass]="{'border-radius-bottom-no': config?.params['buttons'].length > 0}"
+       data-drag="true">
+    <i class="fas fa-video" data-drag="true"></i>
+    <span data-drag="true">{{ config?.params?.name }}</span>
+  </div>
+
+  <app-buttons [buttons]="config?.params['buttons']"
+               [opened]="opened"
+               [type]="'some'"></app-buttons>
+</div>

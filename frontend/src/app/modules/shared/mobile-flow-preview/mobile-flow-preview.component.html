@@ -1,0 +1,73 @@
+<div class="flow-preview-container" *ngIf="data?.type === 'send_message'">
+  <div class="flow-item" *ngFor="let item of data?.widget_content">
+    <div class="text" *ngIf="item?.type === 'text'">
+      <span [ngClass]="{'border-bottom-radius-none': item?.params?.buttons.length > 0}">{{ item?.params?.description }}</span>
+      <div class="buttons" *ngFor="let button of item?.params?.buttons">
+        <span>{{ button?.title }}</span>
+      </div>
+    </div>
+    <div class="image" *ngIf="item?.type === 'image'">
+      <img [src]="item?.params?.img_url" [ngClass]="{'border-bottom-radius-none': item?.params?.buttons.length > 0}">
+      <div class="buttons" *ngFor="let button of item?.params?.buttons">
+        <span>{{ button?.title }}</span>
+      </div>
+    </div>
+    <div class="card" *ngIf="item?.type === 'card' || item?.type === 'gallery'">
+      <div class="card-item" *ngFor="let card of item?.params?.cards_array; let i = index"
+           [ngClass]="{'active': card?.active}">
+        <i class="fas fa-chevron-left" (click)="changePositionCards(card, item?.params?.cards_array, i, 'prev')"></i>
+        <div class="card-content"
+             [ngClass]="{'border-bottom-radius-none': card?.buttons.length > 0}">
+          <img [src]="card?.img_url">
+          <span class="title">{{ card?.title }}</span>
+          <span class="subtitle">{{ card?.subtitle }}</span>
+        </div>
+        <div class="buttons" *ngFor="let button of card?.buttons">
+          <span>{{ button?.title }}</span>
+        </div>
+        <i class="fas fa-chevron-right" (click)="changePositionCards(card, item?.params?.cards_array, i, 'next')"></i>
+      </div>
+    </div>
+    <div class="file" *ngIf="item?.type === 'video'">
+      <a [href]="item?.params?.url" [ngClass]="{'border-bottom-radius-none': item?.params?.buttons.length > 0}"
+         [download]="item?.params?.url" target="_blank">
+        <i class="fas fa-download"></i>
+        {{ item?.params?.name }}
+      </a>
+      <div class="buttons" *ngFor="let button of item?.params?.buttons">
+        <span>{{ button?.title }}</span>
+      </div>
+    </div>
+    <div class="file" *ngIf="item?.type === 'audio' || item?.type === 'file'">
+      <a [href]="item?.params?.url" [download]="item?.params?.url" target="_blank">
+        <i class="fas fa-download"></i>
+        {{ item?.params?.name }}
+      </a>
+    </div>
+    <div class="user-input" *ngIf="item?.type === 'user_input'">
+      <span>{{ item?.params?.description }}</span>
+      <p class="request-from-user">User replies as expected</p>
+    </div>
+  </div>
+  <div class="img-circle"></div>
+
+  <div class="flow-item quick-reply">
+    <span *ngFor="let quick of data?.quick_reply">{{ quick?.title }}</span>
+  </div>
+</div>
+
+<div class="flow-preview-container" *ngIf="!data">
+  <span>This Flow doesn't have a published version</span>
+
+</div>
+
+<div class="flow-preview-container" *ngIf="data && data?.type !== 'send_message'">
+  <span *ngIf="data?.type === 'perform_actions'">The first step of the attached Flow is a Perform Actions step</span>
+  <span *ngIf="data?.type === 'condition'">The first step of the attached Flow is a Condition step</span>
+  <span *ngIf="data?.type === 'randomizer'">The first step of the attached Flow is a Randomizer step</span>
+  <span *ngIf="data?.type === 'smart_delay'">The first step of the attached Flow is a Smart Delay step</span>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloadContent}">
+  <div class="loader" id="loader-1"></div>
+</div>

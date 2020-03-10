@@ -1,0 +1,155 @@
+<div class="text-item-content position-relative margin-bottom--25">
+
+  <div class="card-content position-relative">
+
+    <div class="card-array" *ngFor="let card of item?.params['cards_array']; let i = index"
+         [ngClass]="{'active': card?.active,
+         'border-bottom-transparent': card?.buttons.length > 0}">
+
+      <div class="error-content-icon" style="left: -30px;">
+        <i class="fas fa-exclamation-triangle" *ngIf="
+              !card?.title && (item['uuid'] | publishErrors) === true ||
+              card?.title.length > 45 && (item['uuid'] | publishErrors) === true ||
+              (!card?.subtitle && !card?.img_url) && (item['uuid'] | publishErrors) === true ||
+              card?.subtitle.length > 80 && (item['uuid'] | publishErrors) === true"></i>
+      </div>
+
+      <div class="card-container"
+           [ngClass]="{ 'text-border-bottom': _builderService.view === 'preview' && card['buttons'].length === 0 }">
+        <div class="prev-card-items">
+          <button class="btn-step"
+                  [disabled]="i === 0"
+                  (click)="_builderFunctionsService.prevCardItem(item?.params?.cards_array, i)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        </div>
+
+        <div class="card-image-container">
+          <button *ngIf="card?.img_url && _builderService.view !== 'preview'"
+                  (click)="_builderFunctionsService.deleteImageCardItem(card)"
+                  class="delete-card-img"><i class="fas fa-times"></i></button>
+          <img *ngIf="card?.img_url" [src]="card?.img_url" width="100%">
+
+          <label class="file-upload file-upload__show-image" *ngIf="_builderService.view !== 'preview'">
+            <img src="/assets/img/builder-sidebar/bild-short.png" alt="bild-short">
+            <span>Bild</span>
+            <input type="file" accept="image/*" (change)="_builderFunctionsService.uploadFile(card, $event.target.files)"/>
+          </label>
+        </div>
+
+        <div class="card-text-container position-relative">
+          <div class="text"
+               (clickOutside)="_builderFunctionsService.closeSubTextareaPanel(card, 'activeTitlePanel', 'activeEmojiTitle', 'activeActionTitle')"
+               (click)="_builderFunctionsService.openSubTextareaPanel(title, card, 'activeTitlePanel')">
+            <input type="text" #title placeholder="Titel eingeben..." maxlength="45" [(ngModel)]="card.title"
+                   [disabled]="_builderService.view === 'preview'"
+                   [ngClass]="{
+                       'error-border': !card?.title && (item['uuid'] | publishErrors) === true ||
+                                       card?.title.length > 45 && (item['uuid'] | publishErrors) === true}"
+                   (change)="_builderFunctionsService.setInputValue(card, 'title', title.value)">
+
+            <div class="sub-panel" *ngIf="card?.activeTitlePanel && _builderService.view !== 'preview'"
+                 [delayClickOutsideInit]="true"
+                 (clickOutside)="_builderFunctionsService.openEmojiPanel(false, card, 'activeEmojiTitle', 'activeActionTitle');
+                                 _builderFunctionsService.openBulkActionsPanel(false, title, card, 'activeActionTitle', 'activeEmojiTitle')">
+              <button (click)="_builderFunctionsService.openEmojiPanel(true, card, 'activeEmojiTitle', 'activeActionTitle')">
+                <i class="far fa-smile-o"></i>
+
+                <app-emoji-picker *ngIf="card['activeEmojiTitle']"
+                                  (clickOutside)="_builderFunctionsService.closeEmoji(card['activeEmojiTitle'])"
+                                  (modelChange)="_builderFunctionsService.addEmoji(title, $event, card, 'title')"
+                                  [popupAnchor]="'top'"></app-emoji-picker>
+
+              </button>
+              <button (click)="_builderFunctionsService.openBulkActionsPanel(true, title, card, 'activeActionTitle', 'activeEmojiTitle')">&#123;&bull;&#125;
+                <div class="sub-bulk-actions-panel" *ngIf="card['activeActionTitle']">
+                  <ul>
+                    <li *ngFor="let action of _builderService.bulkActions" (click)="_builderFunctionsService.getCaretPos(title, action, title, card, 'title')">
+                      {{ action?.name }}
+                    </li>
+                    <span class="path-c-f">Custom Fields</span>
+                    <li *ngFor="let action of _builderService.bulkActionsCF" (click)="_builderFunctionsService.getCaretPos(title, action, title, card, 'title')">
+                      {{ action?.name }}
+                    </li>
+                  </ul>
+                </div>
+              </button>
+              <span>{{ 45 - title.value.length }}</span>
+            </div>
+          </div>
+
+          <div class="text"
+               (clickOutside)="_builderFunctionsService.closeSubTextareaPanel(card, 'activeSubtitlePanel', 'activeEmojiSubtitle', 'activeActionSubtitle')"
+               (click)="_builderFunctionsService.openSubTextareaPanel(subtitle, card, 'activeSubtitlePanel')">
+          <textarea placeholder="Geben Sie Ihren Untertitel ein..." maxlength="80" #subtitle [(ngModel)]="card.subtitle"
+                    [disabled]="_builderService.view === 'preview'"
+                    [ngClass]="{
+                       'error-border': (!card?.subtitle && !card?.img_url) && (item['uuid'] | publishErrors) === true ||
+                                       card?.subtitle.length > 80 && (item['uuid'] | publishErrors) === true }"
+                    (change)="_builderFunctionsService.setInputValue(card, 'subtitle', subtitle.value)"></textarea>
+
+            <div class="sub-panel text" *ngIf="card?.activeSubtitlePanel && _builderService.view !== 'preview'"
+                 [delayClickOutsideInit]="true"
+                 (clickOutside)="_builderFunctionsService.openEmojiPanel(false, card, 'activeEmojiSubtitle', 'activeActionSubtitle');
+                                 _builderFunctionsService.openBulkActionsPanel(false, subtitle, card, 'activeActionSubtitle', 'activeEmojiSubtitle')">
+
+              <button (click)="_builderFunctionsService.openEmojiPanel(true, card, 'activeEmojiSubtitle', 'activeActionSubtitle')">
+                <i class="far fa-smile-o"></i>
+                <app-emoji-picker *ngIf="card['activeEmojiSubtitle']"
+                                  (clickOutside)="_builderFunctionsService.closeEmoji(card['activeEmojiSubtitle'])"
+                                  (modelChange)="_builderFunctionsService.addEmoji(subtitle, $event, card, 'subtitle')"
+                                  [popupAnchor]="'top'"></app-emoji-picker>
+              </button>
+
+              <button (click)="_builderFunctionsService.openBulkActionsPanel(true, subtitle, card, 'activeActionSubtitle', 'activeEmojiSubtitle')">&#123;&bull;&#125;
+
+                <div class="sub-bulk-actions-panel" *ngIf="card['activeActionSubtitle']">
+                  <ul>
+                    <li *ngFor="let action of _builderService.bulkActions" (click)="_builderFunctionsService.getCaretPos(subtitle, action, subtitle, card, 'subtitle')">
+                      {{ action?.name }}
+                    </li>
+                    <span class="path-c-f">Custom Fields</span>
+                    <li *ngFor="let action of _builderService.bulkActionsCF" (click)="_builderFunctionsService.getCaretPos(subtitle, action, subtitle, card, 'subtitle')">
+                      {{ action?.name }}
+                    </li>
+                  </ul>
+                </div>
+              </button>
+              <span>{{ 80 - subtitle.value.length }}</span>
+            </div>
+          </div>
+
+          <input type="text" placeholder="Card URL" [(ngModel)]="card.url_page"
+                 [disabled]="_builderService.view === 'preview'"
+                 (change)="_builderService.updateDraftItem()">
+
+        </div>
+
+        <div class="next-card-items">
+          <button class="btn-step"
+                  *ngIf="i === item?.params?.cards_array.length - 1 && _builderService.view !== 'preview'"
+                  [disabled]="item?.params?.cards_array.length === 10"
+                  (click)="_builderFunctionsService.createNewCardItem(item?.params?.cards_array, i)">
+            <i class="fas fa-plus"></i>
+          </button>
+          <button class="btn-step"
+                  *ngIf="i !== item?.params?.cards_array.length - 1"
+                  (click)="_builderFunctionsService.nextCardItem(item?.params?.cards_array, i)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="sidebar-actions" *ngIf="_builderService.view !== 'preview'">
+          <button class="trash-sidebar" (click)="_builderFunctionsService.deleteCardItem(item?.params?.cards_array, i, item)">
+            <i class="fas fa-times"></i>
+          </button>
+          <button class="drop-sidebar-items"><i class="fas fa-arrows-alt-v"></i></button>
+          <button (click)="_builderFunctionsService.cloneItemFromSidebar(item)"><i class="far fa-clone"></i></button>
+        </div>
+      </div>
+
+      <app-buttons-item [config]="card['buttons']" [opened]="opened" [type]="'some'"></app-buttons-item>
+    </div>
+
+  </div>
+</div>

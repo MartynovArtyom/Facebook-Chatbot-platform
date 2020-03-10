@@ -1,0 +1,11 @@
+<div class="child-items-container" data-drag="true"  *ngIf="config?.widget_content[0]['id_select_flow']">
+  <span data-drag="true">{{ config?.widget_content[0]['name_select_flow'] }}</span>
+  <button (click)="openFlow(config?.widget_content[0])" class="opening-flow" data-drag="true">Öffne diese Kampagne</button>
+</div>
+
+<div class="widget-content-not-found" *ngIf="!config?.widget_content[0]['id_select_flow']"
+     [ngClass]="{'padding-bottom': config?.quick_reply.length > 0}"
+     data-drag="true">
+  <i class="fas fa-external-link-square-alt" data-drag="true"></i>
+  <span data-drag="true">Klicken, um eine Kampagne auszuwählen</span>
+</div>

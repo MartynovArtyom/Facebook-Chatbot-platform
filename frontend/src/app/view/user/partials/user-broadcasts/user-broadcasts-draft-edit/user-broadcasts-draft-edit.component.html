@@ -1,0 +1,196 @@
+<div class="top-navbar-page" *ngIf="!publish">
+  <div class="title-page">
+    <a [routerLink]="['/' + _userService.userID + '/broadcasts']">Newsletter</a>
+    <i class="fas fa-chevron-right"></i>
+    <a [routerLink]="['/' + _userService.userID + '/broadcasts/drafts']">Entwurf</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>Bearbeiten</h3>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <button class="btn sidebar-top-menu-button margin-right--10"
+            (click)="_sharedService.previewFlowInMessenger(previewAccept, _sharedService.flowId)">
+      <i class="fab fa-facebook-messenger"></i> Vorschau
+    </button>
+    <button class="btn primary-button margin-right--10" (click)="saveFlowItem('save')">Speichern</button>
+    <button class="btn primary-button margin-right--10" (click)="saveFlowItem('publish')">Veröffentlichen</button>
+  </div>
+</div>
+
+<div class="broadcast-edit-container" *ngIf="!publish">
+  <ul class="nav nav-tabs">
+    <li class="nav-item" (click)="choiceTab('setting')">
+      <a class="nav-link" id="settings-tab"
+         [ngClass]="{'active': openTab === 'setting'}">Einstellungen</a>
+    </li>
+    <li class="nav-item" (click)="choiceTab('flow')">
+      <a class="nav-link" id="broadcast-tab"
+         [ngClass]="{'active': openTab === 'flow'}">Newsletter</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="settings-tabs tab-pane fade" id="broadcast"
+         [ngClass]="{'active-tab': openTab === 'flow'}">
+      <app-builder *ngIf="!preloader" [view]="'edit'"></app-builder>
+    </div>
+    <div class="settings-tabs tab-pane fade component-settings" id="settings"
+         [ngClass]="{'active-tab': openTab === 'setting'}">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>Newsletter Type</h5>
+        </div>
+        <div class="col-md-8">
+          <div>
+            <input id="radio-1" class="radio-custom" name="radio-group" type="radio"
+                   [checked]="broadcastType === 1"
+                   (click)="saveBroadcastSettings(1, 'broadcastType')">
+            <label for="radio-1" class="radio-custom-label">Abonnenten Newsletter</label>
+            <div *ngIf="broadcastType === 1">
+              <span class="settings-info">
+                Ein Abonnenten Newsletter darf KEINE Werbung, Produktangebote, Rabattcodes oder Links zu Optin-, oder Verkaufsseiten enthalten, kann aber jederzeit gesendet werden, unabhängig davon, wann der User das letzte Mal aktiv war. SEHR WICHTIG! Das Senden von Werbeinhalten über diese Funktion verstößt gegen die Richtlinien von Facebook was ein Löschen deines Facebook Accounts und deines ChatBo Accounts zur Folge hat.
+              </span>
+              <div class="col-md-6 tag_broadcast">
+                <h5>Tag auswählen</h5>
+                <select class="notification-select tag_broadcast_select"
+                        [(ngModel)]="broadcastTag">
+                  <option [value]=null disabled hidden>Tag auswählen...</option>
+                  <option *ngFor="let tag of _sharedService.broadcastTags" [value]="tag.name">
+                    {{tag.value}}
+                  </option>
+                </select>
+                <a href="https://developers.facebook.com/docs/messenger-platform/send-messages/message-tags#supported_tags" target="_blank">Hilf mir, mich für ein Tag zu entscheiden</a>
+              </div>
+            </div>
+          </div>
+          <div>
+            <input id="radio-2" class="radio-custom" name="radio-group" type="radio"
+                   [checked]="broadcastType === 2"
+                   (click)="saveBroadcastSettings(2, 'broadcastType')">
+            <label for="radio-2" class="radio-custom-label">Werbe Newsletter</label>
+            <span class="settings-info" *ngIf="broadcastType === 2">
+              Der Werbe Newsletter darf Werbung enthalten, wird aber nur an Abonnenten ausgeliefert, welche in den letzten 24 Stunden aktiv waren.
+            </span>
+          </div>
+          <div>
+            <input id="radio-3" class="radio-custom" name="radio-group" type="radio"
+                   [checked]="broadcastType === 3"
+                   (click)="saveBroadcastSettings(3, 'broadcastType')">
+            <label for="radio-3" class="radio-custom-label">FollowUp Newsletter</label>
+            <span class="settings-info" *ngIf="broadcastType === 3">
+              Nach Ablauf des 24 Stunden Zeitfensters hast du die Möglichkeit "1 FollowUp Newsletter" an diese Aboennten zu schicken. Danach kannst du an diese Abonnenten solange keine Werbe Newsletter mehr versenden, bis diese wieder aktiv werden.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="!preloader">
+        <div class="col-md-4">
+          <h5>Targeting</h5>
+        </div>
+        <div class="col-md-8 condition-filter">
+          <app-user-choise-condition-option
+            [view]="'edit'"
+            [statusDraft]="'false'"
+          ></app-user-choise-condition-option>
+          <app-user-condition-filter></app-user-condition-filter>
+          <button class="btn" (click)="activeConditionSelect()" [ngClass]="{'width-n': _sharedService.noneConditionButton}">+ Bedingung</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <h5>Newsletter planen</h5>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <input id="radio-11" class="radio-custom" name="radio-group1" type="radio"
+                   [checked]="broadcastSendType === 1"
+                   (click)="saveBroadcastSettings(1, 'broadcastSendType')">
+            <label for="radio-11" class="radio-custom-label">Jetzt senden</label>
+          </div>
+          <div class="margin-bottom--12">
+            <input id="radio-21" class="radio-custom" name="radio-group1" type="radio"
+                   [checked]="broadcastSendType === 2"
+                   (click)="saveBroadcastSettings(2, 'broadcastSendType')">
+            <label for="radio-21" class="radio-custom-label">Später senden</label>
+          </div>
+          <div *ngIf="broadcastSendType === 2">
+            <input #dateTime class="calendar-input" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" placeholder="DD/MM/YYYY hh:mm">
+            <owl-date-time #dt1></owl-date-time>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <h5>Einstellungen Benachrichtigungen</h5>
+        </div>
+        <div class="col-md-4">
+          <select class="notification-select"
+                  (change)="saveBroadcastSettings(notification.value, 'broadcastPushType')"
+                  [(ngModel)]="broadcastPushType"
+                  #notification>
+            <option value="1">Regulärer Push</option>
+            <option value="2">Lautloser Push</option>
+            <option value="3">Lautlos</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <span class="settings-info" *ngIf="broadcastPushType === 1">
+            Reguläre Push Benachrichtigungen erzeugen einen Ton und werden am Telefon angezeigt. Nutze es nur für wichtige Nachrichten
+          </span>
+          <span class="settings-info" *ngIf="broadcastPushType === 2">
+            Lautlose Push Benachrichtigungen werden am Telefon ohne Ton angezeigt. Nutze es für Benachrichtigungen die keine unmittelbare Aktion erfordern.
+          </span>
+          <span class="settings-info" *ngIf="broadcastPushType === 3">
+            Lautlose Newsletter erzeugen keine Push Benachrichtigung. Nutze es um stille Updates an deine Abonnenten zu senden.
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="success-publish" *ngIf="publish">
+  <div class="circle-broadcast">
+    <i class="fa fa-check" aria-hidden="true"></i>
+  </div>
+  <h2 *ngIf="broadcastSendType === 1">Newsletter Gesendet!</h2>
+  <h2 *ngIf="broadcastSendType === 2">Newsletter Geplanten!</h2>
+  <button class="btn success-button" [routerLink]="['/' + _userService.userID + '/broadcasts']">Gehe zu Newsletter</button>
+</div>
+
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <p class="broadcast-popup-description">Achtung! Beim Abonnenten Newsletter darf KEINE Werbung, Produktangebote, Rabattcodes oder Links zu Optin-, oder Verkaufsseiten enthalten. Das Senden von Werbeinhalten über diese Funktion verstößt gegen die Richtlinien von Facebook was ein Löschen deines Facebook Accounts zur Folge hat.</p>
+    <div class="checkbox" style="margin: 0 0 25px;">
+      <input type="checkbox" id="broad" class="checkbox__input" [checked]="broadcastTypeCheck"
+             (click)="saveWithBroadcast()">
+      <label for="broad" class="checkbox__label">Ja, mein Abonnenten Newsletter enthält keinerlei Werbung</label>
+    </div>
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn success-button" (click)="publishedBroadcast()"
+              [disabled]="!broadcastTypeCheck">Senden</button>
+    </div>
+  </div>
+</ng-template>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+<ng-template #previewAccept let-cd="close" let-cd="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="cd('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Vorschau</h3>
+    <app-preview-accept [popup]="cd"
+                        [flowID]="_sharedService.flowId"></app-preview-accept>
+  </div>
+</ng-template>

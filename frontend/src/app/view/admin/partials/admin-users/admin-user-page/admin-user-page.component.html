@@ -1,0 +1,160 @@
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a [routerLink]="['/admin/users']">Users</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
+  </div>
+</div>
+
+<div class="dashboard-content">
+  <div class="white-background padding--10">
+
+    <div class="user-info">
+      <div class="full-width user-title-avatar">
+        <img [src]="user?.avatar" alt="Avatar">
+        <div class="d-flex">
+          {{ user?.firstName }} {{ user?.lastName }}
+        </div>
+        <span *ngIf="user?.product" class="product-label show-product">{{ user?.product?.label }}</span>
+        <span *ngIf="!user?.product" class="product-label">Not product</span>
+
+        <button class="btn primary-button margin-left--20" (click)="getUserToken(user)">
+          <i class="fas fa-sign-in-alt"></i>
+          Login
+        </button>
+      </div>
+
+      <div class="row margin-bottom--32">
+        <div class="col-md-6">
+          <div class="user-all-information">
+
+            <div class="d-flex d-flex--align-center margin-bottom--18">
+              <span class="stats-info-user"><b>Status:</b></span>
+              <span class="active-tool margin-right--10" *ngIf="user?.status">Actived</span>
+              <span class="disable-tool margin-right--10" *ngIf="!user?.status">Deactived</span>
+              <button class="btn danger-button"
+                      *ngIf="user?.status"
+                      (click)="updateUser('status', false)">
+                Disable User
+              </button>
+              <button class="btn primary-button"
+                      *ngIf="!user?.status"
+                      (click)="updateUser('status', true)">
+                Activate User
+              </button>
+            </div>
+
+            <div class="d-flex d-flex--align-center margin-bottom--48">
+              <span class="stats-info-user"><b>Role:</b></span>
+              <span class="active-tool margin-right--10" *ngIf="user?.role === 'ROLE_ADMIN'">Admin</span>
+              <span class="active-tool margin-right--10" *ngIf="user?.role !== 'ROLE_ADMIN'">User</span>
+              <button class="btn danger-button"
+                      *ngIf="user?.role === 'ROLE_ADMIN'"
+                      (click)="updateUser('role', 'ROLE_USER')">
+                Löschen Admin Role
+              </button>
+              <button class="btn primary-button"
+                      *ngIf="user?.role !== 'ROLE_ADMIN'"
+                      (click)="updateUser('role', 'ROLE_ADMIN')">
+                Set Admin Role
+              </button>
+            </div>
+
+            <span class="stats-info-user"><b>Email:</b> {{ user?.email }}</span>
+            <span class="stats-info-user"><b>Created date:</b> {{ user?.created | date: 'yyyy-MM-dd' }}</span>
+            <span class="stats-info-user"><b>Last login:</b> {{ user?.lastLogin | date: 'yyyy-MM-dd HH:mm' }}</span>
+            <span class="stats-info-user"><b>Pages:</b> {{ user?.countPages }}</span>
+            <span class="stats-info-user"><b>Flows:</b> {{(user?.countFlows) ? user?.countFlows : 0 }}</span>
+            <span class="stats-info-user"><b>Kampagnen:</b> {{(user?.countWidgets) ? user?.countWidgets : 0 }}/{{ (!user?.product) ? 0 : (!user?.product?.limitCompany) ? '&#8734;' : user?.product?.limitCompany }}</span>
+            <span class="stats-info-user"><b>Autoresponder:</b> {{(user?.countSequences) ? user?.countSequences : 0 }}/{{ (!user?.product) ? 0 : (!user?.product?.limitSequences) ? '&#8734;' : user?.product?.limitSequences }}</span>
+            <span class="stats-info-user"><b>Subscribers:</b> {{(user?.countSubscribers) ? user?.countSubscribers : 0 }}/{{(user?.limitSubscribers) ? user?.limitSubscribers : 0 }}</span>
+
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <form [formGroup]="userAction" class="d-flex d-flex--direction-column">
+
+            <div class="d-flex d-flex--align-center d-flex--justify-around d-flex--direction-column">
+              <div class="product-item-label margin-bottom--18">
+                <label>Order Id</label>
+                <input type="text" formControlName="orderId">
+              </div>
+              <div class="product-item-label margin-bottom--18">
+                <label>Limit Subscribers</label>
+                <input type="number" formControlName="limitSubscribers">
+              </div>
+            </div>
+
+            <div class="d-flex d-flex--align-center d-flex--justify-around d-flex--direction-column">
+              <div class="product-item-label margin-bottom--18">
+                <label>Product Id</label>
+                <ng-select class="products-list-select"
+                           [addTag]="false"
+                           (change)="selectProduct(addTags.selectedItems[0])"
+                           (clear)="selectProduct({index: 0})"
+                           formControlName="productId"
+                           #addTags>
+                  <ng-option *ngFor="let item of productsList" [value]="item?.id">
+                    {{ item?.name }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              <div class="product-item-label margin-bottom--18">
+                <label>Mailchimp Id</label>
+                <input type="text" formControlName="quentnId">
+              </div>
+            </div>
+
+          </form>
+
+          <button class="btn primary-button d-flex" style="margin: 0 auto;" (click)="editUserProfile()">Update</button>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="d-flex d-flex--align-center d-flex--justify-center title-user-page">Pages</h3>
+
+    <div class="users-content-tabs margin-bottom--32">
+      <div class="users-tab-list">
+        <div class="user-item" *ngFor="let page of user?.pages; let i = index">
+
+          <div class="d-flex">
+            <span *ngIf="page?.status" class="active-tool">Connected</span>
+            <span *ngIf="!page?.status" class="disable-tool">Disconnected</span>
+            <img [src]="page?.avatar" alt="Avatar">
+            <div class="d-flex d-flex--direction-column">
+              <a [routerLink]="'/admin/pages/' + page?.id">{{ page?.title }}</a>
+              <span>Subscribers: {{ page?.countSubscribers }}/{{(page?.limitSubscribers) ? page?.limitSubscribers : 0 }}
+              </span>
+            </div>
+          </div>
+
+          <div class="user-button-actions">
+            <button class="btn default-button margin-right--10"
+                    [routerLink]="'/admin/pages/' + page?.id">
+              <i class="fas fa-pencil-alt"></i>
+              Update
+            </button>
+            <button class="btn danger-button" (click)="removePage(page, i)">
+              <i class="far fa-trash-alt"></i>
+              Löschen
+            </button>
+          </div>
+        </div>
+
+        <div class="user-item not-found" *ngIf="user?.pages?.length === 0">
+          Pages not found
+        </div>
+      </div>
+    </div>
+
+    <div id="container" style="width: 100%; height: 500px;"></div>
+
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+

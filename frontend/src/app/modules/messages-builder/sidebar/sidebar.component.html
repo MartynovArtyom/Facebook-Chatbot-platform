@@ -1,0 +1,32 @@
+<div class="builder-sidebar active" id="close-modal" [ngClass]="{'active': _builderService.openSidebar}"
+     (click)="closeModalByOverlay($event)">
+  <div class="builder-close" (click)="closeModal()"><i class="fa fa-times" aria-hidden="true"></i></div>
+  <div class="sidebar-container">
+    <ng-container [ngSwitch]="config?.type">
+      <ng-container  *ngSwitchCase="'default'">
+        <app-default-items></app-default-items>
+      </ng-container>
+      <ng-container  *ngSwitchCase="'send_message'">
+        <app-send-message-items [config]="config"></app-send-message-items>
+      </ng-container>
+      <ng-container  *ngSwitchCase="'perform_actions'">
+        <app-perform-actions-items [config]="config"></app-perform-actions-items>
+      </ng-container>
+      <ng-container  *ngSwitchCase="'start_another_flow'">
+        <app-start-another-flow-items [config]="config"></app-start-another-flow-items>
+      </ng-container>
+      <ng-container  *ngSwitchCase="'condition'">
+        <app-condition-items [config]="config"></app-condition-items>
+      </ng-container>
+      <ng-container  *ngSwitchCase="'randomizer'">
+        <app-randomizer-items [config]="config"></app-randomizer-items>
+      </ng-container>
+      <ng-container  *ngSwitchCase="'smart_delay'">
+        <app-smart-delay-items [config]="config"></app-smart-delay-items>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div class="builder-opening-tab" (click)="openBuilderSidebar()">
+    <i class="fas fa-chevron-right"></i>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="list-main-items">
+  <span>Was möchtest du tun?</span>
+  <button class="main-items-button"
+          (click)="openListMainItems(true)"
+          [ngClass]="{'active': openListMainItemsCheck}">+</button>
+  <ul *ngIf="openListMainItemsCheck"
+      class="list-items"
+      [delayClickOutsideInit]="true"
+      (clickOutside)="openListMainItems(false)">
+    <li class="list-item" *ngFor="let item of listMainItems"
+        [ngClass]="{'grey': item?.type === 'send_message',
+                    'yellow': item?.type === 'perform_actions',
+                    'green': item?.type === 'start_another_flow',
+                    'blue': item?.type === 'condition',
+                    'violet': item?.type === 'randomizer',
+                    'red': item?.type === 'smart_delay'}"
+        (click)="createMainItemComponent(item?.type, item?.name, position)">
+      <img [src]="item?.icon" alt="{{item?.name}}">
+      {{ item?.name }}
+    </li>
+  </ul>
+</div>
+<br>

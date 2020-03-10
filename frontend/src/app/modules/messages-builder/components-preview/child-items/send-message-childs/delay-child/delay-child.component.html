@@ -1,0 +1,7 @@
+<div class="text-items-view">
+  <div class="config-content" data-drag="true">
+    <span data-drag="true" *ngIf="config?.params['type_action']">Tippe</span>
+    <span data-drag="true" *ngIf="!config?.params['type_action']">Warten</span>
+    <span data-drag="true"> {{ config?.params['time'] }} sek.</span>
+  </div>
+</div>

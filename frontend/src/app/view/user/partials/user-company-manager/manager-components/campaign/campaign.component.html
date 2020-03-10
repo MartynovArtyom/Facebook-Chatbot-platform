@@ -1,0 +1,240 @@
+<div class="top-navbar-page">
+  <div class="title-page d-flex d-flex--align-center position--relative">
+    <p style="width: 260px">Kampagne auswählen</p>
+    <input type="text" placeholder="Kampagne suchen" id="search" class="flow-search"
+           [(ngModel)]="companyManagerService.searchKampaign"
+           (change)="routeSearch(companyManagerService.searchKampaign)"
+           (keyup.enter)="routeSearch(companyManagerService.searchKampaign)">
+    <i (click)="routeSearch(companyManagerService.searchKampaign)" class="fas fa-search" style="position: absolute; right: 6px; font-size: 16px; cursor: pointer;"></i>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <button *ngIf="renderList !== 'autoresponder' && renderList !== 'keywords' && _userService.userPageInfo?.role !== 4" (click)="openVerticallyCenter(newCompanyPopup)" class="btn primary-button">+ neue Kampagne</button>
+    <button *ngIf="renderList === 'autoresponder' && _userService.userPageInfo?.role !== 4" (click)="openSendTitlePopup(companyTitlePopup, 'Autoresponder')" class="btn primary-button">+ neuer Autoresponder</button>
+    <button *ngIf="renderList === 'keywords' && _userService.userPageInfo?.role !== 4" (click)="openSendTitlePopup(companyTitlePopup, 'Keywords')" class="btn primary-button">+ neuer Keywords</button>
+  </div>
+</div>
+
+<div class="flow-content">
+  <div class="flow-sidebar full-height">
+    <div class="full-height">
+      <div class="flow-top-menu">
+        <ul class="sub-folder">
+          <li class="sub-item-folder margin-bottom--0-imp"
+              [routerLink]="['/' + _userService.userID + '/company-manager']"
+              [queryParams]="{path: 'company'}"
+              [ngClass]="{'active-folder': renderList === 'company'}">
+            <i class="far fa-folder"></i>
+            <span style="outline: none">Kampagnen</span>
+          </li>
+
+          <li>
+            <ul class="sub-folder">
+              <li class="sub-item-folder" *ngFor="let item of companyManagerService.widgetData | slice:0:widgetCount"
+                  (click)="companyManagerService.navigateToTab(item, (item?.type === 12) ? 'newAutoresponder' : 'widget', true)">
+                <img *ngIf="item?.type === 1" src="../../../../../../../assets/img/widget/bar.png">
+                <img *ngIf="item?.type === 2" src="../../../../../../../assets/img/widget/slidein.png">
+                <img *ngIf="item?.type === 3" src="../../../../../../../assets/img/widget/modal.png">
+                <img *ngIf="item?.type === 4" src="../../../../../../../assets/img/widget/page_takeover.png">
+                <img *ngIf="item?.type === 5" src="../../../../../../../assets/img/widget/button.png">
+                <img *ngIf="item?.type === 6" src="../../../../../../../assets/img/widget/box.png">
+                <img *ngIf="item?.type === 7" src="../../../../../../../assets/img/widget/messenger_ref.png">
+                <img *ngIf="item?.type === 8" src="../../../../../../../assets/img/widget/fb_ads.png">
+                <img *ngIf="item?.type === 9" src="../../../../../../../assets/img/widget/fb_messenger_code.png">
+                <img *ngIf="item?.type === 10" src="../../../../../../../assets/img/widget/chat.png">
+                <img *ngIf="item?.type === 11" src="../../../../../../../assets/img/widget/comments.png">
+                <img *ngIf="item?.type === 12" src="../../../../../assets/img/sidebar-icon/automatisierung1.png">
+                <span>{{ item?.name }}</span>
+              </li>
+              <li *ngIf="companyManagerService.widgetData && companyManagerService.widgetData.length > 5 && widgetCount === 5">
+                <span class="load-more-btn cmp" (click)="showAllCompany('widgetCount', 10000)">Zeige alles Kampagnen</span>
+              </li>
+              <li *ngIf="companyManagerService.widgetData && companyManagerService.widgetData.length > 5 && widgetCount > 5">
+                <span class="load-more-btn cmp" (click)="showAllCompany('widgetCount', 5)">Verbergen Kampagnen</span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flow-top-menu">
+        <ul class="sub-folder">
+          <li class="sub-item-folder margin-bottom--0-imp"
+              [routerLink]="['/' + _userService.userID + '/company-manager']"
+              [queryParams]="{path: 'autoresponder'}"
+              [ngClass]="{'active-folder': renderList === 'autoresponder'}">
+            <i class="far fa-folder"></i>
+            <span>Autoresponder</span>
+          </li>
+
+          <li>
+            <ul class="sub-folder">
+              <li class="sub-item-folder" *ngFor="let item of companyManagerService.sequenceData | slice:0:sequenceCount"
+                  (click)="companyManagerService.navigateToTab(item, 'autoresponder', true)">
+                <i class="far fa-folder color"></i>
+                <span>{{ item?.title }}</span>
+              </li>
+              <li *ngIf="companyManagerService.sequenceData && companyManagerService.sequenceData.length > 5 && sequenceCount === 5">
+                <span class="load-more-btn cmp" (click)="showAllCompany('sequenceCount', 10000)">Zeige alles Autoresponder</span>
+              </li>
+              <li *ngIf="companyManagerService.sequenceData && companyManagerService.sequenceData.length > 5 && sequenceCount > 5">
+                <span class="load-more-btn cmp" (click)="showAllCompany('sequenceCount', 5)">Verbergen Autoresponder</span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flow-top-menu">
+        <ul class="sub-folder">
+          <li class="sub-item-folder margin-bottom--0-imp"
+              [routerLink]="['/' + _userService.userID + '/company-manager']"
+              [queryParams]="{path: 'keywords'}"
+              [ngClass]="{'active-folder': renderList === 'keywords'}">
+            <i class="far fa-folder"></i>
+            <span>Keywords</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flow-top-menu">
+        <ul class="sub-folder">
+          <li class="sub-item-folder margin-bottom--0-imp"
+              [routerLink]="['/' + _userService.userID + '/company-manager']"
+              [queryParams]="{path: 'flows'}"
+              [ngClass]="{'active-folder': renderList === 'flows'}">
+            <i class="far fa-folder"></i>
+            <span>alle Nachrichten</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-container position--relative" id="flow-container">
+
+    <app-company *ngIf="renderList === 'company'"></app-company>
+
+    <app-autoresponder *ngIf="renderList === 'autoresponder'"></app-autoresponder>
+
+    <app-keywords *ngIf="renderList === 'keywords'"></app-keywords>
+
+    <app-flows *ngIf="renderList === 'flows'"></app-flows>
+
+    <app-search-company *ngIf="renderList === 'search'"></app-search-company>
+
+  </div>
+
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+<ng-template #newCompanyPopup let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-widget-body">
+
+    <div class="add-widget-container">
+      <h3>Welche Kampagne möchtest du erstellen?</h3>
+
+      <span>Widgets überlagern</span>
+      <div class="type-adding-widget">
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '1')">
+          <img src="../../../../../assets/img/widget/bar.png">
+          <span>Bar</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '2')">
+          <img src="../../../../../assets/img/widget/slidein.png">
+          <span>Slide-In</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '3')">
+          <img src="../../../../../assets/img/widget/modal.png">
+          <span>Popup klein</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '4')">
+          <img src="../../../../../assets/img/widget/page_takeover.png">
+          <span>Popup groß</span>
+        </div>
+      </div>
+
+      <span>Einbettbare Widgets</span>
+      <div class="type-adding-widget">
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '5')">
+          <img src="../../../../../assets/img/widget/button.png">
+          <span>Button</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '6')">
+          <img src="../../../../../assets/img/widget/box.png">
+          <span>Box</span>
+        </div>
+      </div>
+
+      <span>Andere Conversion Tools</span>
+      <div class="type-adding-widget">
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '7')">
+          <img src="../../../../../assets/img/widget/messenger_ref.png">
+          <span>Messenger Ref URL</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '8')">
+          <img src="../../../../../assets/img/widget/fb_ads.png">
+          <span>Facebook Ads JSON</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '10')">
+          <img src="../../../../../assets/img/widget/chat.png">
+          <span>Kundenchat</span>
+        </div>
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '11')">
+          <img src="../../../../../assets/img/widget/comments.png">
+          <span>Facebook-Kommentare</span>
+        </div>
+      </div>
+
+      <div class="type-adding-widget">
+        <div class="widget-type" (click)="openSendTitlePopup(companyTitlePopup, '12')" style="padding: 5px 10px;">
+          <img src="../../../../../assets/img/sidebar-icon/automatisierung1.png" style="width: 50px; margin-right: 15px;">
+          <span>Autoresponder</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #companyTitlePopup let-cd="close" let-cd="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="cd('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-widget-body">
+
+    <div *ngIf="createCompanyType !== 'Keywords'" class="add-widget-container">
+      <h4 *ngIf="renderList !== 'autoresponder'" class="margin-bottom--18">Name der Kampagne</h4>
+      <h4 *ngIf="renderList === 'autoresponder'" class="margin-bottom--18">Name der Autoresponder</h4>
+      <input type="text" placeholder="Name eingeben" class="company-name" [(ngModel)]="companyTitle">
+    </div>
+
+    <div *ngIf="createCompanyType === 'Keywords'" class="keywords-row created-rule">
+      <div class="keywords-col" style="width: 90%">
+        <form [formGroup]="newKeywords">
+          <ng-select class="condition-select keywords-select" [clearable]="false" [ngModel]="1" [searchable]="false" formControlName="type">
+            <ng-option [value]="1">Nachricht ist</ng-option>
+            <ng-option [value]="2">Nachricht enthält</ng-option>
+            <ng-option [value]="3">Nachricht beginnt mit</ng-option>
+          </ng-select>
+          <input type="text" placeholder="Enter keywords separated by commas (e.g. 'hi, hey, hello')" formControlName="command">
+          <button class="btn primary-button"
+                  [disabled]="!newKeywords.controls.command.value"
+                  (click)="createCompany()">Speichern</button>
+        </form>
+      </div>
+    </div>
+
+    <div *ngIf="createCompanyType !== 'Keywords'" class="footer-chanel-buttons d-flex d-flex--align-center d-flex--justify-between">
+      <button class="btn default-button" (click)="cd('Cross click')">Abbrechen</button>
+      <button class="btn primary-button" [disabled]="!companyTitle" (click)="createCompany(companyTitle)">Erstellen</button>
+    </div>
+  </div>
+</ng-template>

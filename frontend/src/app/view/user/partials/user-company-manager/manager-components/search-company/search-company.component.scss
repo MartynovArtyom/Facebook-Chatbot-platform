@@ -1,0 +1,102 @@
+.icon-btn-main{
+  border: none !important;
+  color: #8492a6;
+  display: flex;
+  align-items: center;
+
+  & > i{
+    font-size: 22px;
+  }
+
+  &:hover{
+    background: transparent;
+    color: #0084ff;
+  }
+}
+
+.not-found-messages{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 32px;
+
+  & > span{
+    color: #8492a6;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+}
+
+.sequences-container{
+  padding: 0;
+
+  .sequence-table{
+    .sequence-table-title{
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 5px;
+
+      .table-row{
+        display: flex;
+        width: 100%;
+        padding: 10px 20px;
+
+        .table-cell{
+          font-size: 12px;
+        }
+      }
+    }
+
+    .sequence-table-body{
+      .table-row{
+        padding: 5px 20px;
+        min-height: 46px;
+
+        .table-cell{
+          & > i{
+            margin-right: 12px;
+            font-size: 19px;
+            color: #0084ff;
+          }
+          & > img{
+            margin-right: 12px;
+            width: 22px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.search-company-row{
+  display: flex;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+}
+
+.company-component{
+  .loader-component{
+    left: 0;
+    //box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+    background: #f9f9f9;
+  }
+}
+
+.new-switch.notification-switch{
+  width: 110px;
+}
+
+.new-switch.notification-switch .switch-input:checked ~ .switch-handle{
+  left: 86px;
+}
+
+.status-share{
+  position: relative;
+  top: 2px;
+  margin-left: 10px;
+  font-size: 16px;
+}

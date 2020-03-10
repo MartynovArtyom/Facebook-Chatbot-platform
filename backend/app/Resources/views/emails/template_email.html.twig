@@ -1,0 +1,40 @@
+<table border="0" cellpadding="25" cellspacing="0" style="background-color:#FFFFFF;" width="100%">
+    <tbody>
+    <tr>
+        <td align="center" bgcolor="#269bea" style="padding:0 60px;"><br />
+            <br />
+            <img border="0" height="51" src="https://app.chatbo.de/assets/img/chatbo-logo-neu.png" width="187" /><br />
+            <br />
+            <span style="font-family:Arial, Helvetica, sans-serif; font-size:46px; color:#FFF;">
+                <strong>{% block mail_title %}ChatBo{% endblock %}</strong>
+            </span><br /><br /><br />
+            <span style="font-family:Arial, Helvetica, sans-serif; font-size:32px; color:#FFF;">
+                {% block user_name %}{% endblock %}
+            </span><br />
+            <span style="font-family:Arial, Helvetica, sans-serif; font-size:32px; color:#FFF; ">
+                {% block body_blue %}{% endblock %}
+            </span><br />
+{#            <img height="276" src="https://www.chatbo.de/img/chatbo-whatb.png" width="245" /></td>#}
+    </tr>
+    <tr>
+        <td align="center" style="padding:40px;">
+            <div style="font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:25px; color:#333333;">
+                {% block body_white %}{% endblock %}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="padding:40px;">
+            <span style="font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:25px; color:#333333;">
+                {% block body_white_button %}{% endblock %}
+                <br /><br />
+                Dein Chatbo Team
+                {% if link_unsubscribe is defined %}
+                    <br><br>
+                    <span style="color: #8a8a8a;"> Wenn du keinen Wochenreport mehr erhalten willst, kannst du dich hier <a href="{{ link_unsubscribe }}" style="color: #8a8a8a;">abmelden</a>.</span>
+                {% endif %}
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>

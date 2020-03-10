@@ -1,0 +1,13 @@
+<p>Du musst dich anmelden, um eine Vorschau des Inhalts anzeigen zu können..</p>
+<p class="margin-bottom--18">Drücken Sie die Taste unten, um fortzufahren</p>
+
+<div class="d-flex d-flex--align-center d-flex--justify-center">
+  <div class="fb-send-to-messenger"
+       [attr.messenger_app_id]="apiId"
+       [attr.page_id]="_userService.userID"
+       [attr.user_ref]="randomValue"
+       [attr.data-ref]="'CHATBO_NEW:PREVIEW_FLOW:' + flowID"
+       [attr.color]="'blue'"
+       [attr.size]="'xlarge'">
+  </div>
+</div>

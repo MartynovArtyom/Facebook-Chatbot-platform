@@ -1,0 +1,44 @@
+<div class="title-sidebar">
+  <input type="text" #title placeholder="Enter name" [value]="config?.name"
+         [disabled]="_builderService.view === 'preview'"
+         [(ngModel)]="config.name"
+         (change)="_builderFunctionsService.setInputValue(config, 'name', title.value)">
+</div>
+
+<div class="sidebar-all-items-content">
+
+  <div class="error-content-icon">
+    <i class="fas fa-exclamation-triangle" *ngIf="!config?.widget_content[0]['id_select_flow'] &&
+                                                  (config['uuid'] | publishErrors) === true"></i>
+  </div>
+
+  <div class="start-another-flow-default" *ngIf="!config?.widget_content[0]['id_select_flow'] && _builderService.view !== 'preview'"
+       (click)="openVerticallyCentered(contentFlow)">
+    <i class="fas fa-external-link-alt"></i>
+    <span>Klicken, um eine Kampagne auszuwählen</span>
+  </div>
+
+  <div class="start-another-flow-content" *ngIf="config?.widget_content[0]['id_select_flow']">
+    <i *ngIf="_builderService.view !== 'preview'" class="fas fa-times" (click)="deleteFlow()"></i>
+    <span>{{ config?.widget_content[0]['name_select_flow'] }}</span>
+    <button class="opening-flow" (click)="openFlow(config?.widget_content[0])">Öffne diese Kampagne</button>
+  </div>
+
+  <div class="continue-next-step" *ngIf="!config?.next_step && _builderService.view !== 'preview' ||
+                                          config?.next_step">
+    <app-buttons-item [type]="'main'" [config]="config"></app-buttons-item>
+  </div>
+
+</div>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-body d-flex d-flex--direction-column enter-folder-name">
+    <button type="button" class="close close-flow-popup" aria-label="Close" (click)="c('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <app-kampaign-popup
+      [config]="config?.widget_content[0]"
+      [sendPopup]="'true'"
+      [closePopup]="c"></app-kampaign-popup>
+  </div>
+</ng-template>

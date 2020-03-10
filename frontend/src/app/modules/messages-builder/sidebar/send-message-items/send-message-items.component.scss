@@ -1,0 +1,46 @@
+.title-sidebar{
+  background: #00BFC6 !important;
+
+  & > input {
+    color: #ffffff !important;
+  }
+}
+
+.widget-content-not-found{
+  padding: 40px 0;
+  text-align: center;
+  position: relative;
+
+  & > span{
+    color: #000;
+  }
+}
+
+.continue-next-step{
+  padding-top: 20px;
+  border-top: 1px solid #E0E6ED;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.error-content-icon{
+  top: 0;
+}
+
+.user-input-select{
+  text-align: center;
+  font-size: 11px;
+}
+
+.replace-flow-item{
+  cursor: pointer;
+  color: rgba(0, 132, 255, 1) !important;
+  transition: all 0.15s linear;
+
+  &:hover{
+    transition: all 0.15s linear;
+    text-decoration: underline !important;
+  }
+}
+

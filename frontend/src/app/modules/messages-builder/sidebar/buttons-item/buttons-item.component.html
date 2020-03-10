@@ -1,0 +1,566 @@
+<div class="container-buttons-send-message" *ngIf="type === 'some'">
+  <div class="button-content" *ngFor="let button of config; let i = index"
+       [ngClass]="{
+        'last-border-bottom': _builderService.view === 'preview',
+        'error-border': (button?.type !== 'call_number' && button?.type !== 'open_website' && !button?.next_step) && (button['uuid'] | publishErrors) === true ||
+                        !button?.title && (button['uuid'] | publishErrors) === true ||
+                        button?.title.length > 20 && (button['uuid'] | publishErrors) === true ||
+                        (button?.type === 'open_website' && !button['btnValue']) && (button['uuid'] | publishErrors) === true ||
+                        (button?.type === 'call_number' && !button['btnValue']) && (button['uuid'] | publishErrors) === true
+       }"
+       [class.open]="p.isOpen()"
+       [autoClose]="'outside'"
+       #p="ngbPopover"
+       [ngbPopover]="buttonsSomePopoverContent"
+       [popoverTitle]="buttonsSomePopoverTitle"
+       [popoverClass]="'add-next-steps buttons-popover'"
+       container="body"
+       placement="right">
+    <div class="name-button" [ngClass]="{'text-left': _builderService.view === 'preview'}">
+      {{ button?.title }}
+      <span class="button-clicks" *ngIf="button?.click && _builderService.view === 'preview'">CTR {{ button?.click | flowStatistic:opened }}%</span>
+      <span class="button-clicks" *ngIf="!button?.click && _builderService.view === 'preview'">CTR 0%</span>
+    </div>
+    <div class="link-button" *ngIf="!button?.next_step && button?.type !== 'open_website' && button?.type !== 'call_number'">
+      <i class="far fa-circle"></i>
+    </div>
+    <div class="link-button next" *ngIf="button?.next_step && button?.type !== 'open_website' && button?.type !== 'call_number'"
+         (click)="_builderFunctionsService.transitionToNextStep(button?.next_step)">
+      <i class="fas fa-chevron-right"></i>
+    </div>
+    <div class="link-button next" *ngIf="button?.type === 'open_website'">
+      <i class="fas fa-link"></i>
+    </div>
+    <div class="link-button next" *ngIf="button?.type === 'call_number'">
+      <i class="fas fa-phone"></i>
+    </div>
+
+    <ng-template #buttonsSomePopoverTitle>
+      <span *ngIf="_builderService.view !== 'preview'">Bearbeiten Button</span>
+      <span *ngIf="_builderService.view === 'preview'">Button Info</span>
+    </ng-template>
+    <ng-template #buttonsSomePopoverContent>
+      <div class="pop-content" *ngIf="_builderService.view === 'preview'">
+        <div class="popover-container-content">
+          <span *ngIf="!button?.click" style="margin-bottom: 24px;">Gesamtanzahl an Klicks: 0</span>
+          <span *ngIf="button?.click" style="margin-bottom: 24px;">Gesamtanzahl an Klicks: {{ button?.click }}</span>
+        </div>
+      </div>
+
+      <div class="pop-content" *ngIf="_builderService.view !== 'preview'">
+        <div class="popover-container-content">
+          <span>Schaltflächentitel:</span>
+          <div class="text"
+               (clickOutside)="_builderFunctionsService.closeSubTextareaPanel(button, 'activeTitlePanel', 'activeEmojiTitle', 'activeActionTitle')"
+               (click)="_builderFunctionsService.openSubTextareaPanel(title, button, 'activeTitlePanel')">
+            <input type="text" #title placeholder="Geben Sie den Schaltflächentitel ein..." maxlength="20"
+                   [(ngModel)]="button.title"
+                   (change)="_builderFunctionsService.setInputValue(button, 'title', title.value);
+                        _builderFunctionsService.closeSubTextareaPanel(button, 'activeTitlePanel', 'activeEmojiTitle', 'activeActionTitle')">
+
+            <div class="sub-panel" *ngIf="button['activeTitlePanel']"
+                 [delayClickOutsideInit]="true"
+                 (clickOutside)="_builderFunctionsService.openEmojiPanel(false, button, 'activeEmojiTitle', 'activeActionTitle')">
+
+              <button (click)="_builderFunctionsService.openEmojiPanel(true, button, 'activeEmojiTitle', 'activeActionTitle')">
+                <i class="far fa-smile-o"></i>
+                <app-emoji-picker *ngIf="button['activeEmojiTitle']"
+                                  (clickOutside)="_builderFunctionsService.closeEmoji(button['activeEmojiTitle'])"
+                                  (modelChange)="_builderFunctionsService.addEmoji(title, $event, button, 'title')"
+                                  [popupAnchor]="'top'"></app-emoji-picker>
+              </button>
+              <span>{{ 20 - title.value.length }}</span>
+            </div>
+          </div>
+
+          <span>Wenn diese Taste gedrückt wird</span>
+
+          <!-- //////////////////////////////// -->
+          <div class="next-step-button" *ngIf="button?.next_step && button?.type !== 'open_website' && button?.type !== 'call_number'"
+               [ngClass]="{'grey': (button?.next_step | typeNextStep) === 'send_message',
+                  'yellow': (button?.next_step | typeNextStep) === 'perform_actions',
+                  'green': (button?.next_step | typeNextStep) === 'start_another_flow',
+                  'blue': (button?.next_step | typeNextStep) === 'condition',
+                  'dark-blue': (button?.next_step | typeNextStep) === 'open_website',
+                  'violet': (button?.next_step | typeNextStep) === 'randomizer',
+                  'red': (button?.next_step | typeNextStep) === 'smart_delay'}">
+            <div class="info-next-step" (click)="_builderFunctionsService.transitionToNextStep(button?.next_step)">
+
+              <img *ngIf="button?.type !== 'open_website' &&
+                          button?.type !== 'call_number'" [src]="button?.next_step | typeNextStep | typeIconButton ">
+              <i *ngIf="button?.type === 'open_website' ||
+                        button?.type === 'call_number'" class="{{ button?.next_step | typeNextStep | typeIconButton }}"></i>
+
+
+              <!--<i class="{{ button?.next_step | typeNextStep | typeIconButton }}"></i>-->
+              <div class="text-button">
+                <p>{{ button?.next_step | typeNextStep | nameNextButton }}</p>
+                <span *ngIf="button?.type !== 'open_website' && button?.type !== 'call_number'">
+                  {{ button?.next_step | nameNextStep }}
+                </span>
+                <span *ngIf="button?.type === 'open_website' || button?.type === 'call_number'">
+                  {{ button?.next_step }}
+                </span>
+              </div>
+            </div>
+            <div class="delete-step-item" (click)="_builderFunctionsService.deleteNextStep(button)">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
+
+          <!-- //////////////////////////////// -->
+          <div class="next-step-button dark-blue" *ngIf="button?.type === 'open_website' || button?.type === 'call_number'">
+            <div class="info-next-step">
+
+              <img *ngIf="button?.type !== 'open_website' &&
+                          button?.type !== 'call_number'" [src]="button?.type | typeNextStep | typeIconButton ">
+              <i *ngIf="button?.type === 'open_website' ||
+                        button?.type === 'call_number'" class="{{ button?.type | typeNextStep | typeIconButton }}"></i>
+
+              <!--<i class="{{ button?.type | typeNextStep | typeIconButton }}"></i>-->
+              <div class="text-button">
+                <p>{{ button?.type | typeNextStep | nameNextButton }}</p>
+                <span *ngIf="button?.type === 'open_website'">{{ button?.btnValue }}</span>
+                <span *ngIf="button?.type === 'call_number'">+ {{ button?.btnValue }}</span>
+              </div>
+            </div>
+            <div class="delete-step-item" (click)="_builderFunctionsService.deleteTypeButton(button)">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
+
+          <!-- //////////////////////////////// -->
+          <ul class="list-items" *ngIf="!button?.next_step && !button?.type">
+            <li *ngFor="let main of _builderService.listMainItemsButtons"
+                [ngClass]="{'grey': main?.type === 'send_message',
+                  'yellow': main?.type === 'perform_actions',
+                  'green': main?.type === 'start_another_flow',
+                  'blue': main?.type === 'condition',
+                  'dark-blue': main?.type === 'open_website' || main?.type === 'call_number',
+                  'violet': main?.type === 'randomizer',
+                  'red': main?.type === 'smart_delay'}"
+                (click)="_builderFunctionsService.createNewMainFromButton(button, main?.type, main?.name)">
+
+              <img *ngIf="main?.type !== 'open_website' &&
+                          main?.type !== 'call_number'" [src]="main?.icon ">
+              <i *ngIf="main?.type === 'open_website' ||
+                        main?.type === 'call_number'" class="{{ main?.icon }}"></i>
+
+              <!--<i [class]="main?.icon"></i>-->
+              {{ main?.name }}
+            </li>
+            <li class="dark-blue"
+                (click)="openVerticallyCenterFlow(content, button)">
+              <i class="far fa-hand-pointer"></i>
+              Bestehenden Schritt auswählen
+            </li>
+          </ul>
+
+          <div class="website-content" *ngIf="button?.type === 'open_website'">
+            <span>Webseitenadressse</span>
+            <input type="text" (change)="_builderService.updateDraftItem()" placeholder="Geben Sie hier die URL ein..." [(ngModel)]="button.btnValue">
+          </div>
+          <div class="website-content" *ngIf="button?.type === 'open_website'">
+            <span>
+              Webview-Größe
+              <button class="tooltip-button" placement="top"
+                      ngbTooltip="Messenger öffnet Websites direkt in der App, ohne einen externen Browser zu verwenden. Definieren Sie die Höhe dieses integrierten Browsers. Die Option 'Native' verwendet den Standardbrowser mit voller Höhe. Um das Messenger Extensions SDK in der Webansicht verfügbar zu machen, wählen Sie 'Vollständig', 'Mittel' oder 'Kompakt'. Vergessen Sie nicht, dass alle Site-Domain-Namen, die das SDK verwenden, in die Whitelist aufgenommen werden sollten.">
+                <i class="far fa-question-circle"></i>
+              </button>
+            </span>
+            <select [(ngModel)]="button.viewSize"
+                    (change)="_builderService.updateDraftItem()">
+              <option [value]="'native'">Nativer</option>
+              <option [value]="'full'">Vollständig - 100%</option>
+              <option [value]="'medium'">Mittel - 75%</option>
+              <option [value]="'compact'">Kompakt - 50%</option>
+            </select>
+          </div>
+
+          <div class="website-content" *ngIf="button?.type === 'call_number'">
+            <span>Rufnummer</span>
+            <input type="number" (change)="_builderService.updateDraftItem()" onKeyDown="if(this.value.length==16) return false;" placeholder="Telefonnummer eingeben..." [(ngModel)]="button.btnValue">
+          </div>
+
+          <span *ngIf="!button?.next_step && button?.type === 'open_website'">Additional Actions</span>
+          <!-- //////////////////////////////// -->
+          <ul class="list-items" *ngIf="!button?.next_step && button?.type === 'open_website'">
+            <li class="yellow"
+                (click)="_builderFunctionsService.createNewMainFromButton(button, 'perform_actions', 'Perform Actions', 'pr')">
+              <img src="../../../../../assets/img/flows/perform_actions.svg">
+              <!--<i class="fas fa-bolt"></i>-->
+              Aktion ausführen
+            </li>
+          </ul>
+
+          <!-- //////////////////////////////// -->
+          <div class="next-step-button" *ngIf="button?.next_step && button?.type === 'open_website'"
+               [ngClass]="{'yellow': (button?.next_step | typeNextStep) === 'perform_actions'}">
+            <div class="info-next-step" (click)="_builderFunctionsService.transitionToNextStep(button?.next_step)">
+
+              <img *ngIf="button?.type !== 'open_website' &&
+                          button?.type !== 'call_number'" [src]="button?.next_step | typeNextStep | typeIconButton ">
+              <i *ngIf="button?.type === 'open_website' ||
+                        button?.type === 'call_number'" class="{{ button?.next_step | typeNextStep | typeIconButton }}"></i>
+
+              <i class="{{ button?.next_step | typeNextStep | typeIconButton }}"></i>
+              <div class="text-button">
+                <p>{{ button?.next_step | typeNextStep | nameNextButton }}</p>
+                <span>{{ button?.next_step | nameNextStep }}</span>
+              </div>
+            </div>
+            <div class="delete-step-item" (click)="_builderFunctionsService.deleteNextStep(button)">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pop-footer" *ngIf="_builderService.view !== 'preview'">
+        <button class="btn default-btn" (click)="_builderFunctionsService.deleteButton(config, i)">Löschen</button>
+        <button class="btn success-btn" (click)="p.close()">Erledigt</button>
+      </div>
+    </ng-template>
+  </div>
+
+  <button class="bottom-button" *ngIf="config.length < 3 && _builderService.view !== 'preview'" (click)="createNewButton()">+ Button hinzufügen</button>
+</div>
+<!-- Container from array buttons to send message type main -->
+
+<div class="container-buttons-send-message" *ngIf="type === 'noun' || type === 'noun-list-item'">
+  <div class="button-content noun" *ngFor="let button of config; let i = index"
+       [ngClass]="{
+        'noun-list-item': type === 'noun-list-item',
+        'error-border': (button?.type !== 'call_number' && button?.type !== 'open_website' && !button?.next_step) && (button['uuid'] | publishErrors) === true ||
+                        !button?.title && (button['uuid'] | publishErrors) === true ||
+                        button?.title.length > 20 && (button['uuid'] | publishErrors) === true ||
+                        (button?.type === 'open_website' && !button['btnValue']) && (button['uuid'] | publishErrors) === true ||
+                        (button?.type === 'call_number' && !button['btnValue']) && (button['uuid'] | publishErrors) === true
+       }"
+       [class.open]="p.isOpen()"
+       [autoClose]="'outside'"
+       #p="ngbPopover"
+       [ngbPopover]="buttonsSomePopoverContent"
+       [popoverTitle]="buttonsSomePopoverTitle"
+       [popoverClass]="'add-next-steps buttons-popover'"
+       container="body"
+       placement="right">
+    <div class="name-button" [ngClass]="{'text-left': _builderService.view === 'preview'}">
+      {{ button?.title }}
+      <span class="button-clicks" *ngIf="button?.click && _builderService.view === 'preview'">CTR {{ button?.click | flowStatistic:opened }}%</span>
+      <span class="button-clicks" *ngIf="!button?.click && _builderService.view === 'preview'">CTR 0%</span>
+    </div>
+    <div class="link-button" *ngIf="!button?.next_step && button?.type !== 'open_website'">
+      <i class="far fa-circle"></i>
+    </div>
+    <div class="link-button next" *ngIf="button?.next_step && button?.type !== 'open_website'"
+         (click)="_builderFunctionsService.transitionToNextStep(button?.next_step)">
+      <i class="fas fa-chevron-right"></i>
+    </div>
+    <div class="link-button next" *ngIf="button?.type === 'open_website'">
+      <i class="fas fa-link"></i>
+    </div>
+
+
+    <ng-template #buttonsSomePopoverTitle>
+      <span *ngIf="_builderService.view !== 'preview'">Bearbeiten Button</span>
+      <span *ngIf="_builderService.view === 'preview'">Button Info</span>
+    </ng-template>
+    <ng-template #buttonsSomePopoverContent>
+      <div class="pop-content" *ngIf="_builderService.view === 'preview'">
+        <div class="popover-container-content">
+          <span *ngIf="!button?.click" style="margin-bottom: 24px;">Gesamtanzahl an Klicks: 0</span>
+          <span *ngIf="button?.click" style="margin-bottom: 24px;">Gesamtanzahl an Klicks: {{ button?.click }}</span>
+        </div>
+      </div>
+      <div *ngIf="_builderService.view !== 'preview'" class="pop-content">
+        <div class="popover-container-content">
+          <span>Schaltflächentitel:</span>
+          <div class="text"
+               (clickOutside)="_builderFunctionsService.closeSubTextareaPanel(button, 'activeTitlePanel', 'activeEmojiTitle', 'activeActionTitle')"
+               (click)="_builderFunctionsService.openSubTextareaPanel(title, button, 'activeTitlePanel')">
+            <input type="text" #title placeholder="Geben Sie den Schaltflächentitel ein..." maxlength="20"
+                   [(ngModel)]="button.title"
+                   (change)="_builderFunctionsService.setInputValue(button, 'title', title.value);
+                        _builderFunctionsService.closeSubTextareaPanel(button, 'activeTitlePanel', 'activeEmojiTitle', 'activeActionTitle')">
+
+            <div class="sub-panel" *ngIf="button['activeTitlePanel']"
+                 [delayClickOutsideInit]="true"
+                 (clickOutside)="_builderFunctionsService.openEmojiPanel(false, button, 'activeEmojiTitle', 'activeActionTitle')">
+
+              <button (click)="_builderFunctionsService.openEmojiPanel(true, button, 'activeEmojiTitle', 'activeActionTitle')">
+                <i class="far fa-smile-o"></i>
+                <app-emoji-picker *ngIf="button['activeEmojiTitle']"
+                                  (clickOutside)="_builderFunctionsService.closeEmoji(button['activeEmojiTitle'])"
+                                  (modelChange)="_builderFunctionsService.addEmoji(title, $event, button, 'title')"
+                                  [popupAnchor]="'top'"></app-emoji-picker>
+              </button>
+              <span>{{ 20 - title.value.length }}</span>
+
+            </div>
+          </div>
+          <span>Wenn diese Taste gedrückt wird</span>
+          <!-- //////////////////////////////// -->
+          <div class="next-step-button" *ngIf="button?.next_step && button?.type !== 'open_website'"
+               [ngClass]="{'grey': (button?.next_step | typeNextStep) === 'send_message',
+                  'yellow': (button?.next_step | typeNextStep) === 'perform_actions',
+                  'green': (button?.next_step | typeNextStep) === 'start_another_flow',
+                  'blue': (button?.next_step | typeNextStep) === 'condition',
+                  'dark-blue': (button?.next_step | typeNextStep) === 'open_website',
+                  'violet': (button?.next_step | typeNextStep) === 'randomizer',
+                  'red': (button?.next_step | typeNextStep) === 'smart_delay'}">
+            <div class="info-next-step" (click)="_builderFunctionsService.transitionToNextStep(button?.next_step)">
+
+              <img *ngIf="button?.next_step !== 'open_website' &&
+                          button?.next_step !== 'call_number'" [src]="button?.next_step | typeNextStep | typeIconButton ">
+              <i *ngIf="button?.next_step === 'open_website' ||
+                        button?.next_step === 'call_number'" class="{{ button?.next_step | typeNextStep | typeIconButton }}"></i>
+
+              <!--<i class="{{ button?.next_step | typeNextStep | typeIconButton }}"></i>-->
+              <div class="text-button">
+                <p>{{ button?.next_step | typeNextStep | nameNextButton }}</p>
+                <span *ngIf="button?.type !== 'open_website' && button?.type !== 'call_number'">
+                  {{ button?.next_step | nameNextStep }}
+                </span>
+                <span *ngIf="button?.type === 'open_website' || button?.type === 'call_number'">
+                  {{ button?.next_step }}
+                </span>
+              </div>
+            </div>
+            <div class="delete-step-item" (click)="_builderFunctionsService.deleteNextStep(button)">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
+
+          <!-- //////////////////////////////// -->
+          <div class="next-step-button" *ngIf="button?.type === 'open_website'"
+               [ngClass]="{'dark-blue': button?.type === 'open_website'}">
+            <div class="info-next-step">
+
+              <img *ngIf="button?.type !== 'open_website' &&
+                          button?.type !== 'call_number'" [src]="button?.type | typeNextStep | typeIconButton ">
+              <i *ngIf="button?.type === 'open_website' ||
+                        button?.type === 'call_number'" class="{{ button?.type | typeNextStep | typeIconButton }}"></i>
+
+              <!--<i class="{{ button?.type | typeNextStep | typeIconButton }}"></i>-->
+              <div class="text-button">
+                <p>{{ button?.type | typeNextStep | nameNextButton }}</p>
+                <span>{{ button?.btnValue }}</span>
+              </div>
+            </div>
+            <div class="delete-step-item" (click)="_builderFunctionsService.deleteTypeButton(button)">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
+
+          <!-- //////////////////////////////// -->
+          <ul class="list-items" *ngIf="!button?.next_step && !button?.type">
+            <li *ngFor="let main of listMainItems"
+                [ngClass]="{'grey': main?.type === 'send_message',
+                  'yellow': main?.type === 'perform_actions',
+                  'green': main?.type === 'start_another_flow',
+                  'blue': main?.type === 'condition',
+                  'dark-blue': main?.type === 'open_website',
+                  'violet': main?.type === 'randomizer',
+                  'red': main?.type === 'smart_delay'}"
+                (click)="_builderFunctionsService.createNewMainFromButton(button, main?.type, main?.name)">
+
+              <img *ngIf="main?.type !== 'open_website' &&
+                          main?.type !== 'call_number'" [src]="main?.icon ">
+              <i *ngIf="main?.type === 'open_website' ||
+                        main?.type === 'call_number'" class="{{ main?.icon }}"></i>
+
+              <!--<i [class]="main?.icon"></i>-->
+              {{ main?.name }}
+            </li>
+            <li class="dark-blue"
+                (click)="openVerticallyCenterFlow(content, button)">
+              <i class="far fa-hand-pointer"></i>
+              Bestehenden Schritt auswählen
+            </li>
+          </ul>
+
+          <div class="website-content" *ngIf="button?.type === 'open_website'">
+            <span>Webseitenadressse</span>
+            <input type="text" (change)="_builderService.updateDraftItem()" placeholder="Geben Sie hier die URL ein..." [(ngModel)]="button.btnValue">
+          </div>
+
+          <div class="website-content" *ngIf="button?.type === 'open_website'">
+            <span>
+              Webview-Größe
+              <button class="tooltip-button" placement="top"
+                      ngbTooltip="Messenger öffnet Websites direkt in der App, ohne einen externen Browser zu verwenden. Definieren Sie die Höhe dieses integrierten Browsers. Die Option 'Native' verwendet den Standardbrowser mit voller Höhe. Um das Messenger Extensions SDK in der Webansicht verfügbar zu machen, wählen Sie 'Vollständig', 'Mittel' oder 'Kompakt'. Vergessen Sie nicht, dass alle Site-Domain-Namen, die das SDK verwenden, in die Whitelist aufgenommen werden sollten.">
+                <i class="far fa-question-circle"></i>
+              </button>
+            </span>
+            <select [(ngModel)]="button.viewSize"
+                    (change)="_builderService.updateDraftItem()">
+              <option [value]="'native'">Nativer</option>
+              <option [value]="'full'">Vollständig - 100%</option>
+              <option [value]="'medium'">Mittel - 75%</option>
+              <option [value]="'compact'">Kompakt - 50%</option>
+            </select>
+          </div>
+
+          <!-- //////////////////////////////// -->
+          <span *ngIf="!button?.next_step && button?.type === 'open_website'">Zusätzliche Aktionen</span>
+          <ul class="list-items" *ngIf="!button?.next_step && button?.type === 'open_website'">
+            <li class="yellow"
+                (click)="_builderFunctionsService.createNewMainFromButton(button, 'perform_actions', 'Perform Actions', 'pr')">
+              <img src="../../../../../assets/img/flows/perform_actions.svg" alt="">
+              <!--<i class="fas fa-bolt"></i>-->
+              Aktion ausführen
+            </li>
+          </ul>
+
+          <!-- //////////////////////////////// -->
+          <div class="next-step-button" *ngIf="button?.next_step && button?.type === 'open_website'"
+               [ngClass]="{'yellow': (button?.next_step | typeNextStep) === 'perform_actions'}">
+            <div class="info-next-step" (click)="_builderFunctionsService.transitionToNextStep(button?.next_step)">
+
+              <img *ngIf="button?.next_step !== 'open_website' &&
+                          button?.next_step !== 'call_number'" [src]="button?.next_step | typeNextStep | typeIconButton ">
+              <i *ngIf="button?.next_step === 'open_website' ||
+                        button?.next_step === 'call_number'" class="{{ button?.next_step | typeNextStep | typeIconButton }}"></i>
+
+              <!--<i class="{{ button?.next_step | typeNextStep | typeIconButton }}"></i>-->
+              <div class="text-button">
+                <p>{{ button?.next_step | typeNextStep | nameNextButton }}</p>
+                <span>{{ button?.next_step | nameNextStep }}</span>
+              </div>
+            </div>
+            <div class="delete-step-item" (click)="_builderFunctionsService.deleteNextStep(button)">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="_builderService.view !== 'preview'" class="pop-footer">
+        <button class="btn default-btn" (click)="_builderFunctionsService.deleteButton(config, i)">Löschen</button>
+        <button class="btn success-btn" (click)="p.close()">Erledigt</button>
+      </div>
+    </ng-template>
+  </div>
+
+  <button class="bottom-button" *ngIf="config.length < 1 && type === 'noun' && _builderService.view !== 'preview'"
+          (click)="createNewButton()">+ Button hinzufügen</button>
+
+  <button class="bottom-button noun-list-item" *ngIf="config.length < 1 && type === 'noun-list-item' && _builderService.view !== 'preview'"
+          (click)="createNewButton()">+ Button hinzufügen</button>
+</div>
+<!-- Container from array buttons to send message type child list -->
+
+<div class="container-buttons-send-message" *ngIf="type === 'main'">
+  <button class="bottom-button choose-step" *ngIf="!config?.next_step && _builderService.view !== 'preview'"
+          [ngClass]="{
+            'error-border': !config.hasOwnProperty('widget_content') &&
+                            !config?.next_step &&
+                            (config?.uuid | publishErrors) === true ||
+                            config.type === 'smart_delay' &&
+                            !config?.next_step &&
+                            (config?.uuid | publishErrors) === true}"
+          [class.open]="p.isOpen()"
+          [autoClose]="'outside'"
+          #p="ngbPopover"
+          [ngbPopover]="buttonsSomePopoverContent"
+          [popoverTitle]="buttonsSomePopoverTitle"
+          [popoverClass]="'add-next-steps buttons-popover'"
+          container="body"
+          [placement]="'right'">Wähle nächsten Schritt</button>
+
+  <!-- //////////////////////////////// -->
+  <div class="next-step-button margin-0" *ngIf="config?.next_step"
+       [ngClass]="{'grey': (config?.next_step | typeNextStep) === 'send_message',
+                  'yellow': (config?.next_step | typeNextStep) === 'perform_actions',
+                  'green': (config?.next_step | typeNextStep) === 'start_another_flow',
+                  'blue': (config?.next_step | typeNextStep) === 'condition',
+                  'dark-blue': (config?.next_step | typeNextStep) === 'open_website',
+                  'violet': (config?.next_step | typeNextStep) === 'randomizer',
+                  'red': (config?.next_step | typeNextStep) === 'smart_delay'}">
+    <div class="info-next-step" (click)="_builderFunctionsService.transitionToNextStep(config?.next_step)"
+      [ngClass]="{'full-width': _builderService.view === 'preview'}">
+
+      <img *ngIf="config?.next_step !== 'open_website' &&
+                  config?.next_step !== 'call_number'" [src]="config?.next_step | typeNextStep | typeIconButton ">
+      <i *ngIf="config?.next_step === 'open_website' ||
+                config?.next_step === 'call_number'" class="{{ config?.next_step | typeNextStep | typeIconButton }}"></i>
+
+      <!--<i class="{{ config?.next_step | typeNextStep | typeIconButton }}"></i>-->
+      <div class="text-button">
+        <p>{{ config?.next_step | typeNextStep | nameNextButton }}</p>
+        <span>{{ config?.next_step | nameNextStep }}</span>
+      </div>
+    </div>
+    <div class="delete-step-item" *ngIf="_builderService.view !== 'preview'" (click)="_builderFunctionsService.deleteNextStep(config)">
+      <i class="fas fa-times"></i>
+    </div>
+  </div>
+
+  <ng-template #buttonsSomePopoverTitle>
+    <span>Wähle nächsten Schritt</span>
+  </ng-template>
+  <ng-template #buttonsSomePopoverContent>
+    <div class="pop-content">
+      <div class="popover-container-content">
+        <span>Wähle nächsten Schritt</span>
+        <ul class="list-items">
+          <li *ngFor="let main of listMain"
+              [ngClass]="{'grey': main?.type === 'send_message',
+                  'yellow': main?.type === 'perform_actions',
+                  'green': main?.type === 'start_another_flow',
+                  'blue': main?.type === 'condition',
+                  'violet': main?.type === 'randomizer',
+                  'dark-blue': main?.type === 'select_step',
+                  'red': main?.type === 'smart_delay'}"
+              (click)="_builderFunctionsService.createNewMainFromButton(config, main?.type, main?.name)">
+            <img *ngIf="main?.type !== 'open_website' &&
+                        main?.type !== 'call_number'" [src]="main?.icon" alt="{{main?.name}}">
+            <i *ngIf="main?.type === 'open_website' ||
+                        main?.type === 'call_number'" [class]="main?.icon"></i>
+            {{ main?.name }}
+          </li>
+          <li class="dark-blue"
+              (click)="openVerticallyCenterFlow(content, config)">
+            <i class="far fa-hand-pointer"></i>
+            Bestehenden Schritt auswählen
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-template>
+</div>
+<!-- Container from array buttons to main items -->
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-header">
+    <span>Wählen Sie einen Schritt</span>
+  </div>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <div class="select-flow-next-step text-align--center" *ngIf="_builderService.selectedNextStep.length === 0">
+      <span>Nichts hier</span>
+    </div>
+    <div class="select-flow-next-step" *ngFor="let step of _builderService.selectedNextStep">
+      <div class="next-step-button"
+           [ngClass]="{'grey': step?.type === 'send_message',
+                  'yellow': step?.type === 'perform_actions',
+                  'green': step?.type === 'start_another_flow',
+                  'blue': step?.type === 'condition',
+                  'dark-blue': step?.type === 'open_website',
+                  'violet': step?.type === 'randomizer',
+                  'red': step?.type === 'smart_delay'}">
+        <div class="info-next-step" style="width: 100%;" (click)="selectedMainLink(step)">
+          <img *ngIf="step?.type !== 'open_website' &&
+                      step?.type !== 'call_number'" [src]="step?.type | typeIconButton " alt="{{step?.name}}">
+          <i *ngIf="step?.type === 'open_website' ||
+                    step?.type === 'call_number'" class="{{ step?.type | typeIconButton }}"></i>
+          <div class="text-button">
+            <p>{{ step?.type | nameNextButton }}</p>
+            <span>{{ step?.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

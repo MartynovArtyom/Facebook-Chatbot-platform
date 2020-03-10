@@ -1,0 +1,269 @@
+<div class="top-navbar-page live-chat-bar">
+  <div class="title-page">
+    <p>Live Chat</p>
+  </div>
+
+  <div class="search-live-chat">
+    <div class="position--relative">
+      <input type="text" placeholder="Suche in einer LiveChat Unterhaltung"
+             [(ngModel)]="search"
+             (ngModelChange)="getConversationSearch(search)">
+      <i *ngIf="!search" class="fas fa-search"></i>
+      <i *ngIf="search" class="fas fa-close" (click)="clearFilter(); getConversation()"></i>
+    </div>
+
+  </div>
+</div>
+
+<div class="row chat-container">
+  <div class="col-md-4 border-content full-height live-chat-contacts">
+
+    <div class="tabs-edit-sidebar" *ngIf="search.length === 0">
+      <span class="contacts-offnen-btn" [ngClass]="{ 'active': tabsValue === 'open' }"
+            (click)="comeToTabs('open')">
+        Öffnen ({{ _sharedService.openedConversationCount }})
+      </span>
+      <span class="geschlossen-btn" [ngClass]="{'active': tabsValue === 'close'}"
+            (click)="comeToTabs('close')">
+        Geschlossen
+      </span>
+      <button class="btn primary-button alle-shlieben-btn"
+              *ngIf="tabsValue === 'open' && _userService.userPageInfo?.role !== 4"
+              [disabled]="tabsValue === 'open' && conversations.length === 0"
+              (click)="changeAllConversation(false)"
+      >Alle schließen</button>
+      <button class="btn primary-button alle-offnen-btn"
+              *ngIf="tabsValue === 'close' && _userService.userPageInfo?.role !== 4"
+              [disabled]="tabsValue === 'close' && conversations.length === 0"
+              (click)="changeAllConversation(true)"
+      >Alle öffnen</button>
+      <button class="contacts-btn" (click)="addClass('live-chat-contacts', 'live-chat-info')">
+        <i class="fas fa-users"></i>
+      </button>
+      <button (click)="addClass(null, 'live-chat-contacts')" class="close-btn"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="tabs-edit-sidebar" *ngIf="search.length > 0">
+      <span>Search result</span>
+    </div>
+
+    <div class="content-tabs-sidebar" style="overflow-y: auto">
+      <div class="subscribers-list">
+        <!--(click)="addSunscriberInfo(user)"-->
+        <div *ngFor="let user of conversations"
+             (click)="selectId(user?.subscriber?.subscriber_id)"
+             [routerLink]="'/' + _userService.userID + '/chat/'"
+             [queryParams]="{ id: user?.subscriber?.subscriber_id }"
+             class="subscriber-item">
+          <div class="subscriber-preview">
+            <img [src]="user?.subscriber?.avatar">
+            <div class="subscriber-info">
+              <p class="full-name">{{ user?.subscriber?.firstName }} {{ user?.subscriber?.lastName }}</p>
+              <span class="last-message" *ngIf="user?.message?.text">{{ user?.message?.text }}</span>
+              <span class="last-message" *ngIf="!user?.message?.text">...</span>
+            </div>
+          </div>
+          <span class="last-message-time">{{ user?.updated | dateUpdatedMessage }}</span>
+        </div>
+        <div class="d-flex d-flex--align-center d-flex--justify-center margin-top--8 margin-bottom--12">
+          <button class="btn primary-button"
+                  *ngIf="totalCountSubscribers > conversations.length"
+                  (click)="loadMoreSubscribers()">Load more</button>
+        </div>
+        <div *ngIf="conversations.length === 0" class="default-message-content">
+          <img src="../../../../../assets/img/chat-bg.svg" alt="Chat image">
+          <span>Conversations not found</span>
+        </div>
+        <div *ngIf="search.length === 1" class="default-message-content least-characters">
+          <span>Please enter at least 2 characters</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="subscriberId" class="col-md-4 border-content live-chat-dialog">
+    <div class="live-chat-container">
+      <div class="conversation-name">
+        <span class="conversation-first-name">{{ _userService.subscriberInfo?.details?.firstName }} {{ _userService.subscriberInfo?.details?.lastName }}</span>
+        <div class="conversation-name-right">
+          <button class="btn default-button conversation-name-schlieben-btn"
+                  *ngIf="_userService.subscriberInfo?.conversationStatus && _userService.userPageInfo?.role !== 4"
+                  (click)="changeConversation(false)">
+            Schließen <i class="far fa-folder"></i>
+          </button>
+          <div class="chat-btns-wrapper">
+            <button class="btn default-button chat-offnen-btn"
+                  *ngIf="!_userService.subscriberInfo?.conversationStatus && _userService.userPageInfo?.role !== 4"
+                  (click)="changeConversation(true)">
+              Öffnen <i class="far fa-folder-open"></i>
+            </button>
+            <button class="subscriber-info-btn" (click)="addClass('live-chat-info', 'live-chat-contacts')">
+              <i class="far fa-id-card"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="messages-content">
+
+        <ul id="scroller"
+            ngxInfiniteScroller
+            strategy="scrollingToTop"
+            #chatMessage
+            (onScrollUp)="getConversationsBySubscriber()">
+          <li *ngIf="messageLoader" class="loader-button" style="background: transparent !important; border: none !important;"></li>
+          <li class="news d-flex d-flex--align-center d-flex--direction-column position--relative"
+              *ngFor="let item of subscriberMessages; let i = index"
+              [ngClass]="{
+                  'd-flex--justify-start subscr-message-item': item?.type === 1,
+                  'd-flex--justify-end bot-message-item': item?.type === 2
+                 }">
+            <img *ngIf="item?.type === 1" [src]="item?.avatar" class="avatar-subscriber">
+            <img *ngIf="item?.type === 2" src="../../../../../assets/img/smily.png" class="avatar-bot">
+            <span class="d-flex full-width d-flex--justify-center margin-bottom--12"
+              *ngIf="subscriberMessages[i - 1] &&
+                     shouldDisplayDate(item?.created, subscriberMessages[i - 1]?.created) ||
+                     i === 0">
+              {{ item?.created | date:'d MMMM ' }}
+            </span>
+            <div class="d-flex d-flex--align-center message-item-list"
+                 [ngClass]="{
+                  'd-flex--justify-start': item?.type === 1,
+                  'd-flex--justify-end': item?.type === 2
+                 }">
+
+              <div class="message-body">
+                <div class="message-body-content">
+
+                  <span class="text-item"
+                        *ngIf="item?.message?.text"
+                        [ngClass]="{'border-bottom-none': item?.message?.buttons?.length > 0}"
+                        [placement]="(item?.type === 1) ? 'left' : 'right'"
+                        ngbTooltip="{{ item?.created | date:'hh:mm aa' }}" container="body">
+                    {{ item?.message?.text }}
+                  </span>
+
+                  <video *ngIf="item?.message?.video" [src]="item?.message?.video" width="200" controls></video>
+                  <audio *ngIf="item?.message?.audio" [src]="item?.message?.audio" controls></audio>
+
+                  <span *ngIf="item?.message?.file" class="text-item"
+                        [placement]="(item?.type === 1) ? 'left' : 'right'"
+                        ngbTooltip="{{ item?.created | date:'hh:mm' }}" container="body">
+                    {{ item?.message?.file }}
+                  </span>
+
+                  <img *ngIf="item?.message?.image"
+                       [src]="item?.message?.image"
+                       class="image-item">
+
+                  <div *ngIf="item?.message?.gallery" class="card-item"
+                        [placement]="(item?.type === 1) ? 'left' : 'right'"
+                        ngbTooltip="{{ item?.created | date:'hh:mm aa' }}" container="body">
+                    <div class="card-content" *ngFor="let card of item?.message?.gallery; let indexCard = index"
+                         [id]="i + 'card' + indexCard"
+                         [ngClass]="{ 'active': indexCard === 0 }">
+
+                      <button class="btn gallery-btn prev-card"
+                              *ngIf="indexCard !== 0"
+                              (click)="rotateCards('prev', item?.message?.gallery, i, indexCard)">
+                        <i class="fas fa-chevron-left"></i>
+                      </button>
+
+                      <img *ngIf="card?.imageUrl" [src]="card?.imageUrl">
+                      <p>{{ card?.title }}</p>
+                      <span>{{ card?.subtitle }}</span>
+
+                      <span class="button-item" *ngFor="let button of card?.buttons; let indexBtn = index"
+                            [ngClass]="{'border-bottom-radius': indexBtn === (card?.buttons.length - 1)}">
+                    {{ button }}
+                  </span>
+
+                      <button class="btn gallery-btn next-card"
+                              *ngIf="indexCard !== (item?.message?.gallery.length - 1)"
+                              (click)="rotateCards('next', item?.message?.gallery, i, indexCard)">
+                        <i class="fas fa-chevron-right"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div *ngIf="item?.message?.list" class="list-item"
+                        [placement]="(item?.type === 1) ? 'left' : 'right'"
+                        ngbTooltip="{{ item?.created | date:'hh:mm aa' }}" container="body">
+                    <div *ngFor="let item of item?.message?.list" class="list-content">
+
+                      <div>
+                        <p>{{ item?.title }}</p>
+                        <span>{{ item?.subtitle }}</span>
+                      </div>
+                      <img *ngIf="item?.imageUrl" [src]="item?.imageUrl">
+
+                    </div>
+                  </div>
+
+                  <span class="button-item" *ngFor="let button of item?.message?.buttons">
+                    {{ button }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+
+      </div>
+
+      <div class="send-message-content position--relative">
+        <textarea *ngIf="_userService?.subscriberInfo?.details?.status"
+                  placeholder="Enter text..."
+                  [(ngModel)]="message"
+                  [disabled]="_userService.userPageInfo?.role === 4"
+                  #desc></textarea>
+        <p *ngIf="!_userService?.subscriberInfo?.details?.status" class="full-width">
+          You can not send messages to unsubscribed users.
+        </p>
+        <button (click)="changesPanel(true)" class="emoji-btn-message position--relative"
+                [disabled]="_userService.userPageInfo?.role === 4"
+                *ngIf="_userService?.subscriberInfo?.details?.status">
+          <i class="far fa-smile-o"></i>
+
+          <!--<emoji-mart class="emoji-conteiner"-->
+                      <!--*ngIf="activeEmoji"-->
+                      <!--(clickOutside)="changesPanel(false)"-->
+                      <!--[delayClickOutsideInit]="true"-->
+                      <!--size="16"-->
+                      <!--[set]="'facebook'"-->
+                      <!--[perLine]="7"-->
+                      <!--(emojiClick)="addEmoji(desc, $event)"-->
+          <!--&gt;</emoji-mart>-->
+
+          <app-emoji-picker *ngIf="activeEmoji"
+                            [delayClickOutsideInit]="true"
+                            (clickOutside)="closeEmoji(activeEmoji)"
+                            (modelChange)="addEmoji(desc, $event)"
+                            [popupAnchor]="'bottom'"></app-emoji-picker>
+        </button>
+
+
+        <button class="btn primary-button"
+                *ngIf="!checkSend"
+                [disabled]="!message || !_userService?.subscriberInfo?.details?.status || _userService.userPageInfo?.role === 4"
+                (click)="createMessage()">Senden</button>
+        <button *ngIf="checkSend" class="btn primary-button loader-button">Senden</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="subscriberId" class="col-md-4 subscriber-app live-chat-info">
+    <button (click)="addClass(null, 'live-chat-info')" class="close-btn"><i class="fas fa-times"></i></button>
+    <app-user-subscriber-profile
+      [subscriberId]="subscriberId"></app-user-subscriber-profile>
+  </div>
+
+  <div *ngIf="!subscriberId" class="col-md-8 default-message-content">
+    <img src="../../../../../assets/img/chat-bg.svg" alt="Chat image">
+    <span>Wähle links bitte eine Unterhaltung aus um zu chatten</span>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>

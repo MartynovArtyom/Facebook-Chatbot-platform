@@ -1,0 +1,79 @@
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Dashboard</p>
+  </div>
+</div>
+<div class="dashboard-content">
+  <div class="statistic-admin-dashboard">
+    <div class="row margin-bottom--18">
+      <div class="col-md-3"></div>
+      <div class="col-md-3">
+        <div class="stats-item color--users cursor--pointer" [routerLink]="'/admin/users'">
+          <i class="fas fa-user-friends"></i>
+          <div class="stats-content">
+            <p>Users</p>
+            <span>{{ dashboard?.userCount }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-item color--pages cursor--pointer" [routerLink]="'/admin/pages'">
+          <i class="far fa-file-alt"></i>
+          <div class="stats-content">
+            <p>All pages</p>
+            <span>{{ dashboard?.pageCount }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-item color--subscribers">
+          <i class="fas fa-users"></i>
+          <div class="stats-content">
+            <p>Subscribers</p>
+            <span>{{ dashboard?.subscriberCount }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row margin-bottom--18">
+      <div class="col-md-3"></div>
+      <div class="col-md-3">
+        <div class="stats-item color--conversion-tools">
+          <i class="fas fa-magnet"></i>
+          <div class="stats-content">
+            <p>Kampagnen</p>
+            <span>{{ dashboard?.widgetCount }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-item color--sequence">
+          <i class="fas fa-magnet"></i>
+          <div class="stats-content">
+            <p>Autoresponder</p>
+            <span *ngIf="dashboard?.sequenceCount">{{ dashboard?.sequenceCount }}</span>
+            <span *ngIf="!dashboard?.sequenceCount">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-item color--messages">
+          <i class="far fa-envelope"></i>
+          <div class="stats-content">
+            <p>Flows</p>
+            <span>{{ dashboard?.flowCount }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="container" style="width: 100%; height: 500px;"></div>
+
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+

@@ -1,0 +1,81 @@
+<div class="title-sidebar">
+  <input type="text" #title placeholder="Enter name" [value]="config?.name"
+         [(ngModel)]="config.name"
+         [disabled]="_builderService.view === 'preview'"
+         (change)="_builderFunctionsService.setInputValue(config, 'name', title.value)">
+</div>
+
+<div class="content-sidebar-start-step" *ngIf="_builderService.view !== 'preview'">
+  <div class="switchs">
+    <input type="checkbox" id="switch1" class="switchs__input"
+           [checked]="config?.start_step"
+           [disabled]="config?.start_step"
+           (change)="_builderFunctionsService.setStartingStep(config)"
+    >
+    <label for="switch1" class="switchs__label">Kampagnen Start</label>
+  </div>
+</div>
+
+<div class="sidebar-all-items-content">
+
+  <div class="randomizer-info">
+    <div class="def-random" *ngIf="(config?.widget_content[0]['randomData'] | sumRandomsValue) === 100">
+      <span>Teilen Sie den Verkehr</span>
+      <span>Ausschüttungssumme muss 100% betragen</span>
+    </div>
+    <div class="error-random" *ngIf="(config?.widget_content[0]['randomData'] | sumRandomsValue) < 100 ||
+                                     (config?.widget_content[0]['randomData'] | sumRandomsValue) > 100">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div class="error-content">
+        <span>Ausschüttungssumme muss 100% betragen</span>
+        <span>Strom ist {{ config?.widget_content[0]['randomData'] | sumRandomsValue }}%</span>
+      </div>
+    </div>
+  </div>
+<!--
+  <div class="checkbox">
+    <input type="checkbox" id="random" class="checkbox__input" [checked]="config?.widget_content[0]['randomCheck']"
+           [disabled]="_builderService.view === 'preview'"
+           (click)="_builderFunctionsService.choiceRandomStatus(config?.widget_content[0])">
+    <label for="random" class="checkbox__label">Random path every time</label>
+  </div>-->
+
+  <div class="random-container" *ngFor="let item of config?.widget_content[0]['randomData']; let i = index"
+              [ngClass]="{
+                'blue': item?.random_leter === 'A',
+                'turquoise': item?.random_leter === 'B',
+                'violet': item?.random_leter === 'C',
+                'orange': item?.random_leter === 'D',
+                'navy-blue': item?.random_leter === 'E',
+                'green': item?.random_leter === 'F'
+              }">
+    <i class="fas fa-times" (click)="_builderFunctionsService.deleteAction(config.widget_content[0]['randomData'], i)"
+        *ngIf="_builderService.view !== 'preview'"></i>
+    <div class="range-select">
+      <span>{{ item?.random_leter }}</span>
+
+      <input type="range" min="0" step="1" max="100" placeholder=""
+             (input)="setRam($event, item)"
+             [disabled]="_builderService.view === 'preview'"
+             (change)="_builderService.updateDraftItem()"
+             [value]="item?.value"
+             [style.background-size]="item?.value + '% 100%'"/>
+
+      <div class="percent-content">
+        <input type="number" placeholder="Enter number" [value]="item?.value" #value
+               [disabled]="_builderService.view === 'preview'"
+               (change)="changeRangeValue(item, value.value);
+                         _builderService.updateDraftItem()">
+        <span>%</span>
+      </div>
+    </div>
+
+    <app-buttons-item [type]="'main'" [config]="item"></app-buttons-item>
+  </div>
+
+  <button class="create-new-random margin-bottom--32" *ngIf="config?.widget_content[0]['randomData'].length < 6 && _builderService.view !== 'preview'"
+          (click)="_builderFunctionsService.createNewRandomVariation(config?.widget_content[0]['randomData'])">
+    + Neue Variante
+  </button>
+
+</div>

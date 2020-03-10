@@ -1,0 +1,292 @@
+<div class="text-items-view">
+  <div class="error-content-icon">
+    <i class="fas fa-exclamation-triangle"
+       *ngIf="!item?.params['description'] && (item?.uuid | publishErrors) === true ||
+              item?.params['description'].length > 640 && (item?.uuid | publishErrors) === true ||
+              item?.params['keyboardInput']['replyType'] === 1 && item?.params['quick_reply'].length === 0 && (item?.uuid | publishErrors) === true ||
+              (item?.params['keyboardInput']['replyType'] === 8 || item?.params['keyboardInput']['replyType'] === 9) &&
+              (!item?.params['keyboardInput']['text_on_button'] || !item?.params['keyboardInput']['skip_button']) && (item?.uuid | publishErrors) === true"></i>
+  </div>
+
+  <div class="text-content position-relative">
+
+    <div class="text" (clickOutside)="closeSubTextareaPanel(item?.params)">
+      <textarea placeholder="Geben Sie Ihren Text ein..." autosize maxlength="640"
+                id="{{ item?.uuid }}"
+                [disabled]="_builderService.view === 'preview'"
+                [(ngModel)]="item.params['description']"
+                #desc
+                (change)="_builderFunctionsService.setInputValue(item?.params, 'description', desc.value)"
+                #p="ngbPopover"
+                [autoClose]="'outside'"
+                [ngbPopover]="userInputPopoverContent"
+                [popoverTitle]="userInputPopoverTitle"
+                [popoverClass]="'user-input-popover add-next-steps'"
+                (click)="openSubTextareaPanel(item?.params); renderCustomFields(item.params['keyboardInput']['replyType'])"
+                container="body"
+                placement="right"></textarea>
+
+      <div class="sub-panel" *ngIf="item?.params['active'] && _builderService.view !== 'preview'"
+           [delayClickOutsideInit]="true"
+           (clickOutside)="openEmojiPanel(false);
+                           openBulkActionsPanel(false)">
+
+        <button (click)="openEmojiPanel(true)">
+          <i class="far fa-smile-o"></i>
+          <app-emoji-picker *ngIf="item?.params['activeEmoji']"
+                            (clickOutside)="_builderFunctionsService.closeEmoji(item?.params['activeEmoji'])"
+                            (modelChange)="addEmoji(desc, $event)"
+                            [popupAnchor]="'top'"></app-emoji-picker>
+        </button>
+
+        <button (click)="openBulkActionsPanel(true)">&#123;&bull;&#125;
+          <div class="sub-bulk-actions-panel" *ngIf="item?.params['activeAction']">
+            <ul>
+              <li *ngFor="let action of _builderService.bulkActions" (click)="getCaretPos(desc, action)">
+                {{ action?.name }}
+              </li>
+              <span class="path-c-f">Custom Fields</span>
+              <li *ngFor="let action of _builderService.bulkActionsCF" (click)="getCaretPos(desc, action)">
+                {{ action?.name }}
+              </li>
+            </ul>
+          </div>
+        </button>
+        <span>{{ 640 - desc.value.length }}</span>
+
+      </div>
+    </div>
+
+    <ng-template #userInputPopoverTitle>
+      <span>Bearbeite Nutzer Eingabe</span>
+    </ng-template>
+    <ng-template #userInputPopoverContent>
+      <div class="pop-content">
+        <div class="popover-container-content" *ngIf="_builderService.view !== 'preview'">
+          <div class="reply-container">
+            <span>Welche Daten möchtest du abfragen?</span>
+            <select title="Welche Daten möchtest du abfragen?"
+                    #selectInputType
+                    [(ngModel)]="item?.params['keyboardInput'].replyType"
+                    (change)="choiceReplyType(selectInputType.value)">
+              <option [value]="0">Text</option>
+              <option [value]="1">Multiple Choice</option>
+              <option [value]="2">Number</option>
+              <option [value]="3">Email</option>
+              <option [value]="4">Phone</option>
+              <option [value]="5">URL</option>
+              <option [value]="6">Datei</option>
+              <option [value]="7">Bild</option>
+              <option [value]="10">Wohnort</option>
+              <option [value]="8">Date</option>
+              <option [value]="9">Date and time</option>
+            </select>
+            <div class="md-checkbox" *ngIf="item?.params['keyboardInput'].replyType === 1">
+              <input id="i2" type="checkbox"
+                     [checked]="item?.params['keyboardInput']['active']"
+                     (change)="choiceActiveUserInput(item?.params['keyboardInput'])">
+              <label for="i2">Also allow free text input</label>
+            </div>
+          </div>
+
+          <div class="reply-container"
+               *ngIf="item?.params['keyboardInput'].replyType !== 0 &&
+                      item?.params['keyboardInput'].active === false &&
+                      item?.params['keyboardInput'].replyType !== 8 &&
+                      item?.params['keyboardInput'].replyType !== 9">
+            <span>Antwort wenn Eingabe ungültig</span>
+            <textarea placeholder="No retry message"
+                      #retryMessage
+                      [ngModel]="item.params['keyboardInput']?.retry_message"
+                      (change)="_builderFunctionsService.setValueToInputField(
+                              item.params['keyboardInput'],
+                              'retry_message',
+                              retryMessage.value)"></textarea>
+          </div>
+
+          <div class="reply-container"
+               *ngIf="item?.params['keyboardInput'].replyType === 8 ||
+                      item?.params['keyboardInput'].replyType === 9">
+            <span>Text im Button</span>
+            <input type="text"
+                   [placeholder]="(item?.params['keyboardInput'].replyType === 8) ? 'Wähle ein Datum aus' : 'Datum und Uhrzeit'"
+                   #textOnButton
+                   [ngModel]="item.params['keyboardInput']?.text_on_button"
+                   (change)="_builderFunctionsService.setValueToInputField(
+                              item.params['keyboardInput'],
+                              'text_on_button',
+                              textOnButton.value)">
+          </div>
+
+          <div class="reply-container"
+               *ngIf="item?.params['keyboardInput'].active === false &&
+                      item?.params['keyboardInput'].replyType !== 0">
+            <span>Kein Überspringen Button</span>
+            <input type="text" placeholder="Kein Überspringen Button"
+                   #skipButton
+                   [ngModel]="item.params['keyboardInput']?.skip_button"
+                   (change)="_builderFunctionsService.setValueToInputField(
+                              item.params['keyboardInput'],
+                              'skip_button',
+                              skipButton.value)">
+          </div>
+
+          <div class="reply-container">
+            <span>Speichere Eingabe in einem benutzerdefinierten Feld</span>
+            <ng-select [items]="customFields"
+                       bindLabel="name" bindValue="name"
+                       [(ngModel)]="item.params['keyboardInput'].response_custom_field"
+                       [placeholder]="'Gin den Feldnamen ein'"
+                       (clear)="clearID(item.params['keyboardInput']);_builderService.updateDraftItem()"
+                       (change)="_builderFunctionsService.setValueToInputFieldCF(
+                              item.params['keyboardInput'],
+                              responseCustomFiled.selectedValues[0])"
+                       #responseCustomFiled>
+              <ng-template ng-label-tmp let-item="item">
+                <i *ngIf="item?.type === 1" class="fas fa-font"></i>
+                <i *ngIf="item?.type === 2" class="fas fa-hashtag"></i>
+                <i *ngIf="item?.type === 3" class="far fa-clock"></i>
+                <i *ngIf="item?.type === 4" class="far fa-clock"></i>
+                <i *ngIf="item?.type === 5" class="fas fa-code"></i>
+                {{ item?.name }}
+              </ng-template>
+            </ng-select>
+          </div>
+
+          <span>Wie soll es nach erfolgreicher Eingabe weitergehen?</span>
+          <ul class="list-items" *ngIf="!item?.params?.buttons[0]?.next_step">
+            <li class="yellow"
+                (click)="_builderFunctionsService.createNewMainFromButton(item?.params?.buttons[0], 'perform_actions', 'Perform Actions', 'pr')">
+              <img src="../../../../../../assets/img/flows/perform_actions.svg">
+              Perform Actions
+            </li>
+          </ul>
+
+          <div class="next-step-button yellow" *ngIf="item?.params?.buttons[0]?.next_step">
+            <div class="info-next-step" (click)="_builderFunctionsService.transitionToNextStep(item?.params?.buttons[0]?.next_step)">
+              <img *ngIf="item?.params?.buttons[0]?.next_step !== 'open_website' &&
+                          item?.params?.buttons[0]?.next_step !== 'call_number'" [src]="item?.params?.buttons[0]?.next_step | typeNextStep | typeIconButton ">
+              <i *ngIf="item?.params?.buttons[0]?.next_step === 'open_website' ||
+                        item?.params?.buttons[0]?.next_step === 'call_number'" class="{{ item?.params?.buttons[0]?.next_step | typeNextStep | typeIconButton }}"></i>
+
+              <!--<i class="{{ item?.params?.buttons[0]?.next_step | typeNextStep | typeIconButton }}"></i>-->
+              <div class="text-button">
+                <p>{{ item?.params?.buttons[0]?.next_step | typeNextStep | nameNextButton }}</p>
+                <span>{{ item?.params?.buttons[0]?.next_step | nameNextStep }}</span>
+              </div>
+            </div>
+            <div class="delete-step-item" (click)="_builderFunctionsService.deleteNextStep(item?.params?.buttons[0])">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="quick-container" *ngIf="item?.params['keyboardInput'].replyType === 1 && _builderService.view !== 'preview'">
+    <div *ngFor="let quick of item?.params['quick_reply']; let i = index" class="quick-item"
+         [autoClose]="'outside'"
+         #p="ngbPopover"
+         [ngbPopover]="quickReplyPopoverContent"
+         [popoverTitle]="quickReplyPopoverTitle"
+         [popoverClass]="'quick-reply-popover add-next-steps switch-popover'"
+         container="body"
+         placement="right">
+        <input type="text" #quicks placeholder="Add text" maxlength="20" [class.open]="p.isOpen()"
+               [ngClass]="{'error-border': !quick?.title && (item?.uuid | publishErrors) === true}"
+               [disabled]="_builderService.view === 'preview'"
+               (change)="_builderFunctionsService.setInputValue(quick, 'title', quicks.value);
+                        _builderFunctionsService.closeSubTextareaPanel(quick, 'activeTitlePanel', 'activeEmojiTitle', 'activeActionTitle')"
+               [(ngModel)]="quick.title">
+
+        <div class="sub-panels" *ngIf="_builderService.view !== 'preview'" [delayClickOutsideInit]="true"
+             (clickOutside)="_builderFunctionsService.openEmojiPanel(false, quick, 'activeEmojiTitle', 'activeActionTitle')">
+
+          <button (click)="_builderFunctionsService.openEmojiPanel(true, quick, 'activeEmojiTitle', 'activeActionTitle')">
+            <i class="far fa-smile-o"></i>
+
+            <app-emoji-picker *ngIf="quick['activeEmojiTitle']"
+                              (clickOutside)="_builderFunctionsService.closeEmoji(quick['activeEmojiTitle'])"
+                              (modelChange)="_builderFunctionsService.addEmoji(quicks, $event, quick, 'title')"
+                              [popupAnchor]="'top'"></app-emoji-picker>
+          </button>
+          <span>{{ 20 - quicks.value.length }}</span>
+        </div>
+
+        <ng-template #quickReplyPopoverTitle>
+          <span>Bearbeiten Quick Reply</span>
+        </ng-template>
+        <ng-template #quickReplyPopoverContent>
+          <div class="pop-content" *ngIf="_builderService.view !== 'preview'">
+            <div class="popover-container-content">
+              <div class="user-input-quick">
+
+                <div class="switch">
+                  <input type="checkbox" id="showRatings" class="switch__input"
+                         [checked]="quick?.answer_check"
+                         (change)="choiceAnswerCheck(quick)"
+                  >
+                  <label for="showRatings" class="switch__label">Use another value as a gespeichert answer</label>
+                </div>
+              </div>
+
+              <div class="text-answer" *ngIf="quick?.answer_check === true">
+                <span>Speichern antworte als</span>
+                <input type="text" placeholder=""
+                       #saveReply
+                       [ngModel]="quick.save_reply"
+                       (change)="_builderFunctionsService.setInputValue(quick, 'save_reply', saveReply.value)">
+              </div>
+            </div>
+          </div>
+
+          <div class="pop-footer" *ngIf="_builderService.view !== 'preview'">
+            <button class="btn default-btn"
+                    (click)="_builderFunctionsService.deleteQuickReply(item?.params['quick_reply'], i)">Löschen</button>
+            <button class="btn success-btn" (click)="p.close()">Erledigt</button>
+          </div>
+        </ng-template>
+    </div>
+
+
+    <div class="quick-item quick-btn" *ngIf="_builderService.view !== 'preview'">
+      <button class="add-quick-btn"
+              *ngIf="item?.params['quick_reply'].length < 10"
+              (click)="_builderFunctionsService.createNewQuickReplyUserInput(item?.params['quick_reply'])">
+        + Schnelle Antwort
+      </button>
+    </div>
+  </div>
+
+  <div class="quick-container" *ngIf="item?.params['keyboardInput'].replyType === 1 && _builderService.view === 'preview'">
+    <div *ngFor="let quick of item?.params['quick_reply']; let i = index" class="quick-item">
+      <input type="text" #quicks placeholder="Text hinzufügen" maxlength="20" [class.open]="p.isOpen()"
+             [ngClass]="{'error-border': !quick?.title && (item?.uuid | publishErrors) === true}"
+             [disabled]="_builderService.view === 'preview'"
+             (change)="_builderFunctionsService.setInputValue(quick, 'title', quicks.value);
+                          _builderFunctionsService.closeSubTextareaPanel(quick, 'activeTitlePanel', 'activeEmojiTitle', 'activeActionTitle')"
+             [(ngModel)]="quick.title">
+
+      <span class="button-clicks" *ngIf="quick?.buttons[0]?.click && _builderService.view === 'preview'">CTR {{ quick?.buttons[0]?.click | flowStatistic:opened }}%</span>
+      <span class="button-clicks" *ngIf="!quick?.buttons[0]?.click && _builderService.view === 'preview'">CTR 0%</span>
+    </div>
+  </div>
+
+  <div class="quick-container" *ngIf="item?.params['keyboardInput'].replyType !== 1 ||
+   (item?.params['keyboardInput'].replyType === 1 && item?.params['keyboardInput'].active)">
+    <div class="quick-item free-user">
+      <label for="{{ item?.uuid }}">Texteingabe durch Nutzer</label>
+    </div>
+  </div>
+
+  <span class="user-input-output">Warte auf Antwort vom Nutzer</span>
+
+  <div class="sidebar-actions" *ngIf="_builderService.view !== 'preview'">
+    <button class="trash-sidebar" (click)="_builderFunctionsService.deleteItemFromSidebar(item)">
+      <i class="fas fa-times"></i>
+    </button>
+    <button class="drop-sidebar-items"><i class="fas fa-arrows-alt-v"></i></button>
+    <button (click)="_builderFunctionsService.cloneItemFromSidebar(item)"><i class="far fa-clone"></i></button>
+  </div>
+</div>

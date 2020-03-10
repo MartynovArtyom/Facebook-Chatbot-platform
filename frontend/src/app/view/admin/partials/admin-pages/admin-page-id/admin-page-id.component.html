@@ -1,0 +1,58 @@
+<div class="top-navbar-page">
+  <div class="title-page">
+    <a [routerLink]="['/admin/pages']">Pages</a>
+    <i class="fas fa-chevron-right"></i>
+    <h3>{{ page?.title }}</h3>
+  </div>
+</div>
+
+<div class="dashboard-content">
+  <div class="white-background padding--10">
+
+    <div class="user-info">
+      <div class="full-width user-title-avatar">
+        <img [src]="page?.avatar" alt="Avatar">
+        <div class="d-flex">
+          {{ page?.title }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="user-all-information">
+
+            <div class="d-flex d-flex--align-center margin-bottom--18">
+              <span class="stats-info-user"><b>Status:</b></span>
+              <span class="active-tool margin-right--10" *ngIf="page?.status">Actived</span>
+              <span class="disable-tool margin-right--10" *ngIf="!page?.status">Deactived</span>
+              <button class="btn danger-button"
+                      *ngIf="page?.status"
+                      (click)="updatePage(false)">
+                Disable Page
+              </button>
+            </div>
+
+            <span class="stats-info-user"><b>Created by:</b>
+              <a [routerLink]="'/admin/users/' + page?.userID">{{ page?.firstName }} {{ page?.lastName }}</a>
+            </span>
+            <span class="stats-info-user"><b>Created:</b> {{ page?.created | date:'MMMM dd, yyy HH:mm' }}</span>
+            <span class="stats-info-user"><b>Flows:</b> {{ page?.countFlows }}</span>
+            <span class="stats-info-user"><b>Kampagnen:</b> {{(page?.countWidgets) ? page?.countWidgets : 0 }}/{{ (!page?.product) ? 0 : (!page?.product?.limitCompany) ? '&#8734;' : page?.product?.limitCompany }}</span>
+            <span class="stats-info-user"><b>Autoresponder:</b> {{(page?.countSequences) ? page?.countSequences : 0 }}/{{ (!page?.product) ? 0 : (!page?.product?.limitSequences) ? '&#8734;' : page?.product?.limitSequences }}</span>
+            <span class="stats-info-user"><b>Subscribers:</b> {{(page?.countSubscribers) ? page?.countSubscribers : 0 }}/{{(page?.limitSubscribers) ? page?.limitSubscribers : 0 }}</span>
+
+          </div>
+        </div>
+        <div class="col-md-6"></div>
+      </div>
+    </div>
+
+    <div id="container" style="width: 100%; height: 500px;"></div>
+
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+

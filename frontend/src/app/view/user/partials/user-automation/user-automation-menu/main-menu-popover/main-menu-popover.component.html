@@ -1,0 +1,323 @@
+<div class="pop-content">
+  <div class="popover-container-content">
+    <span>Wenn geklickt</span>
+    <div class="choice-type">
+      <div class="type-main">
+        <input id="radio-6" class="radio-custom" name="radio-group" type="radio"
+               [checked]="_item?.type === 'reply_message'"
+               (click)="_mainMenuService.updateType('reply_message', _item)">
+        <label for="radio-6" class="radio-custom-label">Antworte mit Nachricht</label>
+      </div>
+      <div class="type-main">
+        <input id="radio-3" class="radio-custom" name="radio-group" type="radio"
+               [checked]="_item?.type === 'open_website'"
+               (click)="_mainMenuService.updateType('open_website', _item)"
+               [disabled]="!_item.removed">
+        <label for="radio-3" class="radio-custom-label"> Öffne Webseite</label>
+      </div>
+    </div>
+
+    <span *ngIf="_item?.type === 'open_website'">URL der Webseite die geöffnet werden soll</span>
+    <input type="text" [(ngModel)]="_item.url" placeholder="e.g. mywebsite.com" *ngIf="_item?.type === 'open_website'">
+
+    <span *ngIf="_item?.type === 'open_website'">
+      Webview-Größe
+      <button class="tooltip-button" placement="top"
+        ngbTooltip="Messenger öffnet Websites direkt in der App, ohne einen externen Browser zu verwenden. Definieren Sie die Höhe dieses integrierten Browsers. Die Option 'Native' verwendet den Standardbrowser mit voller Höhe. Um das Messenger Extensions SDK in der Webansicht verfügbar zu machen, wählen Sie 'Vollständig', 'Mittel' oder 'Kompakt'. Vergessen Sie nicht, dass alle Site-Domain-Namen, die das SDK verwenden, in die Whitelist aufgenommen werden sollten.">
+        <i class="far fa-question-circle"></i>
+      </button>
+    </span>
+    <div class="view-size" *ngIf="_item?.type === 'open_website'">
+      <select [(ngModel)]="_item.viewSize"
+              (change)="_mainMenuService.updateMainMenuDraft()">
+        <option [value]="'native'">Nativer</option>
+        <option [value]="'full'">Vollständig - 100%</option>
+        <option [value]="'medium'">Mittel - 75%</option>
+        <option [value]="'compact'">Kompakt - 50%</option>
+      </select>
+    </div>
+
+    <span *ngIf="_item?.type === 'reply_message'">Antwort Nachricht</span>
+    <div class="choice-message" *ngIf="_item?.type === 'reply_message' && !_item?.flow?.id">
+      <div class="message-option" (click)="_mainMenuService.createNewFlow(_item)">
+        <i class="fas fa-plus"></i>
+        <span>Erstelle neue Nachricht</span>
+      </div>
+
+      <div class="message-option" (click)="openVerticallyCentered(contentFlow, _item)">
+        <i class="far fa-comment-dots"></i>
+        <span>Wähle eine bestehende Nachricht</span>
+      </div>
+    </div>
+
+    <div class="choice-message" *ngIf="_item?.type === 'reply_message' && _item?.flow?.id">
+      <div class="message-option selected-message-option" (click)="_mainMenuService.routerToEdit(_item?.flow?.id)">
+        <span>{{ _item?.flow?.name }}</span>
+        <i class="fas fa-times" *ngIf="_item.removed"  (click)="_mainMenuService.deleteFlowMainMenuItem(_item)"></i>
+      </div>
+    </div>
+
+    <span *ngIf="_item?.type === 'reply_message'">Zusätzliche Aktionen</span>
+    <div class="d-flex d-flex--direction-column main-actions" *ngIf="_item?.type === 'reply_message'">
+
+      <div class="bulk-action-container" *ngFor="let action of _item['actions']; let i = index">
+        <div *ngIf="action.type === 'add_tag'" class="padding--10">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="fas fa-tag"></i> Tag hinzufügen
+          </p>
+          <ng-select class="full-width"
+                     placeholder="Tag eingeben"
+                     [addTag]="true"
+                     [ngModel]="action.name"
+                     (change)="createSubscriberActions(addTags.selectedItems[0], 'add_tag', action)"
+                     #addTags>
+            <ng-option *ngFor="let item of _audienceService.savedTags?.conditions">{{ item?.name }}</ng-option>
+          </ng-select>
+        </div>
+        <div *ngIf="action.type === 'remove_tag'" class="padding--10">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="fas fa-backspace"></i> Tag entfernen
+          </p>
+          <ng-select class="full-width"
+                     placeholder="Tag eingeben"
+                     [addTag]="true"
+                     [ngModel]="action.name"
+                     (change)="createSubscriberActions(removeTags.selectedItems[0], 'remove_tag', action)"
+                     #removeTags>
+            <ng-option *ngFor="let item of _audienceService.savedTags?.conditions">{{ item?.name }}</ng-option>
+          </ng-select>
+        </div>
+        <div *ngIf="action.type === 'subscribe_sequence'" class="padding--10">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="far fa-plus-square"></i> Abonnieren Sie die Sequenz
+          </p>
+          <ng-select class="full-width"
+                     placeholder="Reihenfolge eingeben"
+                     [ngModel]="action.name"
+                     (change)="createSubscriberActions(subscribeSequence.selectedItems[0], 'subscribe_sequence', action)"
+                     #subscribeSequence>
+            <ng-option *ngFor="let item of _audienceService.savedSequences?.conditions">{{ item?.name }}</ng-option>
+          </ng-select>
+        </div>
+        <div *ngIf="action.type === 'unsubscribe_sequence'" class="padding--10">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="far fa-minus-square"></i> Sequenz abbestellen
+          </p>
+          <ng-select class="full-width"
+                     placeholder="Reihenfolge eingeben"
+                     [ngModel]="action.name"
+                     (change)="createSubscriberActions(unsubscribeSequence.selectedItems[0], 'unsubscribe_sequence', action)"
+                     #unsubscribeSequence>
+            <ng-option *ngFor="let item of _audienceService.savedSequences?.conditions">{{ item?.name }}</ng-option>
+          </ng-select>
+        </div>
+        <div *ngIf="action.type === 'clear_subscriber_custom_field'" class="padding--10">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="far fa-calendar-times"></i> Benutzerdefiniertes Teilnehmerfeld löschen
+          </p>
+          <ng-select [items]="_audienceService.dataSubscribers?.customFields" placeholder="Feldname eingeben"
+                     [ngModel]="action?.name"
+                     (change)="createSubscriberActions(clearCustomFields.selectedItems[0], 'clear_subscriber_custom_field', action)"
+                     #clearCustomFields
+                     bindLabel="name" bindValue="name">
+            <ng-template ng-label-tmp let-item="item">
+              <i *ngIf="item?.type === 1" class="fas fa-font"></i>
+              <i *ngIf="item?.type === 2" class="fas fa-hashtag"></i>
+              <i *ngIf="item?.type === 3 || item?.type === 4" class="far fa-clock"></i>
+              <i *ngIf="item?.type === 5" class="fas fa-code"></i>
+              {{ item?.name }}
+            </ng-template>
+          </ng-select>
+        </div>
+
+
+        <div *ngIf="action.type === 'mark_conversation_open'" class="padding--10">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="fas fa-upload"></i> Konversation als offen markieren
+          </p>
+        </div>
+        <div *ngIf="action.type === 'subscribe_bot'" class="padding--10">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="far fa-smile"></i> Abonniere bot
+          </p>
+        </div>
+        <div *ngIf="action.type === 'unsubscribe_bot'" class="padding--10">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="far fa-sad-tear"></i> Bot abbestellen
+          </p>
+        </div>
+
+
+        <div class="padding--10" *ngIf="action?.type === 'notify_admins'" (click)="openAdmins(true, action)">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="far fa-bell"></i> Administratoren benachrichtigen
+          </p>
+          <div class="span-text">
+            <span>{{ action?.team | counterNotifyAdmins }} person </span>
+            via
+            <span> E-mail</span>
+          </div>
+        </div>
+        <div class="popover-container-contents-admin" *ngIf="action['openAdmins'] === true">
+          <span class="preview"><i class="fas fa-chevron-left" (click)="openAdmins(false, action)"></i> Benachrichtigungstext</span>
+          <div class="text"
+               (clickOutside)="_builderFunctionsService.closeSubTextareaPanelAction(action)"
+               (click)="_builderFunctionsService.openSubTextareaPanel(title, action, 'activeTitlePanel')">
+
+                <textarea #title title="Text eingeben..." [placeholder]="'Enter text...'"
+                          [(ngModel)]="action['notificationText']"
+                          (change)="setInputValue(action, 'notificationText', title.value);
+                            _builderFunctionsService.closeSubTextareaPanelAction(action)"></textarea>
+
+            <div class="sub-panel" *ngIf="action['activeTitlePanel'] === true">
+              <button (click)="_builderFunctionsService.openEmojiPanel(true, action, 'activeEmojiTitle', 'activeActionTitle')">
+                <i class="far fa-smile-o"></i>
+              </button>
+              <button (click)="_builderFunctionsService.openBulkActionsPanel(true, title, action, 'activeActionTitle', 'activeEmojiTitle')">&#123;&bull;&#125;</button>
+
+              <app-emoji-picker *ngIf="action['activeEmojiTitle']"
+                                (clickOutside)="_builderFunctionsService.closeEmoji(action['activeEmojiTitle'])"
+                                (modelChange)="addEmoji(title, $event, action, 'notificationText')"
+                                [popupAnchor]="'top'"></app-emoji-picker>
+
+              <div class="sub-bulk-actions-panel" *ngIf="action['activeActionTitle']">
+                <ul>
+                  <li *ngFor="let actions of _builderService.bulkActions" (click)="getCaretPosAction(actions, title, action, 'notificationText')">
+                    {{ actions?.name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <span>Senden an</span>
+          <div class="admins-container">
+            <div class="admin" *ngFor="let admin of _builderService.admins; let i = index">
+              <span>{{ admin?.firstName }} {{ admin?.lastName }} </span>
+              <div class="checkbox" style="margin: 0 0 25px;">
+                <input type="checkbox" id="admin + {{ admin?.adminID }}" class="checkbox__input" [checked]="action?.team | checkAdminsTeam:admin"
+                       (click)="choiceAdminActionStatus(admin, action.team)">
+                <label for="admin + {{ admin?.adminID }}" class="checkbox__label"></label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div *ngIf="action.type === 'set_custom_field'" class="padding--10">
+          <i class="fas fa-times delete-action" (click)="deleteAction(_item['actions'], i)"></i>
+          <p class="action-bulk-title">
+            <i class="fas fa-download"></i> Benutzerdefiniertes Feld festlegen
+          </p>
+          <ng-select [items]="_audienceService.dataSubscribers?.customFields" placeholder="Feldname eingeben"
+                     (change)="createSubscriberActions(setCustomFields.selectedItems[0], 'set_custom_field', action)"
+                     [ngModel]="action.name"
+                     #setCustomFields
+                     bindLabel="name" bindValue="name">
+            <ng-template ng-label-tmp let-item="item">
+              <i *ngIf="item?.type === 1" class="fas fa-font"></i>
+              <i *ngIf="item?.type === 2" class="fas fa-hashtag"></i>
+              <i *ngIf="item?.type === 3 || item?.type === 4" class="far fa-clock"></i>
+              <i *ngIf="item?.type === 5" class="fas fa-code"></i>
+              {{ item?.name }}
+            </ng-template>
+          </ng-select>
+          <div class="set-value-custom-filed">
+            <div *ngIf="!action['typeCF']">
+              <p>Wert</p>
+              <span>Bitte wählen Sie zuerst ein Feld aus ...</span>
+            </div>
+            <div *ngIf="action['typeCF'] === 1">
+              <p>Wert</p>
+              <input #valueField1 [ngModel]="action.value" class="full-width" type="text" placeholder="Text eingeben"
+                     (change)="booleanValueCustomField(valueField1.value, action)">
+            </div>
+            <div *ngIf="action['typeCF'] === 2">
+              <p>Wert</p>
+              <input #valueField2 [ngModel]="action.value" class="full-width" type="number" placeholder="Nummer eingeben"
+                     (change)="booleanValueCustomField(valueField2.value, action)">
+            </div>
+            <div *ngIf="action['typeCF'] === 3">
+              <p>Wert</p>
+
+              <input placeholder="Date:"
+                     class="full-width"
+                     [(ngModel)]="action.value"
+                     [owlDateTime]="dt3"
+                     [owlDateTimeTrigger]="dt3">
+              <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+
+            </div>
+            <div *ngIf="action['typeCF'] === 4">
+              <p>Wert</p>
+
+              <input placeholder="DateTime:"
+                     class="full-width"
+                     [(ngModel)]="action.value"
+                     [owlDateTime]="dt1"
+                     [owlDateTimeTrigger]="dt1">
+              <owl-date-time #dt1></owl-date-time>
+
+            </div>
+            <div *ngIf="action['typeCF'] === 5">
+              <p>Wert</p>
+              <div class="switch-custom-fields d-flex">
+                <div>
+                  <input id="radio-1" class="radio-custom" name="radio-group" type="radio"
+                         [checked]="action?.value === 'true'"
+                         (click)="booleanValueCustomField('true', action)">
+                  <label for="radio-1" class="radio-custom-label">Yes</label>
+                </div>
+                <div>
+                  <input id="radio-2" class="radio-custom" name="radio-group" type="radio"
+                         [checked]="action?.value === 'false'"
+                         (click)="booleanValueCustomField('false', action)">
+                  <label for="radio-2" class="radio-custom-label">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ngbDropdown class="actions-dropdown">
+        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>+ Neue Aktion</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <div class="action-list">
+            <span *ngFor="let act of _builderService.listActions"
+                  (click)="choiseBulkAction(act?.type)">
+              {{ act?.name }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pop-footer">
+  <button class="btn default-btn" [disabled]="!_item.removed" (click)="_mainMenuService.deleteItem(_data, _index)">Löschen</button>
+  <button class="btn success-btn" (click)="_mainMenuService.updateMainMenuDraft();_p.close()">Fertig</button>
+</div>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <div class="modal-body d-flex d-flex--direction-column enter-folder-name">
+    <button type="button" class="close close-flow-popup" aria-label="Close" (click)="c('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <app-flow-popup
+      [config]="selectedItem"
+      [sendPopup]="'true'"
+      [closePopup]="c">
+    </app-flow-popup>
+  </div>
+</ng-template>

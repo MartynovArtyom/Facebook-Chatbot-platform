@@ -1,0 +1,275 @@
+{
+  "operators": {
+    "operator1": {
+      "top": 39670,
+      "left": 39900,
+      "properties": {
+        "title": "widget_1",
+        "data": {
+          "id": 1,
+          "title": "test",
+          "type": "starting_step",
+          "new_widget": true,
+          "next_step": [],
+          "quick_reply": [],
+          "start_step": true,
+          "sent": 0,
+          "delivered": 0,
+          "opened": 0,
+          "clicked": 0,
+          "widget_content": [
+            {
+              "type": "text",
+              "description": "asdsad",
+              "next_step": [],
+              "buttons": [
+                {
+                  "title": "New Button #1",
+                  "type": "",
+                  "next_step": [
+                    {
+                      "type": "Send Message",
+                      "typeIcon": "far fa-comment-alt",
+                      "step_to": "150"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "image",
+              "url": "http___localhost_8000_uploads_candidate_57_ebc532e5c79e872cd6f48e2e081ef7d4.png",
+              "buttons": [
+                {
+                  "title": "New Button #1",
+                  "type": "",
+                  "next_step": []
+                }
+              ]
+            }
+          ]
+        },
+        "inputs": {
+          "input_1": {
+            "label": "Input 1"
+          }
+        },
+        "outputs": {
+          "output_1": {
+            "label": "Output 1"
+          }
+        }
+      }
+    },
+    "operator92": {
+      "top": 39598,
+      "left": 40768,
+      "properties": {
+        "title": "widget_92",
+        "data": {
+          "id": 92,
+          "title": "Perform Action",
+          "type": "perform_actions",
+          "next_step": [],
+          "widget_content": [
+            {
+              "type": "add_tag",
+              "description": "Rochelle Estes"
+            },
+            {
+              "type": "remove_tag",
+              "description": "test2"
+            }
+          ]
+        },
+        "inputs": {
+          "input_92": {
+            "label": "Input 92"
+          }
+        },
+        "outputs": {
+          "output_92": {
+            "label": "Output 92"
+          }
+        }
+      }
+    },
+    "operator93": {
+      "top": 40207,
+      "left": 39561,
+      "properties": {
+        "title": "widget_93",
+        "data": {
+          "id": 93,
+          "title": "Start Another Flow",
+          "type": "start_another_flow",
+          "next_step": [],
+          "widget_content": [
+            {
+              "name": "test2",
+              "unique_users": 6,
+              "runs": 4,
+              "modified": "13.08.2018",
+              "image_url": "../../../../../assets/img/test1.png"
+            }
+          ]
+        },
+        "inputs": {
+          "input_93": {
+            "label": "Input 93"
+          }
+        },
+        "outputs": {
+          "output_93": {
+            "label": "Output 93"
+          }
+        }
+      }
+    },
+    "operator94": {
+      "top": 39805,
+      "left": 39517,
+      "properties": {
+        "title": "widget_94",
+        "data": {
+          "id": 94,
+          "title": "Condition",
+          "type": "condition",
+          "following_conditions": 0,
+          "next_step": [],
+          "widget_content": {
+            "targeting": [
+              {
+                "type": "Locale",
+                "definition": "is",
+                "description": "test3",
+                "status": false
+              },
+              {
+                "type": "Subscribed",
+                "definition": "is",
+                "description": "test1",
+                "status": false
+              }
+            ],
+            "valid": [],
+            "invalid": [],
+          }
+        },
+        "inputs": {
+          "input_94": {
+            "label": "Input 94"
+          }
+        },
+        "outputs": {
+          "output_94": {
+            "label": "Output 94"
+          }
+        }
+      }
+    },
+    "operator95": {
+      "top": 40424,
+      "left": 40308,
+      "properties": {
+        "title": "widget_95",
+        "data": {
+          "id": 95,
+          "title": "Randomizer",
+          "type": "randomizer",
+          "next_step": [],
+          "widget_content": [
+            {
+              "value": 50,
+              "random_leter": "A",
+
+            },
+            {
+              "value": 50,
+              "random_leter": "B"
+            },
+            {
+              "value": 50,
+              "random_leter": "C",
+              "color": "blue"
+            }
+          ]
+        },
+        "inputs": {
+          "input_95": {
+            "label": "Input 95"
+          }
+        },
+        "outputs": {
+          "output_95": {
+            "label": "Output 95"
+          }
+        }
+      }
+    },
+    "operator96": {
+      "top": 39272,
+      "left": 40482,
+      "properties": {
+        "title": "widget_96",
+        "data": {
+          "id": 96,
+          "title": "Smart Delay",
+          "type": "smart_delay",
+          "next_step": [],
+          "widget_content": [
+            {
+              "delay_time": "5",
+              "delay_checkbox": 0,
+              "set_continue": false
+            }
+          ]
+        },
+        "inputs": {
+          "input_96": {
+            "label": "Input 96"
+          }
+        },
+        "outputs": {
+          "output_96": {
+            "label": "Output 96"
+          }
+        }
+      }
+    },
+    "operator150": {
+      "top": 39396,
+      "left": 39713,
+      "properties": {
+        "title": "widget_150",
+        "data": {
+          "id": 150,
+          "title": "Send Message",
+          "type": "send_message",
+          "quick_reply": [],
+          "next_step": [],
+          "widget_content": [
+            {
+              "type": "text",
+              "description": "",
+              "next_step": [],
+              "buttons": []
+            }
+          ]
+        },
+        "inputs": {
+          "input_150": {
+            "label": "Input 150"
+          }
+        },
+        "outputs": {
+          "output_150": {
+            "label": "Output 150"
+          }
+        }
+      }
+    }
+  },
+  "links": {},
+  "operatorTypes": {}
+}

@@ -1,0 +1,170 @@
+<div class="bulk-actions-content" *ngIf="_sharedService.openBulkActions" (clickOutside)="onClickedOutside()" [delayClickOutsideInit]="true">
+  <ul *ngIf="listActionCheck">
+    <li *ngFor="let action of actionList" (click)="choiseBulkAction(action?.type)">
+      <span>{{ action?.name }}</span>
+    </li>
+  </ul>
+  <div class="bulk-action-container" *ngIf="actionCheck">
+    <div *ngIf="sendAction === 'add_tag'" class="padding--10">
+      <p class="action-bulk-title">
+        <i class="fas fa-tag"></i> Tag hinzufügen
+      </p>
+      <ng-select class="full-width"
+                 placeholder="Enter tag"
+                 [addTag]="true"
+                 (change)="createSubscriberActions(addTags)"
+                 #addTags>
+        <ng-option *ngFor="let item of _audienceService.savedTags?.conditions">{{ item?.name }}</ng-option>
+      </ng-select>
+    </div>
+    <div *ngIf="sendAction === 'remove_tag'" class="padding--10">
+      <p class="action-bulk-title">
+        <i class="fas fa-backspace"></i> Tag entfernen
+      </p>
+      <ng-select class="full-width"
+                 placeholder="Enter tag"
+                 [addTag]="true"
+                 (change)="createSubscriberActions(removeTags)"
+                 #removeTags>
+        <ng-option *ngFor="let item of _audienceService.savedTags?.conditions">{{ item?.name }}</ng-option>
+      </ng-select>
+    </div>
+    <div *ngIf="sendAction === 'subscribe_sequence'" class="padding--10">
+      <p class="action-bulk-title">
+        <i class="far fa-plus-square"></i> Zu Autoresponder hinzufügen
+      </p>
+      <ng-select class="full-width"
+                 placeholder="Enter tag"
+                 (change)="createSubscriberActions(subscribeSequence)"
+                 #subscribeSequence>
+        <ng-option *ngFor="let item of _audienceService.savedSequences?.conditions">{{ item?.name }}</ng-option>
+      </ng-select>
+    </div>
+    <div *ngIf="sendAction === 'unsubscribe_sequence'" class="padding--10">
+      <p class="action-bulk-title">
+        <i class="far fa-minus-square"></i> Von Autoresponder entfernen
+      </p>
+      <ng-select class="full-width"
+                 placeholder="Enter tag"
+                 (change)="createSubscriberActions(unsubscribeSequence)"
+                 #unsubscribeSequence>
+        <ng-option *ngFor="let item of _audienceService.savedSequences?.conditions">{{ item?.name }}</ng-option>
+      </ng-select>
+    </div>
+    <div *ngIf="sendAction === 'set_custom_field'" class="padding--10">
+      <p class="action-bulk-title">
+        <i class="fas fa-download"></i> Benutzerdefiniertes Feld zuordnen
+      </p>
+      <ng-select [items]="_audienceService.dataSubscribers?.customFields" placeholder="Enter field name"
+                 (change)="createSubscriberActions(setCustomFields)"
+                 #setCustomFields
+                 bindLabel="name" bindValue="name">
+        <ng-template ng-label-tmp let-item="item">
+          <i *ngIf="item?.type === 1" class="fas fa-font"></i>
+          <i *ngIf="item?.type === 2" class="fas fa-hashtag"></i>
+          <i *ngIf="item?.type === 3 || item?.type === 4" class="far fa-clock"></i>
+          <i *ngIf="item?.type === 5" class="fas fa-code"></i>
+          {{ item?.name }}
+        </ng-template>
+      </ng-select>
+      <div class="set-value-custom-filed">
+        <div *ngIf="!customFieldAction">
+          <p>Value</p>
+          <span>Please select a field first...</span>
+        </div>
+        <div *ngIf="customFieldAction?.type === 1">
+          <p>Value</p>
+          <input #valueField class="full-width" type="text" placeholder="Enter text">
+        </div>
+        <div *ngIf="customFieldAction?.type === 2">
+          <p>Value</p>
+          <input #valueField class="full-width" type="number" placeholder="Enter number">
+        </div>
+        <div *ngIf="customFieldAction?.type === 3">
+          <p>Value</p>
+          <owl-date-time-inline [pickerType]="'calendar'" #dt1></owl-date-time-inline>
+        </div>
+        <div *ngIf="customFieldAction?.type === 4">
+          <p>Value</p>
+          <owl-date-time-inline #dt2></owl-date-time-inline>
+        </div>
+        <div *ngIf="customFieldAction?.type === 5">
+          <p>Value</p>
+          <div class="switch-custom-fields d-flex">
+            <div>
+              <input id="radio-1" class="radio-custom" name="radio-group" type="radio"
+                     (click)="booleanValueCustomField('true')">
+              <label for="radio-1" class="radio-custom-label">Yes</label>
+            </div>
+            <div>
+              <input id="radio-2" class="radio-custom" name="radio-group" type="radio"
+                     (click)="booleanValueCustomField('false')">
+              <label for="radio-2" class="radio-custom-label">No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="sendAction === 'clear_custom_field'" class="padding--10">
+      <p class="action-bulk-title">
+        <i class="far fa-calendar-times"></i> Benutzerdefiniertes Feld löschen
+      </p>
+      <ng-select [items]="_audienceService.dataSubscribers?.customFields" placeholder="Enter field name"
+                 (change)="createSubscriberActions(clearCustomFields)"
+                 #clearCustomFields
+                 bindLabel="name" bindValue="name">
+        <ng-template ng-label-tmp let-item="item">
+          <i *ngIf="item?.type === 1" class="fas fa-font"></i>
+          <i *ngIf="item?.type === 2" class="fas fa-hashtag"></i>
+          <i *ngIf="item?.type === 3 || item?.type === 4" class="far fa-clock"></i>
+          <i *ngIf="item?.type === 5" class="fas fa-code"></i>
+          {{ item?.name }}
+        </ng-template>
+      </ng-select>
+    </div>
+    <div class="d-flex d-flex--justify-between d-flex--align-center padding--10 padding-top--0-imp">
+      <button class="btn default-button" (click)="onClickedOutside()">Abbrechen</button>
+      <button class="btn success-button" (click)="subscribersActions()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="content-modal-container">
+    <h3>Are your sure?</h3>
+    <div class="modal-footer d-flex d-flex--justify-between d-flex--align-center">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn danger-button" (click)="unsubscribeUsers()">Confirm</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentPSID let-c="close" let-c="dismiss">
+  <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="content-modal-container">
+    <h3>Download PSIDs subscribers in CSV file</h3>
+    <button class="btn success-button" (click)="exportPSID()">Download CSV</button>
+    <div class="modal-footer d-flex d-flex--justify-between d-flex--align-center">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentRemove let-c="close" let-c="dismiss">
+  <button type="button" class="close close-subscriber-popup" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="content-modal-container">
+    <h3>Are your sure?</h3>
+    <div class="modal-footer d-flex d-flex--justify-between d-flex--align-center">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn danger-button" (click)="removeSubscribers()">Löschen</button>
+    </div>
+  </div>
+</ng-template>
+

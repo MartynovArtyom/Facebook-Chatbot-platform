@@ -1,0 +1,17 @@
+<div class="text-items-view">
+  <div class="default-content" *ngIf="!config?.params['img_url']" data-drag="true">
+    <img class="build-component-item-image" src="/assets/img/builder-sidebar/bild-short.png" alt="bild-short">
+    <span data-drag="true">Bild</span>
+  </div>
+
+  <div class="config-content" *ngIf="config?.params['img_url']"
+       [ngClass]="{'border-radius-bottom-no': config?.params['buttons'].length > 0}"
+       data-drag="true">
+    <img [src]="config?.params?.img_url" alt="Image" data-drag="true">
+  </div>
+
+  <app-buttons
+    [buttons]="config?.params['buttons']"
+    [opened]="opened"
+    [type]="'some'"></app-buttons>
+</div>

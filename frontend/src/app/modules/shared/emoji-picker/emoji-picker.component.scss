@@ -1,0 +1,81 @@
+$border-color: #ccc;
+$search-bg: #fff;
+$search-hover-bg: #ccc;
+$search-header-bg: #eee;
+$box-shadow-color: rgba(0, 0, 0, .15);
+
+$popup-z-index: 100;
+
+$popup-height: 200px;
+$border-radius: 12px;
+
+:host {
+
+  input {
+    border: 1px solid $border-color;
+    box-sizing: border-box;
+    font-size: 10pt;
+    padding: 8px 10px;
+    width: 100%;
+  }
+
+  .emoji-opener {
+    cursor: pointer;
+    height: 24px;
+    line-height: 36px;
+    position: absolute;
+    right: 12px;
+    top: 6px;
+    width: 24px;
+  }
+
+  .emoji-search {
+    background-color: $search-bg;
+    border: 1px solid $border-color;
+    //border-radius: 12px;
+    box-shadow: 0 1px 5px $box-shadow-color;
+    //height: $popup-height;
+    line-height: 1.5;
+    position: absolute;
+    right: 0;
+    top: 36px;
+    width: 250px;
+    z-index: $popup-z-index;
+
+    &.bottom {
+      top: -$popup-height - 2px;
+    }
+
+    input {
+      //border-radius: 12px;
+      font-size: 10px;
+      padding: 4px 8px;
+    }
+
+    .search-header {
+      background-color: $search-header-bg;
+      border-bottom: 1px solid $border-color;
+      //border-radius: $border-radius $border-radius 0 0;
+      padding: 10px;
+    }
+
+    .emojis-container {
+      border-radius: 0 0 12px 12px;
+      height: 160px;
+      overflow: hidden;
+      overflow-y: auto;
+    }
+
+    span {
+      cursor: pointer;
+      padding: 4px 3px 2px 4px;
+      width: 28px;
+      font-size: 16px;
+      display: inline-block;
+
+      &:hover {
+        background-color: $search-hover-bg;
+      }
+    }
+  }
+}

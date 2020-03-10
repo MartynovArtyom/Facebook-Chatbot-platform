@@ -1,0 +1,51 @@
+<div class="child-items-container" data-drag="true">
+  <div class="action-container" *ngFor="let item of config.widget_content; let i = index" data-drag="true">
+    <i [class]="item?.type | iconPerformActions" data-drag="true"></i>
+    <div class="action-content" data-drag="true">
+      <span data-drag="true">{{ item?.type | namePerformActions }}</span>
+
+      <div class="action-side-container" *ngIf="item.hasOwnProperty('value')" data-drag="true">
+        <span data-drag="true" *ngIf="item?.type !== 'set_custom_field'">{{ item['value'] }}</span>
+        <span data-drag="true" *ngIf="item?.type === 'add_tag' && !item['value'] ||
+                                      item?.type === 'remove_tag' && !item['value']">Unbekanntes Tag</span>
+        <span data-drag="true" *ngIf="item?.type === 'subscribe_sequence' && !item['value'] ||
+                                      item?.type === 'unsubscribe_sequence' && !item['value']">Unbekannte Reihenfolge</span>
+        <span data-drag="true" *ngIf="item?.type === 'clear_subscriber_custom_field' && !item['value']">Unbekanntes Feld</span>
+        <span data-drag="true" *ngIf="item?.type === 'set_custom_field' && !item['value']">Bitte wählen Sie ein benutzerdefiniertes Feld und einen Wert aus</span>
+
+        <span data-drag="true" *ngIf="item?.type === 'set_custom_field' && item['value']">
+          <span *ngIf="item['custom_field'].type === 1">
+            Set {{ item['custom_field']['name'] }} to {{ item['value'] }}
+          </span>
+          <span *ngIf="item['custom_field'].type === 2">
+            Set {{ item['custom_field']['name'] }} to {{ item['value'] }}
+          </span>
+          <span *ngIf="item['custom_field'].type === 3 && item['custom_field_option'].type !== '2'">
+            Set {{ item['custom_field']['name'] }} to {{ item['value'] | date: 'dd MMMM yyy' }}
+          </span>
+          <span *ngIf="item['custom_field'].type === 4 && item['custom_field_option'].type !== '2'">
+            Set {{ item['custom_field']['name'] }} to {{ item['value'] | date: 'dd MMMM yyy, hh:mm' }}
+          </span>
+          <span *ngIf="item['custom_field'].type === 5">
+            Set {{ item['custom_field']['name'] }} to {{ item['value'] }}
+          </span>
+
+          <span *ngIf="item['custom_field'].type === 3 && item['custom_field_option'].type === '2' ||
+                       item['custom_field'].type === 4 && item['custom_field_option'].type === '2'">
+            Set {{ item['custom_field']['name'] }} to {{ item['value'] }}
+          </span>
+        </span>
+      </div>
+      <div class="action-side-container" *ngIf="item?.type === 'notify_admins'" data-drag="true">
+        <span data-drag="true">{{ item['team'] | counterNotifyAdmins }} person per E-Mail</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="widget-content-not-found" *ngIf="config?.widget_content.length === 0"
+     [ngClass]="{'padding-bottom': config?.quick_reply.length > 0}"
+     data-drag="true">
+  <i class="fas fa-bolt" data-drag="true"></i>
+  <span data-drag="true">Klicken, um in der Sidebar zu bearbeiten</span>
+</div>

@@ -1,0 +1,37 @@
+<div class="widget-content-not-found" [ngClass]="{'padding-bottom': config?.quick_reply.length > 0}"
+     data-drag="true">
+  <div class="default-text" data-drag="true" *ngIf="config?.widget_content[0]['conditions'].length === 0">
+    <i class="fas fa-filter" data-drag="true"></i>
+    <span data-drag="true">Klicken, um in der Sidebar zu bearbeiten</span>
+  </div>
+
+  <div class="container-items" *ngIf="config?.widget_content[0]['conditions'].length > 0" data-drag="true">
+    <span data-drag="true">Trifft folgendes zu
+      <span data-drag="true" *ngIf="config?.widget_content[0]['following_conditions'] === 0">alle </span>
+      <span data-drag="true" *ngIf="config?.widget_content[0]['following_conditions'] === 1">eine </span>
+      der folgenden Bedingungen?
+    </span>
+    <div class="condition-item" *ngFor="let item of config?.widget_content[0]['conditions']" data-drag="true">
+      {{ item?.name | conditionName }}
+      <span data-drag="true">{{ item?.criteria | criteriaReplace }}</span>
+      {{ item?.value | conditionValue: item?.name }}
+    </div>
+  </div>
+
+  <div class="steps-content" data-drag="true">
+    <div class="valid-content" data-drag="true">
+      <span data-drag="true">Ja</span>
+      <i class="far fa-circle" [id]="config?.widget_content[0]['valid_step']?.uuid"
+         (click)="_builderService.createMouseLink(config?.widget_content[0]['valid_step'], $event, 'all')"
+         [ngClass]="{'full': config?.widget_content[0]['valid_step']?.arrow?.to?.id}"
+         data-drag="false"></i>
+    </div>
+    <div class="invalid-content" data-drag="true">
+      <span data-drag="true">Nein</span>
+      <i class="far fa-circle" [id]="config?.widget_content[0]['invalid_step']?.uuid"
+         (click)="_builderService.createMouseLink(config?.widget_content[0]['invalid_step'], $event, 'all')"
+         [ngClass]="{'full': config?.widget_content[0]['invalid_step']?.arrow?.to?.id}"
+         data-drag="false"></i>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,286 @@
+<div class="top-navbar-page">
+  <div class="title-page d-flex d-flex--align-center position--relative">
+    <p style="width: 260px">Flows</p>
+    <input type="text" placeholder="Suche" id="search" #search
+           (change)="routeSearch(search.value)"
+           (keyup.enter)="routeSearch(search.value)" class="flow-search">
+    <i (click)="routeSearch(search.value)" class="fas fa-search" style="position: absolute; right: 6px; font-size: 16px; cursor: pointer;"></i>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <button class="btn primary-button" (click)="openVerticallyCenter(contentFlow)">+ New Flow</button>
+  </div>
+</div>
+
+<div class="flow-content">
+  <div class="flow-sidebar">
+    <div class="flow-top-menu">
+      <ul class="sub-folder">
+        <li id="0"
+            (drop)="_flowFoldersService.drop($event, {id: 0, children: []})"
+            (dragend)="_flowFoldersService.hideDrop($event, {id: 0, children: []})"
+            (dragenter)="_flowFoldersService.enterDrop($event)"
+            (dragleave)="_flowFoldersService.dragleave($event)"
+            (dragover)="_flowFoldersService.allowDrop($event)"
+            class="sub-item-folder margin-bottom--0-imp"
+            [ngClass]="{'active-folder': !_flowFoldersService.folderID && _flowFoldersService?.titleFlowPage === 'Flows'}">
+          <i class="far fa-folder"></i>
+          <span [routerLink]="['/' + _userService.userID + '/content']" style="outline: none">
+            Flows
+          </span>
+        </li>
+        <li *ngIf="!_flowFoldersService.folderPreload">
+          <app-user-flow-folders class="padding-left--not" [(flowFolders)]="_flowFoldersService.flowFolders"></app-user-flow-folders>
+        </li>
+        <li *ngIf="_flowFoldersService.folderPreload" class="loader-button" style="background: transparent !important; border: none !important;"></li>
+      </ul>
+    </div>
+
+    <div class="flow-static-menu">
+      <ul>
+        <li (click)="_flowFoldersService.getFlowsByType(7, null)" [ngClass]="{'active-folder-main': _flowFoldersService?.titleFlowPage === 7}">
+          <i class="fa fa-magnet" aria-hidden="true"></i> Opt-In Messages
+        </li>
+        <li (click)="_flowFoldersService.getFlowsByType(4, null)" [ngClass]="{'active-folder-main': _flowFoldersService?.titleFlowPage === 4}">
+          <i class="fa fa-keyboard-o" aria-hidden="true"></i> Keywords
+        </li>
+        <li [routerLink]="['/' + _userService.userID + '/content']" style="outline: none"
+            [queryParams]="{ path: 'sequences' }"
+            [ngClass]="{'active-folder-main': _flowFoldersService?.titleFlowPage === 'sequences'}">
+          <i class="fa fa-angle-double-right" aria-hidden="true"></i> Sequences
+        </li>
+        <li (click)="_flowFoldersService.getFlowsByType(3, null)" [ngClass]="{'active-folder-main': _flowFoldersService?.titleFlowPage === 3}">
+          <i class="fa fa-hand-paper-o" aria-hidden="true"></i> Welcome Message
+        </li>
+        <li (click)="_flowFoldersService.getFlowsByType(2, null)" [ngClass]="{'active-folder-main': _flowFoldersService?.titleFlowPage === 2}">
+          <i class="fa fa-reply" aria-hidden="true"></i> Default Reply
+        </li>
+        <li (click)="_flowFoldersService.getFlowsByType(6, null)" [ngClass]="{'active-folder-main': _flowFoldersService?.titleFlowPage === 6}">
+          <i class="fa fa-bars" aria-hidden="true"></i> Main Menu Content
+        </li>
+      </ul>
+    </div>
+
+    <div class="flow-trash">
+      <ul>
+        <li (click)="_flowFoldersService.getFlowsTrash()" [ngClass]="{'active-folder-main': _flowFoldersService?.titleFlowPage === 'trash'}"><i class="fa fa-trash" aria-hidden="true"></i> Trash</li>
+      </ul>
+    </div>
+  </div>
+  <div *ngIf="!_flowFoldersService.loaderContent" class="flow-container">
+    <div class="flow-folders">
+      <span *ngIf="_flowFoldersService.breadCrumb.length === 0 &&
+                  _flowFoldersService.titleFlowPage !== 'sequences'">
+        {{ _flowFoldersService.titleFlowPage | flowTitle }}
+      </span>
+
+      <span *ngIf="_flowFoldersService.breadCrumb.length === 0 &&
+                   _flowFoldersService.titleFlowPage === 'sequences' &&
+                   _flowFoldersService.sequenceFolders.length > 0">
+        {{ _flowFoldersService.titleFlowPage | flowTitle }}
+      </span>
+      <button class="breadcrumb-link"
+              *ngIf="_flowFoldersService.breadCrumb.length > 0"
+              [routerLink]="['/' + _userService.userID + '/content']"
+              (click)="_flowFoldersService.setBreadCrumb(null)">{{ _flowFoldersService.titleFlowPage | flowTitle }}</button>
+      <button class="breadcrumb-link"
+              *ngIf="_flowFoldersService.breadCrumb.length === 0 &&
+                _flowFoldersService.titleFlowPage === 'sequences' &&
+                _flowFoldersService.sequenceFolders.length === 0"
+              [routerLink]="['/' + _userService.userID + '/content']"
+              [queryParams]="{ path: 'sequences' }"
+              (click)="_flowFoldersService.setBreadCrumb(null)">{{ _flowFoldersService.titleFlowPage | flowTitle }}</button>
+
+      <div class="bread-crumbs" *ngFor="let item of _flowFoldersService.breadCrumb; let index = index">
+        <i class="action-folder fas fa-chevron-right"></i>
+        <input type="text"
+               *ngIf="index === _flowFoldersService.breadCrumb.length - 1"
+               [minWidth]="150"
+               AutoSizeInput
+               [(ngModel)]="item.name"
+               (change)="updateFolderNames(item?.name, item)">
+        <button *ngIf="index !== _flowFoldersService.breadCrumb.length - 1"
+                [routerLink]="['/' + _userService.userID + '/content']" style="outline: none"
+                [queryParams]="{ path: item?.id }"
+                (click)="_flowFoldersService.setBreadCrumb(item?.id)" class="breadcrumb-link">{{ item?.name }}</button>
+      </div>
+
+      <div class="bread-crumbs" *ngIf="_flowFoldersService.breadCrumb.length === 0 &&
+                _flowFoldersService.titleFlowPage === 'sequences' &&
+                _flowFoldersService.sequenceFolders.length === 0">
+        <i class="action-folder fas fa-chevron-right"></i>
+        <span style="font-size: 22px; margin-left: 5px">{{ _flowFoldersService.flowSequenceFolderName }}</span>
+      </div>
+    </div>
+
+    <div class="flow-container-title" *ngIf="_flowFoldersService.titleFlowPage === 'Flows'">
+      <button *ngFor="let folder of _flowFoldersService.flowTopFolders; let i = index"
+              draggable="true"
+              (drop)="_flowFoldersService.drop($event, folder)"
+              (dragend)="_flowFoldersService.hideDrop($event, folder)"
+              (dragenter)="_flowFoldersService.enterDrop($event)"
+              (dragleave)="_flowFoldersService.dragleave($event)"
+              (dragover)="_flowFoldersService.allowDrop($event)"
+              class="flow-folder-item">
+        <span  [routerLink]="['/' + _userService.userID + '/content']" style="outline: none"
+               [queryParams]="{ path: folder?.id }"><i class="far fa-folder"></i> {{ folder?.name }}</span>
+        <div ngbDropdown placement="bottom-left" class="d-inline-block" (click)="accessRouter()">
+          <button class="btn sidebar-top-menu-button icon-btn-main" id="test" ngbDropdownToggle><i class="fas fa-ellipsis-v"></i></button>
+          <div ngbDropdownMenu aria-labelledby="test" style="right: 0; left: auto !important;" class="left-imp">
+            <button class="dropdown-item" (click)="openVerticallyCenterFolder(renameFolder, folder)"><i class="fas fa-pencil-alt"></i> Umbenennen</button>
+            <button class="dropdown-item trash" (click)="deleteFolder(folder, _flowFoldersService.flowTopFolders, i)"><i class="far fa-trash-alt"></i> Löschen</button>
+          </div>
+        </div>
+      </button>
+      <button class="flow-folder-item flow-folder-item--add" (click)="openVerticallyCentered(content, 'Flows')">
+        <span><i class="fas fa-plus"></i> New Folder</span>
+      </button>
+    </div>
+
+    <div class="flows-items">
+      <div class="flow-table" *ngIf="_flowFoldersService.sequenceFolders.length === 0">
+        <div class="flow-title-row">
+          <div class="flow-col" style="width: 70%">Name</div>
+          <div class="flow-col text-right d-flex--justify-end" style="width: 25%; padding-bottom: 0; padding-top: 0">
+            <button *ngIf="_flowFoldersService.modifiedCheck === 'DESC'" class="btn btn-modified"
+                    (click)="_flowFoldersService.changeValueModified('ASC')">
+              Modified <i class="fas fa-long-arrow-alt-down"></i>
+            </button>
+            <button *ngIf="_flowFoldersService.modifiedCheck === 'ASC'" class="btn btn-modified"
+                    (click)="_flowFoldersService.changeValueModified('DESC')">
+              Modified <i class="fas fa-long-arrow-alt-up"></i>
+            </button>
+          </div>
+          <div class="flow-col text-right" style="width: 5%"></div>
+        </div>
+        <div class="flow-content-row"
+             *ngFor="let item of _flowFoldersService.flowItems; let i = index"
+             [draggable]="item?.type !== 2 &&
+                           item?.type !== 3 &&
+                           item?.type !== 4 &&
+                           item?.type !== 6 &&
+                           item?.type !== 7"
+             (dragend)="_flowFoldersService.hideDrop($event, item)"
+             (click)="openFlowItem(item)">
+          <div class="flow-row-col d-flex d-flex--align-center" style="width: 70%">
+            <i *ngIf="item?.draft && !flowBlock" class="fas fa-circle draft-icon-st"></i>
+            {{ item?.name }}
+          </div>
+          <div class="flow-row-col text-right" style="width: 25%; padding-right: 10px">{{ item?.modified | date: 'd.M.y' }}</div>
+          <div class="flow-row-col padding-none text-right" style="width: 5%">
+            <div ngbDropdown placement="bottom-left" class="d-inline-block" (click)="accessRouter()">
+              <button class="btn sidebar-top-menu-button icon-btn-main" id="dropdownBasic1" ngbDropdownToggle><i class="fas fa-ellipsis-v"></i></button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="right: 0; left: auto !important;" class="left-imp">
+                <button *ngIf="_flowFoldersService.titleFlowPage !== 'trash'" class="dropdown-item" (click)="openVerticallyCenterFlow(renameFlow, item)"><i class="fas fa-pencil-alt"></i> Umbenennen</button>
+                <button class="dropdown-item" (click)="cloneFlowItem(item)"><i class="far fa-clone"></i> Duplizieren</button>
+                <button *ngIf="_flowFoldersService.titleFlowPage === 'trash'" class="dropdown-item" (click)="restoreFlow(item, _flowFoldersService.flowItems, i)"><i class="fas fa-undo"></i> Wiederherstellen</button>
+                <button class="dropdown-item trash" (click)="deleteFlow(item, _flowFoldersService.flowItems, i)"><i class="far fa-trash-alt"></i> Löschen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-content-row" *ngIf="_flowFoldersService.flowItems.length === 0">
+          <div *ngIf="!_flowFoldersService.loadPagination" class="flow-row-col d-flex d-flex--align-center d-flex--justify-center" style="width: 100%">Flows not found</div>
+        </div>
+        <div class="d-flex d-flex--justify-center margin-bottom--32 margin-top--15">
+          <span *ngIf="_flowFoldersService.totalCount > _flowFoldersService.flowItems.length &&
+                      !_flowFoldersService.loadPagination &&
+                      _flowFoldersService.flowItems.length !== 0"
+                (click)="_flowFoldersService.loadMore()" class="load-more-btn">Mehr laden</span>
+          <span *ngIf="_flowFoldersService.loadPagination" class="loader-button small-load-table"></span>
+        </div>
+      </div>
+
+      <div class="flow-table" *ngIf="_flowFoldersService.sequenceFolders.length > 0">
+        <div class="flow-title-row">
+          <div class="flow-col" style="width: 70%">Name</div>
+          <div class="flow-col text-right d-flex--justify-end" style="width: 25%; padding-bottom: 0; padding-top: 0"></div>
+          <div class="flow-col text-right" style="width: 5%"></div>
+        </div>
+        <div class="flow-content-row"
+             *ngFor="let item of _flowFoldersService.sequenceFolders; let i = index"
+             [routerLink]="['/' + _userService.userID + '/content']"
+             [queryParams]="{ path: 'sequences:' + item?.id + ':' + item?.title }">
+          <div class="flow-row-col d-flex d-flex--align-center" style="width: 70%">
+            <i class="far fa-folder" style="color: #008eff; margin-right: 10px"></i>
+            {{ item?.title }}
+          </div>
+          <div class="flow-row-col text-right" style="width: 25%; padding-right: 10px"></div>
+          <div class="flow-row-col padding-none text-right" style="width: 5%"></div>
+        </div>
+        <div class="flow-content-row" *ngIf="_flowFoldersService.sequenceFolders.length === 0">
+          <div *ngIf="!_flowFoldersService.loadPagination" class="flow-row-col d-flex d-flex--align-center d-flex--justify-center" style="width: 100%">Flows not found</div>
+        </div>
+        <div class="d-flex d-flex--justify-center margin-bottom--32 margin-top--15">
+          <span *ngIf="_flowFoldersService.loadPagination" class="loader-button small-load-table"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="_flowFoldersService.loaderContent" class="flow-container loader-table"></div>
+  <div class="flow-preview-sidebar" [ngClass]="{'active': rightSidebarPreview}">
+    <div class="flow-preview-content">
+      <span>{{ dataPreviewSidebar['name'] }}</span>
+    </div>
+    <!--<button class="primary-button" (click)="selectFlowToContent(dataPreviewSidebar)">Wählen Sie diese Kampagne aus</button>-->
+  </div>
+</div>
+
+<ng-template #renameFlow let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Inhalt umbenennen</h3>
+    <input type="text" placeholder="Enter new content name" #renameFlow value="{{ flowContant.name }}">
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn primary-button" (click)="renameFlowItem(renameFlow.value)" [disabled]="!renameFlow?.value">Umbenennen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #renameFolder let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Inhalt umbenennen</h3>
+    <input type="text" placeholder="Enter new content name" #renameFolders value="{{ folderContant.name }}">
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn primary-button" (click)="updateFolderName(renameFolders.value, folderContant)" [disabled]="!renameFolders?.value">Umbenennen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contentFlow let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Neuen Inhalt erstellen</h3>
+    <input type="text" placeholder="Enter new content name" #newFlow>
+    <span>Der erstellte Inhalt wir dem <b>{{ _flowFoldersService?.createFlowFolderName }}</b> hinzugefügt</span>
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn primary-button" (click)="createFlow(newFlow.value)" [disabled]="!newFlow?.value">Erstellen</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #content  let-c="close" let-c="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Create Folder</h4>
+    <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body d-flex d-flex--direction-column enter-folder-name">
+    <input type="text" placeholder="Enter new folder name" #folderName>
+    <span>Folder will be created inside "{{ createParentFolderName }}" folder</span>
+  </div>
+  <div class="modal-footer d-flex d-flex--justify-between">
+    <button type="button" class="btn default-button" (click)="c('Close click')">Schließen</button>
+    <button type="button" class="btn primary-button" (click)="addNewFolder(folderName.value)">Create</button>
+  </div>
+</ng-template>

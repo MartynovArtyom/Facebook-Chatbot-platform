@@ -1,0 +1,55 @@
+.custom-add{
+  font-weight: 600;
+  font-size: 16px;
+}
+.new-custom-name{
+  width: 60%;
+}
+
+.new-custom-type{
+  width: 30%;
+}
+
+.form-control-select{
+  display: block;
+  width: 100%;
+  padding: 0.47rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control{
+  &.text-height{
+    height: 50px;
+  }
+}
+
+.custom-field-table{
+  & > tr{
+    cursor: pointer;
+
+    & > td{
+      padding: 0.85em 0.75em;
+
+      & > input {
+        padding: 0;
+        border: 1px solid #ccc;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 2px;
+      }
+
+      & > .primary-button{
+        padding: 5px 20px;
+        position: absolute;
+        top: 8px;
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+<div class="slide-in btn-w" *ngIf="tabsValue === 'initial_state' || tabsValue === 'setup'">
+  <div class="d-flex d-flex--align-center d-flex--justify-center full-width checkbox-{{config['checkbox_position']}}"
+       [ngClass]="{'d-flex--direction-column': view === 'mobile'}">
+    <div class="button-type-check"
+         [style.background]="config['color_button_background']">
+      <div class="edit-button-text">
+        <input type="text" maxlength="15"
+               id="buttonText"
+               [disabled]="_userService.userPageInfo?.role === 4"
+               [style.color]="config['color_button_text']"
+               class="button-text"
+               [(ngModel)]="config['button_title']">
+        <label for="buttonText">
+          <i *ngIf="_userService.userPageInfo?.role !== 4" class="fa fa-pencil" aria-hidden="true"></i>
+        </label>
+      </div>
+    </div>
+    <div class="facebook-plugin-form">
+      <div class="fb-messenger-checkbox"
+           [attr.origin]="originUrl"
+           [attr.messenger_app_id]="apiId"
+           [attr.page_id]="_userService.userID"
+           [attr.user_ref]="randomValue"
+           [attr.data-ref]="currentId"
+           [attr.checked]="true"
+           [attr.prechecked]="true"
+           [attr.allow_login]="true"
+           [attr.size]="'standard'">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide-in btn-w" *ngIf="tabsValue !== 'initial_state' && tabsValue !== 'setup' && config['after_submit'] === 'show'">
+  <div class="d-flex d-flex--align-center d-flex--justify-center full-width">
+    <span class="button-widget-title"
+          [style.color]="config['after_submit_color_button_background']">Erfolgreich!</span>
+    <div class="button-type-check"
+         [style.background]="config['after_submit_color_button_background']">
+      <div class="edit-button-text">
+        <input type="text" maxlength="15"
+               id="buttonText1"
+               [disabled]="_userService.userPageInfo?.role === 4"
+               [style.color]="config['after_submit_color_button_text']"
+               class="button-text"
+               [(ngModel)]="config['submit_button_title']">
+        <label for="buttonText1">
+          <i *ngIf="_userService.userPageInfo?.role !== 4" class="fa fa-pencil" aria-hidden="true"></i>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

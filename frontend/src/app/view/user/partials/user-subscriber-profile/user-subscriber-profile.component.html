@@ -1,0 +1,146 @@
+<div class="subscriber-profile">
+  <div class="head-profile">
+    <img *ngIf="subscriber?.avatar" [src]="subscriber?.avatar">
+    <div class="profile-information">
+      <div class="fullname-profile padding-bottom--10">
+        <span>{{ subscriber?.firstName | titlecase }} </span>
+        <span>{{ subscriber?.lastName | titlecase }}</span>
+      </div>
+      <p *ngIf="subscriber?.status" class="subscr"><i class="far fa-check-circle"></i> Abonnenten <span *ngIf="_userService.userPageInfo?.role !== 4" class="unsubsc-user" (click)="unsubscribeProfile()">(Abonnent abmelden)</span></p>
+      <p *ngIf="!subscriber?.status" class="unsubscr"><i class="fas fa-minus-circle"></i> Abgemeldet</p>
+      <p>
+        <i class="fas fa-venus" *ngIf="subscriber?.gender === 'female'"></i>
+        <i class="fas fa-mars" *ngIf="subscriber?.gender === 'male'"></i>
+        {{ subscriber?.gender | titlecase }}
+      </p>
+      <p><i class="fas fa-globe-americas"></i> {{ subscriber?.localeName }}</p>
+      <p><i class="far fa-clock"></i> UTC +{{ subscriber?.timezone }}</p>
+      <p class="margin-bottom--15"><i class="far fa-id-card"></i> {{ subscriber?.subscriber_id }}</p>
+    </div>
+    <button class="btn primary-button"
+            *ngIf="_userService.userPageInfo?.role !== 4"
+            (click)="closePopups()"
+            [routerLink]="['/' + _userService.userID + '/chat']"
+            [queryParams]="{id: subscriber?.subscriber_id}">Live Chat</button>
+  </div>
+  <div class="options-profile">
+    <div class="fullname-profile border-bottom margin-bottom--18 padding-bottom--10">
+      <span>{{ subscriber?.firstName | titlecase }} </span>
+      <span>{{ subscriber?.lastName | titlecase }}</span>
+    </div>
+    <div class="profile-user border-bottom margin-bottom--18 padding-bottom--10">
+      <div class="title-fields d-flex d-flex--align-center d-flex--justify-between">
+        <span>Benutzer Tags</span>
+        <a (click)="openAddTags()" *ngIf="_userService.userPageInfo?.role !== 4" class="subscriber-button">+ Add Tag</a>
+        <div class="add-tags-content"
+             *ngIf="addTagsCheck"
+             (clickOutside)="onClickedOutsideTags($event)"
+             [delayClickOutsideInit]="true">
+          <ng-select class="full-width"
+                     notFoundText="No tags found"
+                     placeholder="Enter tag"
+                     [addTag]="true"
+                     (change)="createSubscriberActions(addTags, allTags, subscriberTags)"
+                     #addTags>
+            <ng-option *ngFor="let item of allTags">{{ item?.name }}</ng-option>
+          </ng-select>
+        </div>
+      </div>
+      <div class="tags-content-subscriber margin-top--10">
+        <a *ngFor="let item of subscriberTags">{{ item.name }}
+          <i class="fas fa-times" *ngIf="_userService.userPageInfo?.role !== 4" (click)="deleteFromSubscriberAction(item, allTags, subscriberTags)"></i>
+        </a>
+      </div>
+    </div>
+    <div class="profile-user border-bottom margin-bottom--18 padding-bottom--10">
+      <div class="title-fields d-flex d-flex--align-center d-flex--justify-between">
+        <span>Autoresponder</span>
+        <a (click)="openAddSequence()" *ngIf="_userService.userPageInfo?.role !== 4" class="subscriber-button">Subscribe</a>
+        <div class="add-tags-content"
+             *ngIf="addSequencesCheck"
+             (clickOutside)="onClickedOutsideSequences($event)"
+             [delayClickOutsideInit]="true">
+          <ng-select class="full-width"
+                     placeholder="Enter sequence"
+                     notFoundText="No sequences found"
+                     (change)="createSubscriberActions(sequencesTag, allSequences, subscriberSequences)"
+                     #sequencesTag>
+            <ng-option *ngFor="let item of allSequences">{{ item?.name }}</ng-option>
+          </ng-select>
+        </div>
+      </div>
+      <div class="tags-content-subscriber margin-top--10">
+        <a *ngFor="let item of subscriberSequences">{{ item.name }}
+          <i class="fas fa-times" *ngIf="_userService.userPageInfo?.role !== 4" (click)="deleteFromSubscriberAction(item, allSequences, subscriberSequences)"></i>
+        </a>
+      </div>
+    </div>
+    <div class="profile-custom-fields margin-bottom--18 padding-bottom--10">
+      <div class="title-fields d-flex d-flex--justify-between d-flex--align-center margin-bottom--15">
+        <span>Benutzerdefiniertes Feld</span>
+      </div>
+      <div class="custom-fields-content-subscriber">
+        <div *ngFor="let item of allCustomFields | slice:0:customFiledsCount; let i = index">
+          <div class="c-f" (click)="showCustomFieldOption(item)">
+            {{ item?.name }}:
+            <span class="not-set" *ngIf="!item?.value">Not Set</span>
+            <span *ngIf="item?.value && item?.type === 1 || item?.value && item?.type === 2">{{ item?.value }}</span>
+            <span *ngIf="item?.value && item?.type === 3">{{ item?.value | conditionValue: 'Date' }}</span>
+            <span *ngIf="item?.value && item?.type === 4">{{ item?.value | conditionValue: 'DateTime' }}</span>
+            <span *ngIf="item?.value && item?.type === 5 && item?.value === 'false'">No</span>
+            <span *ngIf="item?.value && item?.type === 5 && item?.value === 'true'">Yes</span>
+          </div>
+          <div class="custom-field-option" *ngIf="item?.activated"
+               (clickOutside)="onClickedOutsideCustomFields($event)">
+            <p class="margin-bottom--15">{{ item?.name }}</p>
+            <input #valueField value="{{ item.value }}" class="full-width margin-bottom--15" *ngIf="item?.type === 1" type="text" placeholder="Enter text">
+            <input #valueField value="{{ item.value }}" class="full-width margin-bottom--15" *ngIf="item?.type === 2" type="number" placeholder="Enter number">
+
+            <input placeholder="Date Time:"
+                   class="full-width margin-bottom--12"
+                   *ngIf="item?.type === 3"
+                   [(ngModel)]="item.value"
+                   [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1">
+            <owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time>
+
+            <input placeholder="Date Time:"
+                   class="full-width margin-bottom--12"
+                   *ngIf="item?.type === 4"
+                   [(ngModel)]="item.value"
+                   [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2">
+            <owl-date-time #dt2></owl-date-time>
+
+            <div class="switch-custom-fields margin-bottom--15 d-flex" *ngIf="item?.type === 5">
+              <div>
+                <input id="radio-1" class="radio-custom" name="radio-group" type="radio"
+                       (click)="booleanValueCustomField(item, 'true')"
+                       [checked]="item?.value === 'true'">
+                <label for="radio-1" class="radio-custom-label">Yes</label>
+              </div>
+              <div>
+                <input id="radio-2" class="radio-custom" name="radio-group" type="radio"
+                       (click)="booleanValueCustomField(item, 'false')"
+                       [checked]="item?.value === 'false'">
+                <label for="radio-2" class="radio-custom-label">No</label>
+              </div>
+            </div>
+            <div class="d-flex d-flex--justify-between d-flex--align-center custom-field-btns">
+              <div class="d-flex d-flex--align-center custom-field-btn-wrapper">
+                <button class="btn default-button margin-right--10 custom-field-schlieben-btn" (click)="closePanel(item)">Schließen</button>
+                <button [disabled]="!item?.value" class="btn default-button" (click)="closeCustomField(item)">Clear</button>
+              </div>
+              <button [disabled]="!item?.value" *ngIf="item?.type === 5" class="btn primary-button custom-field-apply-btn" (click)="setValueCustomField(item, item?.value)">Apply</button>
+              <button [disabled]="!item?.value && !valueField?.nativeElement?.value" *ngIf="item?.type !== 5" class="btn primary-button custom-field-apply-btn" (click)="setValueCustomField(item, valueField)">Apply</button>
+            </div>
+          </div>
+        </div>
+        <button *ngIf="allCustomFields.length > 5 && customFiledsCheck" class="show-more d-flex d-flex--align-center" (click)="showMoreCustomFields(1000)">Show All <i class="fas fa-chevron-down margin-left--10"></i></button>
+        <button *ngIf="allCustomFields.length > 5 && !customFiledsCheck" class="show-more d-flex d-flex--align-center" (click)="showMoreCustomFields(5)">Hide All <i class="fas fa-chevron-up margin-left--10"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}" style="left: 0; border-radius: 5px; min-height: 500px">
+  <div class="loader" id="loader-1"></div>
+</div>

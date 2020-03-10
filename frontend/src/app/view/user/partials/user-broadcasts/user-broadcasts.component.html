@@ -1,0 +1,167 @@
+<!-- Top sidebar page -->
+<div class="top-navbar-page">
+  <div class="title-page">
+    <p>Newsletter</p>
+  </div>
+  <div class="right-side-menu d-flex d-flex--align-center">
+    <button class="btn primary-button margin-right--10 neuer-newsletter-btn"
+            *ngIf="_userService.userPageInfo?.role !== 4"
+            (click)="openVerticallyCentered(content)">+ Neuer Newsletter</button>
+  </div>
+</div>
+<!-- End top sidebar page -->
+<div class="broadcast-container">
+  <span [routerLink]="['/' + _userService.userID + '/broadcasts/drafts']" class="title-broadcasts">Entwurf</span>
+  <!-- Drafts table -->
+  <div class="broadcast-table broadcast-table-entwurf">
+    <div class="broadcast-table-title">
+      <div class="table-row">
+        <div class="table-cell" style="width: 30%">Newsletter</div>
+        <div class="table-cell" style="width: 50%">Gepeichert am</div>
+        <div class="table-cell" style="width: 20%"></div>
+      </div>
+    </div>
+    <div class="broadcast-table-body">
+      <div class="table-row" *ngFor="let item of broadcastItems?.draft | slice:0:5; let i = index" (click)="routerToEdit(item?.id, 'drafts')">
+        <div class="table-cell" style="width: 20%">{{ item?.name }}</div>
+        <div class="table-cell" style="width: 50%">{{ item?.created | date: 'MMM d, y h:mm' }}</div>
+        <div class="table-cell d-flex d-flex--justify-end d-flex--align-center" style="width: 30%">
+          <button class="btn icon-button"
+                  *ngIf="_userService.userPageInfo?.role !== 4"
+                  (click)="copyBroadcast(item?.id, broadcastItems?.draft)">
+            <i class="far fa-clone"></i>
+          </button>
+          <button class="btn icon-button"
+                  *ngIf="_userService.userPageInfo?.role !== 4"
+                  (click)="deleteBroadcast(item, broadcastItems?.draft, broadcastItems?.history, i)">
+            <i class="far fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+      <div class="table-row view-all" *ngIf="broadcastItems?.draft.length > 5">
+        <button class="btn" [routerLink]="['/' + _userService.userID + '/broadcasts/drafts']">View all messages</button>
+      </div>
+      <div class="table-row view-all" *ngIf="broadcastItems?.draft.length === 0">
+        <div class="table-cell d-flex d-flex--align-center d-flex--justify-center" style="width: 100%">
+          Du hast keine Entwürfe
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End drafts table -->
+
+  <span [routerLink]="['/' + _userService.userID + '/broadcasts/scheduled']" class="title-broadcasts">Geplant</span>
+  <!-- Scheduled table -->
+  <div class="broadcast-table-wrapper broadcast-geplant-wrapper">     
+    <div class="broadcast-table broadcast-table-geplant">
+      <div class="broadcast-table-title">
+        <div class="table-row">
+          <div class="table-cell" style="width: 20%">Newsletter</div>
+          <div class="table-cell" style="width: 20%">Geplant am</div>
+          <div class="table-cell" style="width: 35%">Type</div>
+          <div class="table-cell" style="width: 25%"></div>
+        </div>
+      </div>
+      <div class="broadcast-table-body">
+        <div class="table-row" *ngFor="let item of broadcastItems?.schedule | slice:0:5; let i = index" (click)="routerToEdit(item?.id, 'scheduled')">
+          <div class="table-cell" style="width: 20%">{{ item?.name }}</div>
+          <div class="table-cell" style="width: 20%">{{ item?.created | date: 'MMM d, y h:mm' }}</div>
+          <div class="table-cell" style="width: 35%">{{ item?.type | broadcastType }}</div>
+          <div class="table-cell d-flex d-flex--justify-end d-flex--align-center" style="width: 25%">
+            <button class="btn icon-button"
+                    *ngIf="_userService.userPageInfo?.role !== 4"
+                    (click)="copyBroadcast(item?.id, broadcastItems?.draft)">
+              <i class="far fa-clone"></i>
+            </button>
+            <button class="btn icon-button"
+                    *ngIf="_userService.userPageInfo?.role !== 4"
+                    (click)="cancelBroadcast(item, broadcastItems?.schedule, broadcastItems?.draft, i)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="table-row view-all" *ngIf="broadcastItems?.schedule.length > 5">
+          <button class="btn" [routerLink]="['/' + _userService.userID + '/broadcasts/scheduled']">View all messages</button>
+        </div>
+        <div class="table-row view-all" *ngIf="broadcastItems?.schedule.length === 0">
+          <div class="table-cell d-flex d-flex--align-center d-flex--justify-center" style="width: 100%">
+            Du hast keine geplanten Newsletter
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End scheduled table -->
+
+  <span [routerLink]="['/' + _userService.userID + '/broadcasts/history']" class="title-broadcasts">Gesendet</span>
+  <!-- History table -->
+  <div class="broadcast-gesendet-wrapper">
+    <div class="broadcast-table broadcast-table-gesendet">
+      <div class="broadcast-table-title">
+        <div class="table-row">
+          <div class="table-cell" style="width: 20%">Newsletter</div>
+          <div class="table-cell" style="width: 20%">Gesendet am</div>
+          <div class="table-cell" style="width: 15%">Type</div>
+          <div class="table-cell" style="width: 10%">Gesendet</div>
+          <div class="table-cell" style="width: 15%">Gelesen(%)</div>
+          <div class="table-cell" style="width: 15%">Klicks/CTR</div>
+          <div class="table-cell" style="width: 5%"></div>
+        </div>
+      </div>
+      <div class="broadcast-table-body">
+        <div class="table-row" *ngFor="let item of broadcastItems?.history | slice:0:5; let i = index" (click)="routerToEdit(item?.id, 'history')">
+          <div class="table-cell" style="width: 20%">{{ item?.name }}</div>
+          <div class="table-cell" style="width: 20%">{{ item?.created | date: 'MMM d, y HH:mm' }}</div>
+          <div class="table-cell" style="width: 15%">{{ item?.type | broadcastType }}</div>
+          <div class="table-cell" style="width: 10%">{{ item?.sent }}</div>
+
+          <div *ngIf="!item?.delivered" class="table-cell" style="width: 15%">0</div>
+          <div *ngIf="item?.delivered" class="table-cell" style="width: 15%">
+            {{ item?.delivered }} ({{ (item?.delivered / item?.sent) * 100 | sentProcents }}%)
+          </div>
+
+          <div *ngIf="!item?.clicked" class="table-cell" style="width: 15%">0</div>
+          <div *ngIf="item?.clicked" class="table-cell" style="width: 15%">
+            {{ item?.clicked }} ({{ (item?.clicked / item?.delivered) * 100 | sentProcents }}%)
+          </div>
+
+          <div class="table-cell d-flex d-flex--justify-end d-flex--align-center" style="width: 5%">
+            <button class="btn icon-button"
+                    *ngIf="_userService.userPageInfo?.role !== 4"
+                    (click)="copyBroadcast(item?.id, broadcastItems?.draft)">
+              <i class="far fa-clone"></i>
+            </button>
+          </div>
+        </div>
+        <div class="table-row view-all" *ngIf="broadcastItems?.history.length > 5">
+          <button class="btn" [routerLink]="['/' + _userService.userID + '/broadcasts/history']">View all messages</button>
+        </div>
+        <div class="table-row view-all" *ngIf="broadcastItems?.history.length === 0">
+          <div class="table-cell d-flex d-flex--align-center d-flex--justify-center" style="width: 100%">
+            Du hast keine gesendeten Newsletter
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End history table -->
+</div>
+
+<div class="loader-component" [ngClass]="{'close-preloader': !preloader}">
+  <div class="loader" id="loader-1"></div>
+</div>
+
+
+<ng-template #content let-c="close" let-c="dismiss">
+  <button type="button" class="close create-autoposting-chanel-close" aria-label="Close" (click)="c('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body d-flex d-flex--direction-column create-flow">
+    <h3>Neuen Newsletter erstellen</h3>
+    <input type="text" placeholder="Gib den Namen für den Newsletter ein" #newBroadcast>
+    <div class="footer-chanel-buttons">
+      <button class="btn default-button" (click)="c('Cross click')">Abbrechen</button>
+      <button class="btn success-button" (click)="createBroadcast(newBroadcast.value)" [disabled]="!newBroadcast?.value">Erstellen</button>
+    </div>
+  </div>
+</ng-template>

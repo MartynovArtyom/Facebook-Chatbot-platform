@@ -1,0 +1,34 @@
+.date-container-messenger{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #ffffff;
+
+  .calendar-content{
+    width: 50vh;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+
+    .footer-date-container-messenger{
+      display: flex;
+    }
+  }
+}
+
+.owl-dt-inline{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+::ng-deep iframe:has(div){
+  display: none !important;
+  opacity: 0 !important;
+}

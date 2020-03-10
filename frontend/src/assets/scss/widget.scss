@@ -1,0 +1,285 @@
+h2.ed-t{
+  font-size: 22px;
+  font-weight: 600;
+}
+
+h3.ed-t{
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.ed-t{
+  max-width: calc(100% - 30px);
+  border: 2px solid transparent;
+  border-radius: 3px;
+  font-family: Lato,Helvetica Neue,Helvetica,Arial,sans-serif;
+  outline: none;
+  text-align: center;
+  line-height: 28px;
+  position: relative;
+  margin-bottom: 10px;
+
+  &:after{
+    content: "\f040";
+    speak: none;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: absolute;
+    right: -25px;
+    top: 0;
+    color: rgba(0,0,0,.12);
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: 18px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  &:hover, &:active, &:focus{
+    border: 2px dashed rgba(195, 195, 195, 0.6);
+    background: rgba(0, 0, 0, .05);
+  }
+}
+
+.button-type-check{
+  padding: 3px 15px;
+  border: none;
+  border-radius: 3px;
+  font-family: Lato,Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fff;
+
+  .edit-button-text{
+    width: fit-content;
+    position: relative;
+    margin: 0 auto;
+
+    & > span{
+      padding: 6px 15px;
+      display: flex;
+      justify-content: center;
+      width: fit-content;
+      margin: 0 auto;
+      border: 2px solid transparent;
+      border-radius: 3px;
+      cursor: text;
+      outline: none;
+
+      &:hover, &:active, &:focus{
+        border: 2px dashed rgba(195, 195, 195, 0.6);
+        background: rgba(0, 0, 0, .05);
+      }
+    }
+
+    & > i{
+      position: absolute;
+      right: -15px;
+      top: 12px;
+    }
+  }
+}
+
+.bar-desktop, .slide-in{
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,.33);
+  padding: 10px 20px;
+
+  &.mobile{
+    .d-flex{
+      & > h2{
+        font-size: 16px;
+        line-height: 20px;
+      }
+      .button-type-check{
+        .edit-button-text{
+          & > span{
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  & > button{
+    position: absolute;
+    right: 3px;
+    top: 1px;
+    border: none;
+    background: none;
+    color: rgba(0, 0, 0, .5);
+    font-size: 22px;
+  }
+}
+
+.button-type-check{
+  display: flex;
+  padding: 3px 25px 3px 25px !important;
+}
+
+.edit-button-text{
+  padding: 5px 0;
+
+  & > label{
+    position: absolute;
+    top: 8px;
+  }
+}
+
+.facebook-plugin-form{
+  margin-left: 20px;
+}
+
+.button-text{
+  text-align: center;
+  box-sizing: content-box;
+  background: transparent none;
+  border: 1px dashed transparent!important;
+  width: 180px;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 700;
+
+  &:hover{
+    background-color: rgba(0,0,0,.05)!important;
+    border: 1px dashed rgba(0,0,0,.12)!important;
+    border-radius: 3px!important;
+    cursor: pointer!important;
+  }
+}
+
+.fa-pencil{
+  color: rgba(0, 0, 0, .12);
+}
+
+.widget-img{
+  margin-bottom: 15px;
+  max-height: 200px;
+}
+
+.button-widget-title{
+  width: 100%;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+// Type style
+.bar-desktop{
+  position: relative;
+  width: 100%;
+}
+
+.slide-in{
+  width: 430px;
+  max-height: 95vh;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 35px 40px;
+
+  &.box-widget-container{
+    max-width: 98%;
+    min-width: 280px;
+  }
+
+  &.btn-w{
+    box-shadow: 0 0 10px 15px rgba(255, 255, 255, 0.7);
+    top: 40%;
+    background: #ffffff;
+    width: auto;
+
+    & > .checkbox-bottom{
+      flex-direction: column;
+    }
+
+    & > .checkbox-side{
+      flex-direction: row !important;
+    }
+  }
+
+  &.page-tk{
+    box-shadow: none;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+
+    & > .d-flex{
+      width: 430px;
+    }
+  }
+
+  &.r-t{
+    right: 0;
+    top: 10px;
+  }
+  &.r-m{
+    right: 0;
+    top: 25%;
+  }
+  &.r-b{
+    right: 0;
+    bottom: 10px;
+  }
+  &.l-t{
+    left: 0;
+    top: 10px;
+  }
+  &.l-m{
+    left: 0;
+    top: 25%;
+  }
+  &.l-b{
+    left: 0;
+    bottom: 10px;
+  }
+
+  & > .full-width{
+    flex-direction: column;
+  }
+}
+
+.chat-container{
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 360px;
+  height: auto;
+
+  .title-content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 15px;
+    border-bottom: 1px solid #e0e6ed;
+
+    & > span{
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    & > img{
+      width: 50px;
+      border-radius: 50%;
+    }
+  }
+
+  .button-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px;
+
+    & > span{
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+}

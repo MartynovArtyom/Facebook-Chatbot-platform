@@ -1,0 +1,26 @@
+.child-items-container{
+  padding: 40px 30px;
+}
+
+.widget-content-not-found{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #000;
+  position: relative;
+  top: -15px;
+
+  &.padding-bottom{
+    padding-bottom: 40px;
+  }
+
+  & > i{
+    font-size: 32px;
+    margin-bottom: 5px;
+  }
+
+  & > span{
+    font-size: 18px;
+  }
+}

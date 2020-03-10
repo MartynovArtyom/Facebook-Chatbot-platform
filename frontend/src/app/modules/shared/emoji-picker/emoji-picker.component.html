@@ -1,0 +1,11 @@
+<!--<input type="text" (keyup.enter)="onEnter()" [(ngModel)]="input" (ngModelChange)="onChange($event)" />-->
+<!--<div class="emoji-opener"></div>-->
+<div class="emoji-search" [ngClass]="popupAnchor">
+  <div class="emojis-container">
+    <span *ngFor="let emoji of getFilteredEmojis()"
+          (click)="onEmojiClick(emoji.emoji)"
+          title="{{emoji.aliases[0]}}">
+      {{ emoji.emoji }}
+    </span>
+  </div>
+</div>
